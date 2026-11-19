@@ -1,0 +1,135 @@
+/* La base visuelle vient de vgui.css (Greensteam / Blacksteam), compilé dans _site/vgui.css
+   à l'intérieur d'un @layer "vgui". Ici : utilitaires Tailwind + les composants propres au dashboard. */
+@layer vgui, theme, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities) source(none);
+@source "./";
+
+@theme static {
+  --font-sans: "Trebuchet MS", Verdana, "DejaVu Sans", sans-serif;
+  --font-mono: "Lucida Console", "Courier New", monospace;
+}
+
+/* Palette Greensteam, reprise des variables LESS de vgui.css. */
+:root {
+  --primary: #4c5844;
+  --primary-dark: #3e4637;
+  --primary-light: #5a6a50;
+  --shade-light: #899281;
+  --shade-dark: #292d23;
+  --accent: #c4b550;
+  --accent-dark: #96892d;
+  --accent-hover: #e3e41f;
+  --text: #d8ded3;
+  --muted: #a3ad98;
+  --link: #c9d2bf;
+  --up: #a6d96a;
+  --down: #ff8a66;
+
+  --rank-gray: #c8ccc4;
+  --rank-teal: #7fe0e8;
+  --rank-blue: #8ab8ff;
+  --rank-indigo: #b0a8ff;
+  --rank-purple: #d9a3ff;
+  --rank-pink: #ff9cc9;
+  --rank-red: #ff7d6b;
+  --rank-yellow: #ffe066;
+  --rank-green: #a6d96a;
+  --rank-orange: #ffb24a;
+}
+
+@media (prefers-color-scheme: dark) {
+  /* Palette Blacksteam. */
+  :root {
+    --primary: #212121;
+    --primary-dark: #080808;
+    --primary-light: #181818;
+    --shade-light: #323232;
+    --shade-dark: #080808;
+    --accent: #f0b43f;
+    --accent-dark: #96892d;
+    --accent-hover: #ffd27a;
+    --muted: #8f8f8f;
+    --link: #e03644;
+  }
+}
+
+@layer components {
+  body { margin: 0; padding: 0 0 env(safe-area-inset-bottom); -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
+  #app, #app *, #app *::before, #app *::after { box-sizing: border-box; }
+
+  .app { width: 100%; min-width: 0; max-width: 780px; margin: 0 auto; padding: 10px 8px 28px; }
+
+  /* Navbar VGUI collée en haut, trois onglets de même largeur. */
+  nav.tabs {
+    position: sticky; top: 0; z-index: 20;
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    margin: 0 0 10px;
+    box-shadow: 0 6px 10px -6px #0008;
+  }
+  nav.tabs li { display: block; text-align: center; }
+  nav.tabs li a { padding: 8px 4px; }
+  nav.tabs li[aria-selected="true"] a {
+    color: var(--accent-hover);
+    background: var(--primary-dark);
+    border: 1px solid;
+    border-color: var(--shade-dark) var(--shade-light) var(--shade-light) var(--shade-dark);
+  }
+
+  .window, .box { margin: 0 0 10px; max-width: none; }
+
+  .sunken { background: var(--primary-dark); border: 1px solid; border-color: var(--shade-dark) var(--shade-light) var(--shade-light) var(--shade-dark); }
+
+  .caps { text-transform: uppercase; letter-spacing: 2px; font-size: 11px; font-weight: bold; color: #fff; }
+  .muted { color: var(--muted); }
+  .accent { color: var(--accent); }
+
+  /* Liste façon navigateur de serveurs : ligne survolée en jaune foncé. */
+  .lv-head { display: flex; gap: 10px; padding: 4px 8px; border-bottom: 1px solid var(--shade-dark); }
+  .lv-row { display: flex; align-items: center; gap: 10px; padding: 6px 8px; color: var(--text); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--shade-dark) 60%, transparent); }
+  .lv-row:last-child { border-bottom: 0; }
+  a.lv-row:hover, a.lv-row:focus-visible, a.lv-row:active { background: var(--accent-dark); color: #fff; text-decoration: none; outline: none; }
+  a.lv-row:hover .muted, a.lv-row:active .muted { color: #f1ecd0; }
+
+  .tag { display: inline-block; padding: 0 5px; line-height: 18px; font-weight: bold; font-size: 13px; background: var(--primary-dark); border: 1px solid; border-color: var(--shade-dark) var(--shade-light) var(--shade-light) var(--shade-dark); font-variant-numeric: tabular-nums; }
+
+  .rank-img { display: inline-block; flex-shrink: 0; margin: 0; border: 0; image-rendering: auto; vertical-align: middle; }
+  .premier-badge {
+    display: inline-flex; align-items: center; justify-content: center; min-width: 74px; height: 24px; padding: 0 10px 0 16px;
+    background: center / 100% 100% no-repeat; image-rendering: auto;
+    font-weight: bold; font-style: italic; font-size: 14px; font-variant-numeric: tabular-nums; text-shadow: 0 1px 1px #000;
+  }
+
+  .up { color: var(--up); }
+  .down { color: var(--down); }
+
+  .avatar { display: inline-grid; place-items: center; flex-shrink: 0; box-sizing: border-box; border: 2px solid #7b8484; background: var(--primary-light); color: var(--accent); font-weight: bold; object-fit: cover; margin: 0; }
+
+  input[type="search"].search { width: 100%; height: 26px; padding: 0 6px; font: inherit; font-size: 14px; box-sizing: border-box; }
+  input[type="search"].search::placeholder { color: var(--muted); }
+  label.check { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; cursor: pointer; }
+  label.check input { margin: 0; }
+
+  progress.meter { width: 100%; margin: 4px 0 0; height: 22px; }
+  progress.meter::-webkit-progress-bar { padding: 3px; }
+  progress.meter::-webkit-progress-value { height: 14px; }
+
+  button.small { height: 22px; min-width: 0; padding: 0 8px; font-size: 12px; }
+  button[aria-pressed="true"] { border-color: var(--shade-dark) var(--shade-light) var(--shade-light) var(--shade-dark); background: var(--primary-dark); color: var(--accent); }
+
+  .fold { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.35s cubic-bezier(0.32, 0.72, 0, 1); }
+  .fold > * { overflow: hidden; min-height: 0; }
+  .fold.open { grid-template-rows: 1fr; }
+
+  .pop { animation: pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
+  .fade-in { animation: fade-in 0.3s ease-out both; }
+  .blink { animation: blink 1s steps(1) infinite; }
+}
+
+@keyframes pop { 0% { transform: scale(0.96); opacity: 0; } 60% { transform: scale(1.01); opacity: 1; } 100% { transform: none; } }
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes blink { 50% { opacity: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}

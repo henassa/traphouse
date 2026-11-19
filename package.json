@@ -1,0 +1,16 @@
+{
+  "name": "traphouse",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "npx @tailwindcss/cli -i src/styles.css -o _site/app.css --watch",
+    "fetch": "node scripts/fetch.mjs",
+    "demo": "node scripts/demo.mjs"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.5",
+    "tailwindcss": "^4.3.5"
+  },
+  "private": true,
+  "type": "module"
+}

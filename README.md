@@ -42,6 +42,14 @@ Pour voir le rendu avec de fausses données : ajouter `?demo` à l'URL.
 
 **Actions → Mise à jour → Run workflow.** Au bout de 2–3 minutes, l'URL du site s'affiche dans le résumé du job `deploy` (`https://<pseudo>.github.io/traphouse/`). Ensuite, ça tourne tout seul toutes les heures.
 
+## Si GitHub Actions ne marche pas
+
+- **Pas de dossier `.github` dans le dépôt :** c'est un dossier caché, souvent oublié au glisser-déposer. Fais **Add file → Create new file**, tape `.github/workflows/update.yml` comme nom (les `/` créent les dossiers) et colle le contenu du fichier du zip.
+- **Aucun workflow dans l'onglet Actions :** va dans **Settings → Actions → General → Allow all actions and reusable workflows**.
+- **Croix rouge sur l'étape `deploy` :** **Settings → Pages → Source** doit être **GitHub Actions**, pas « Deploy from a branch ».
+- **Croix rouge sur « Enregistrer les données » :** **Settings → Actions → General → Workflow permissions → Read and write permissions**.
+- **Rien ne se passe :** le premier passage planifié peut tarder. Lance-le à la main avec **Actions → Mise à jour → Run workflow**.
+
 ## Ajouter ou retirer un joueur
 
 Ouvrir `players.json` sur GitHub, cliquer sur le crayon, modifier, **Commit changes**. Le commit relance le workflow.
@@ -109,4 +117,3 @@ vendor/vgui/            vgui.css (Greensteam, Blacksteam) et sa licence
 data/                   écrit par le workflow
 .github/workflows/      mise à jour + déploiement Pages
 ```
-"# traphouse" 
