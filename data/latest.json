@@ -1,0 +1,69 @@
+{
+ "generatedAt": "2026-11-19T18:38:13.349Z",
+ "timezone": "Europe/Zurich",
+ "group": "traphouse",
+ "sources": {
+  "faceit": {
+   "ok": 3,
+   "failed": 0,
+   "skipped": false
+  },
+  "leetify": {
+   "ok": 4,
+   "failed": 0,
+   "skipped": false,
+   "error": "Clé refusée, collecte sans clé"
+  },
+  "steam": {
+   "ok": 0,
+   "failed": 0,
+   "skipped": true
+  }
+ },
+ "players": [
+  {
+   "id": "76561198000000001",
+   "name": "Max",
+   "steam64": "76561198000000001",
+   "avatar": null,
+   "steamName": null,
+   "faceit": null,
+   "leetify": null,
+   "matches": [],
+   "errors": []
+  },
+  {
+   "id": "76561198000000002",
+   "name": "Léa",
+   "steam64": "76561198000000002",
+   "avatar": null,
+   "steamName": null,
+   "faceit": null,
+   "leetify": null,
+   "matches": [],
+   "errors": []
+  },
+  {
+   "id": "76561198000000003",
+   "name": "Tom",
+   "steam64": "76561198000000003",
+   "avatar": null,
+   "steamName": null,
+   "faceit": null,
+   "leetify": null,
+   "matches": [],
+   "errors": []
+  },
+  {
+   "id": "76561198000000004",
+   "name": "Nico",
+   "steam64": "76561198000000004",
+   "avatar": null,
+   "steamName": null,
+   "faceit": null,
+   "leetify": null,
+   "matches": [],
+   "errors": []
+  }
+ ]
+}
