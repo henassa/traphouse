@@ -1,0 +1,112 @@
+# Traphouse
+
+Tableau de bord CS2 pour notre groupe : classements FACEIT, Premier et Matchmaking, joueur du jour / de la semaine / du mois, et quelques stats pour se chambrer.
+
+Le site est 100 % statique (GitHub Pages). Toutes les heures, un workflow GitHub Actions interroge les API avec les clés rangées dans les Secrets, puis écrit des JSON dans `data/`. Le navigateur ne voit jamais une clé.
+
+```
+players.json ──► Actions (toutes les heures) ──► data/latest.json
+                  FACEIT · Leetify · Steam       data/history/AAAA-MM-JJ.json
+                                                 data/series.json ──► site
+```
+
+Le look vient de [vgui.css](https://github.com/AlpyneDreams/vgui.css) (MIT) : Greensteam en mode clair, Blacksteam en mode sombre, choisi automatiquement selon le réglage du téléphone. Le framework est copié tel quel dans `vendor/vgui/`, et le build le range dans une couche CSS sous Tailwind pour que les utilitaires restent prioritaires.
+
+Pour voir le rendu avec de fausses données : ajouter `?demo` à l'URL.
+
+## Mise en route (tout depuis github.com)
+
+### 1. Créer le dépôt
+
+1. **New repository** → un nom, par ex. `traphouse`. Il doit être **public** pour utiliser Pages avec un compte gratuit (les pseudos et Steam ID seront donc visibles).
+2. **Add file → Upload files**, puis glisser **tout le contenu** du zip, y compris le dossier `.github`. Sur Mac, `Cmd + Maj + .` dans le Finder affiche les dossiers cachés.
+3. **Commit changes**.
+
+### 2. Récupérer les clés API
+
+| Secret | Obligatoire | Où |
+|---|---|---|
+| `FACEIT_API_KEY` | oui | [developers.faceit.com](https://developers.faceit.com) → App Studio → créer une app → **API Keys** → clé **Server side** |
+| `LEETIFY_API_KEY` | conseillé | [leetify.com/app/developer](https://leetify.com/app/developer) (se connecter avec Steam) |
+| `STEAM_API_KEY` | non | [steamcommunity.com/dev/apikey](https://steamcommunity.com/dev/apikey) : avatars Steam pour ceux qui n'ont pas FACEIT |
+
+### 3. Ajouter les clés dans les Secrets
+
+**Settings → Secrets and variables → Actions → New repository secret**, une fois par clé, avec exactement les noms du tableau.
+
+### 4. Activer GitHub Pages
+
+**Settings → Pages → Build and deployment → Source : GitHub Actions.**
+
+### 5. Premier lancement
+
+**Actions → Mise à jour → Run workflow.** Au bout de 2–3 minutes, l'URL du site s'affiche dans le résumé du job `deploy` (`https://<pseudo>.github.io/traphouse/`). Ensuite, ça tourne tout seul toutes les heures.
+
+## Ajouter ou retirer un joueur
+
+Ouvrir `players.json` sur GitHub, cliquer sur le crayon, modifier, **Commit changes**. Le commit relance le workflow.
+
+```json
+{ "name": "Max", "steam64": "76561198000000001", "faceit": "MaxLeGrand" }
+```
+
+- `steam64` : l'ID à 17 chiffres (sur [steamid.io](https://steamid.io) à partir du lien du profil).
+- `faceit` : pseudo FACEIT. Si on l'omet, on cherche le compte FACEIT lié au Steam ID. `false` si le joueur n'a pas de compte.
+- `name` : le nom affiché sur le site, et le Steam ID sert d'identifiant. On peut donc renommer quelqu'un sans perdre son historique.
+
+## Emblèmes de rang
+
+- **FACEIT** : les icônes de niveau 1 à 10 sont dans `src/img/faceit/`.
+- **Premier et Matchmaking** : dépose les images dans `src/img/ranks/` (Add file → Upload files sur GitHub). Le site les prend automatiquement au déploiement suivant. Tant qu'un fichier manque, il affiche une petite case colorée à la place.
+
+| Fichier | Rang |
+|---|---|
+| `premier-1.png` … `premier-7.png` | fond du rating Premier par palier : gris (< 5 000), bleu clair, bleu, violet, rose, rouge, or (30 000 +). Le chiffre est écrit par-dessus. |
+| `mm-1.png` … `mm-18.png` | Silver I (1) → Global Elite (18) |
+
+PNG, WebP ou SVG, idéalement en fond transparent et en 2× pour les écrans Retina.
+
+## Ce que les API ne donnent pas
+
+- **Pas de classement Matchmaking global**, et même pas de rang MM unique : en CS2 le compétitif est classé par carte. L'onglet Matchmaking prend le **meilleur rang toutes cartes** de chaque joueur (via Leetify) et la page joueur montre le détail par carte.
+- **Pas d'historique d'ELO FACEIT** ni de « +25 » par match dans l'API publique. Les évolutions sont calculées à partir de nos propres snapshots. Il faut donc attendre un jour pour voir les premières flèches, et une semaine pour le « 7 jours ».
+- **Premier et MM viennent uniquement de Leetify.** Un joueur doit avoir un compte Leetify (connexion Steam) et un profil public pour avoir ses matchs.
+- La carte et le score d'un match FACEIT viennent aussi de Leetify (l'historique FACEIT ne donne que la date et le vainqueur).
+
+## Calculs
+
+- **Distinctions** : `ELO gagné + gain Premier ÷ 10 + 15 × victoires − 10 × défaites`, sur aujourd'hui / 7 jours / 30 jours, avec au moins un match joué. Égalité départagée au nombre de victoires.
+- **Variation** : valeur actuelle moins la dernière valeur connue la veille au soir (ou il y a 7 jours).
+- **Meilleure série** : plus longue série de victoires sur 30 jours. **Tryhard** : plus de matchs en 7 jours. **Pire chute** : plus grosse perte d'ELO en 7 jours. **Meilleur rating** : moyenne Leetify sur 7 jours, à partir de 5 matchs.
+
+## Limites et pannes
+
+- Les appels sont espacés (≈ 4 req/s pour FACEIT, moins d'1 req/s pour Leetify), avec 3 essais et un back-off en cas de 429 ou d'erreur serveur. Si Leetify renvoie un 429 qui persiste, on arrête de l'appeler jusqu'au passage suivant.
+- Une source qui échoue n'efface rien : le joueur garde ses dernières valeurs, et le site affiche un bandeau avec l'heure de la dernière mise à jour.
+- Les matchs sont conservés 45 jours dans `latest.json`, et un snapshot par jour est gardé dans `data/history/`. `series.json` en compacte les 90 derniers jours.
+- Le cron de GitHub peut avoir un peu de retard aux heures chargées, c'est normal.
+- Un commit par heure, ça fait ~700 commits par mois dans l'historique du dépôt. C'est sans conséquence.
+
+## En local (facultatif)
+
+```sh
+npm install
+npm run demo     # régénère demo/
+npm run build    # Tailwind v4 + copie dans _site/
+npx serve _site  # puis ouvrir /?demo
+FACEIT_API_KEY=… LEETIFY_API_KEY=… npm run fetch
+```
+
+## Structure
+
+```
+players.json            la liste des joueurs
+scripts/fetch.mjs       collecte (Node 22, aucune dépendance)
+scripts/lib/store.mjs   snapshots, fusion des matchs, series.json
+scripts/demo.mjs        données de démo
+src/                    index.html, styles.css (Tailwind + composants), js/, img/
+vendor/vgui/            vgui.css (Greensteam, Blacksteam) et sa licence
+data/                   écrit par le workflow
+.github/workflows/      mise à jour + déploiement Pages
+```
+"# traphouse" 
