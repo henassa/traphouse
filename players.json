@@ -2,9 +2,6 @@
   "group": "traphouse",
   "timezone": "Europe/Zurich",
   "players": [
-    { "name": "Max", "steam64": "76561198000000001", "faceit": "MaxLeGrand" },
-    { "name": "Léa", "steam64": "76561198000000002" },
-    { "name": "Tom", "steam64": "76561198000000003" },
-    { "name": "Nico", "steam64": "76561198000000004", "faceit": false }
+    { "name": "Didou", "steam64": "76561198123365503", "faceit": "vie2reve" }
   ]
 }
