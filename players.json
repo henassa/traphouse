@@ -83,6 +83,7 @@
     { "steam64": "76561198099317289", "name": "SONIC9ful" },
     { "steam64": "76561198841770010", "name": "xeddo" },
     { "steam64": "76561199483006411", "name": "akwa" },
+    { "steam64": "76561199141778843", "name": "SlayZzee" },
     { "steam64": "76561198036040935", "name": "6quier" }
   ],
   "valorantRegion": "eu",
@@ -94,13 +95,25 @@
     { "riot": "HNG HeZu5#FUC17", "name": "Hezus" },
     { "riot": "injuxta#084", "name": "injuxta" },
     { "riot": "Kerazim#EUW", "name": "Kerazim" },
+    { "riot": "puella magi vyia#lyst", "name": "vyia" },
     { "riot": "nwrt#ouais", "name": "nwrt" },
+    { "riot": "327369619NAUTXD#EUW", "name": "Nautilus" },
     { "riot": "Syndra Sous BBL#85077", "name": "Zweely" },
+    { "riot": "maaskyyy#PIEDS", "name": "MaasKyyy" },
+    { "riot": "KAST#DONK", "name": "Ast" },
     { "riot": "apoïst mentality#KURD", "name": "didou" }
   ],
   "lolRegion": "euw",
   "lol": [
     { "riot": "ddnet supremacy#ddnet", "name": "félix" },
-    { "riot": "Ulyxx3#9539", "name": "Ulyxx3" }
+    { "riot": "Ulyxx3#9539", "name": "Ulyxx3" },
+    { "riot": "Kerazim#EUW", "name": "Kerazim" },
+    { "riot": "LIQUIDZ#0000", "name": "Liquidz" },
+    { "riot": "Aik0#zzzz", "name": "Sevigna" },
+    { "riot": "Syndra Sous BBL#85077", "name": "Zweely" },
+    { "riot": "maaskyyy#PIEDS", "name": "MaasKyyy" },
+    { "riot": "sheepcantdie#7207", "name": "sheepcantdie" }
+    
   ]
 }
+
