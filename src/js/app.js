@@ -13,7 +13,6 @@ const COLUMNS = {
   mm: { label: 'MM', width: 80 },
   wingman: { label: 'Wingman', width: 84 },
   leetify: { label: 'Leetify', width: 76 },
-  aim: { label: 'Aim', width: 60 },
   kd: { label: 'K/D', width: 64 },
   avg: { label: 'Rating', width: 80 },
 };
@@ -23,8 +22,6 @@ const VAL_COLUMNS = {
   rr: { label: 'RR', width: 56 },
   peak: { label: 'Pic', width: 150 },
   kd: { label: 'K/D', width: 60 },
-  hs: { label: 'HS %', width: 64 },
-  acs: { label: 'ACS', width: 60 },
   winrate: { label: 'Victoires', width: 84 },
 };
 
@@ -220,8 +217,8 @@ function tableHtml(columns, sort, sortDir, shown, cell, q) {
     </div>`;
 }
 
-const CS_NOTE = 'Évolution FACEIT et Premier depuis hier soir. MM = meilleur rang toutes cartes. Leetify = rating global Leetify, Rating = moyenne des ratings Leetify sur ses derniers matchs, Aim = note de visée Leetify. K/D calculé sur les tableaux des scores Leetify depuis le début du suivi.';
-const VAL_NOTE = 'Rang, RR (avec la variation du dernier match) et pic de rang via HenrikDev. K/D, HS % (headshots sur tirs touchés), ACS et victoires sur les 20 derniers matchs compétitifs.';
+const CS_NOTE = 'Évolution FACEIT et Premier depuis hier soir. MM = meilleur rang toutes cartes. Leetify = rating global Leetify, Rating = moyenne des ratings Leetify sur ses derniers matchs. K/D calculé sur les tableaux des scores Leetify depuis le début du suivi.';
+const VAL_NOTE = 'Rang, RR (avec la variation du dernier match) et pic de rang via HenrikDev. K/D et victoires sur les 20 derniers matchs compétitifs.';
 
 function gameTabs() {
   return `<nav class="tabs" style="grid-template-columns:repeat(2,1fr)">
