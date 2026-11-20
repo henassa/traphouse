@@ -1,6 +1,6 @@
 {
  "date": "2026-11-20",
- "updatedAt": "2026-11-20T15:45:03.926Z",
+ "updatedAt": "2026-11-20T16:03:57.612Z",
  "players": {
   "76561198329257038": {
    "elo": 2439,
@@ -190,6 +190,195 @@
    "premier": null,
    "mm": null,
    "mmMap": null
+  },
+  "76561198873722778": {
+   "elo": 1000,
+   "level": 4,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561198310011467": {
+   "elo": 1549,
+   "level": 8,
+   "premier": 17824,
+   "mm": 15,
+   "mmMap": "Train"
+  },
+  "76561198282049491": {
+   "elo": 855,
+   "level": 3,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561199031928617": {
+   "elo": 809,
+   "level": 3,
+   "premier": null,
+   "mm": 1,
+   "mmMap": "Nuke"
+  },
+  "76561199084367900": {
+   "elo": 926,
+   "level": 4,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561198836770861": {
+   "elo": 1272,
+   "level": 6,
+   "premier": 17106,
+   "mm": 15,
+   "mmMap": "Inferno"
+  },
+  "76561199209440591": {
+   "elo": 1543,
+   "level": 8,
+   "premier": null,
+   "mm": 10,
+   "mmMap": "Anubis"
+  },
+  "76561198217350221": {
+   "elo": 936,
+   "level": 4,
+   "premier": 10833,
+   "mm": 8,
+   "mmMap": "Mirage"
+  },
+  "76561198151064204": {
+   "elo": 1299,
+   "level": 6,
+   "premier": 16291,
+   "mm": 10,
+   "mmMap": "Dust2"
+  },
+  "76561198252005762": {
+   "elo": 2036,
+   "level": 10,
+   "premier": null,
+   "mm": 13,
+   "mmMap": "Anubis"
+  },
+  "76561199120465590": {
+   "elo": 1047,
+   "level": 4,
+   "premier": 17621,
+   "mm": 11,
+   "mmMap": "Nuke"
+  },
+  "76561198356051532": {
+   "elo": 939,
+   "level": 4,
+   "premier": null,
+   "mm": 11,
+   "mmMap": "Dust2"
+  },
+  "76561198391827654": {
+   "elo": null,
+   "level": null,
+   "premier": null,
+   "mm": 8,
+   "mmMap": "Train"
+  },
+  "76561198409214986": {
+   "elo": 1329,
+   "level": 6,
+   "premier": 15595,
+   "mm": 9,
+   "mmMap": "Dust2"
+  },
+  "76561199100423262": {
+   "elo": 1085,
+   "level": 5,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561198119141964": {
+   "elo": 2065,
+   "level": 10,
+   "premier": null,
+   "mm": 16,
+   "mmMap": "Cache"
+  },
+  "76561199054204778": {
+   "elo": 2249,
+   "level": 10,
+   "premier": null,
+   "mm": 16,
+   "mmMap": "Inferno"
+  },
+  "76561198223273952": {
+   "elo": 878,
+   "level": 3,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561198834504716": {
+   "elo": 1000,
+   "level": 4,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561198414712451": {
+   "elo": 2123,
+   "level": 10,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561198040404351": {
+   "elo": 1537,
+   "level": 8,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561198964879287": {
+   "elo": 980,
+   "level": 4,
+   "premier": null,
+   "mm": 6,
+   "mmMap": "Dust2"
+  },
+  "76561198008039153": {
+   "elo": 2203,
+   "level": 10,
+   "premier": 25245,
+   "mm": 18,
+   "mmMap": "Nuke"
+  },
+  "76561198118146069": {
+   "elo": 2160,
+   "level": 10,
+   "premier": 22222,
+   "mm": 11,
+   "mmMap": "Dust2"
+  },
+  "76561198158653120": {
+   "elo": 2504,
+   "level": 10,
+   "premier": 24607,
+   "mm": 16,
+   "mmMap": "Nuke"
+  },
+  "76561197963277267": {
+   "elo": 1677,
+   "level": 8,
+   "premier": 22448,
+   "mm": 15,
+   "mmMap": "Vertigo"
+  },
+  "76561198113356567": {
+   "elo": 1743,
+   "level": 8,
+   "premier": 21093,
+   "mm": 12,
+   "mmMap": "Dust2"
   }
  }
 }
