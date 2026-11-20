@@ -45,6 +45,9 @@ const lolTierName = (q) => {
 
 // Emblèmes de rang du catalogue public de Riot (servis par valorant-api.com).
 // Emblème publié avec le site par le workflow ; à défaut, la même image chez valorant-api.com.
+// Couleur du nom de rang Valorant, par palier (3–5 Fer … 27 Radiant).
+const VAL_COLORS = ['#8a8a8a', '#b0764b', '#aab4c0', '#e5b84c', '#4fb8c8', '#c084fc', '#3fc36b', '#e0566b', '#fff1a8'];
+const valColor = (tier) => VAL_COLORS[Math.min(8, Math.max(0, Math.floor((tier - 3) / 3)))];
 const valTierIcon = (tier) => `${BASE}valorant-tiers/${tier}.png`;
 const valTierRemote = (tier) => `https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/${tier}/largeicon.png`;
 
@@ -159,7 +162,7 @@ function rankingRows() {
   }).join('');
 
   return `<div class="sunken ranking-scroll">
-      <table class="ranking" style="width:${total}px">
+      <table class="ranking" style="width:100%;min-width:${total}px">
         <colgroup>${cols}</colgroup>
         <thead><tr><th class="rank">#</th><th class="who">Joueur</th>${head}</tr></thead>
         <tbody>${rows || `<tr><td colspan="${2 + Object.keys(COLUMNS).length}" class="muted italic">${q ? 'Aucun joueur trouvé' : 'Aucun joueur'}</td></tr>`}</tbody>
@@ -196,7 +199,7 @@ function valRows() {
   });
   const shown = sorted.map((p, i) => ({ p, i })).filter(({ p }) => !q || `${p.name} ${p.riotId}`.toLowerCase().includes(q));
   const dash = '<span class="muted">—</span>';
-  const tier = (id, name) => `<span class="inline-flex items-center gap-1.5"><img class="rank-img" src="${valTierIcon(id)}" alt="" width="26" height="26" style="width:26px;height:26px" data-remote="${valTierRemote(id)}" onerror="if(this.dataset.remote){this.src=this.dataset.remote;this.dataset.remote=''}else{this.remove()}"><b class="truncate">${esc(name ?? '')}</b></span>`;
+  const tier = (id, name) => `<span class="inline-flex items-center gap-1.5"><img class="rank-img" src="${valTierIcon(id)}" alt="" width="26" height="26" style="width:26px;height:26px" data-remote="${valTierRemote(id)}" onerror="if(this.dataset.remote){this.src=this.dataset.remote;this.dataset.remote=''}else{this.remove()}"><b class="truncate" style="color:${valColor(id)}">${esc(name ?? '')}</b></span>`;
   const cell = (p, key) => {
     const v = p.cur[key];
     if (v == null) return dash;
@@ -229,7 +232,7 @@ function tableHtml(columns, sort, sortDir, shown, cell, q) {
     </tr>`;
   }).join('');
   return `<div class="sunken ranking-scroll">
-      <table class="ranking" style="width:${total}px">
+      <table class="ranking" style="width:100%;min-width:${total}px">
         <colgroup>${cols}</colgroup>
         <thead><tr><th class="rank">#</th><th class="who">Joueur</th>${head}</tr></thead>
         <tbody>${rows || `<tr><td colspan="${2 + Object.keys(columns).length}" class="muted italic">${q ? 'Aucun joueur trouvé' : 'Aucun joueur'}</td></tr>`}</tbody>
@@ -267,13 +270,13 @@ function lolRows() {
   const shown = sorted.map((p, i) => ({ p, i })).filter(({ p }) => !q || `${p.name} ${p.riotId}`.toLowerCase().includes(q));
   const dash = '<span class="muted">—</span>';
   // Emblèmes officiels Riot (ranked-emblems-latest), réduits dans src/img/lol.
-  const rank = (r) => `<span class="inline-flex items-center gap-1.5"><img class="rank-img" src="img/lol/${r.tier}.png" alt="" style="height:26px;width:auto" onerror="this.remove()"><b style="color:${LOL_COLORS[r.tier] ?? 'inherit'}">${esc(lolTierName(r))}</b></span>`;
+  const rank = (r, extra = '') => `<span class="inline-flex items-center gap-1.5"><img class="rank-img" src="img/lol/${r.tier}.png" alt="" style="height:26px;width:auto" onerror="this.remove()"><b style="color:${LOL_COLORS[r.tier] ?? 'inherit'}">${esc(lolTierName(r))}</b>${extra}</span>`;
   const cell = (p, key) => {
     const v = p.cur[key];
     if (v == null) return dash;
     switch (key) {
       case 'solo': return rank(p.solo);
-      case 'flex': return `${rank(p.flex)} <span class="text-[11px] muted">${p.flex.lp} LP</span>`;
+      case 'flex': return rank(p.flex, `<span class="text-[11px] muted">${p.flex.lp} LP</span>`);
       case 'lp': return `<b>${v}</b>`;
       case 'winrate': return `<b class="${v >= 50 ? 'up' : 'down'}">${v} %</b><br><span class="text-[11px] muted">${p.solo.wins} V · ${p.solo.losses} D</span>`;
       default: return `<b>${v}</b>`;
@@ -291,7 +294,7 @@ function gameTabs() {
   return `<nav class="tabs" style="grid-template-columns:repeat(3,1fr)">
     <li aria-selected="${state.game === 'cs'}"><a href="#" data-game="cs">CS2</a></li>
     <li aria-selected="${state.game === 'val'}"><a href="#valorant" data-game="val">Valorant</a></li>
-    <li aria-selected="${state.game === 'lol'}"><a href="#lol" data-game="lol">LoL</a></li>
+    <li aria-selected="${state.game === 'lol'}"><a href="#lol" data-game="lol">League of Legends</a></li>
   </nav>`;
 }
 

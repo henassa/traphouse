@@ -71,7 +71,8 @@
     box-shadow: 0 6px 10px -6px #0008;
   }
   nav.tabs li { display: block; text-align: center; }
-  nav.tabs li a { padding: 8px 4px; text-decoration: none !important; }
+  nav.tabs li a { padding: 8px 4px; text-decoration: none !important; white-space: nowrap; }
+  @media (max-width: 480px) { nav.tabs li a { font-size: 12px; letter-spacing: -0.2px; } }
   nav.tabs li[aria-selected="true"] a {
     color: var(--accent-hover);
     background: var(--primary-dark);
@@ -117,7 +118,7 @@
   table.ranking .rank { left: 0; }
   table.ranking .who { left: 30px; box-shadow: 1px 0 0 var(--shade-dark); }
   table.ranking tbody tr:hover td { background: var(--accent-dark); color: #fff; }
-  table.ranking tbody tr:hover td .muted { color: #fff; }
+  table.ranking tbody tr:hover td .muted, table.ranking tbody tr:hover td b[style] { color: #fff !important; }
   table.ranking td b { font-variant-numeric: tabular-nums; }
 
   .lv-grid { display: grid; grid-template-columns: 20px minmax(0, 1fr) 80px 64px 52px; align-items: center; gap: 6px; }
