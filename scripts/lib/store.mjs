@@ -81,3 +81,28 @@ export async function buildSeries(dir, today) {
   }
   return { dates: kept, players };
 }
+
+// K/D et rating HLTV 1.0 d'un joueur sur ses matchs détaillés. La formule 1.0 est publique ;
+// la 2.0 ne l'est pas et demande le KAST et l'impact, absents des données Leetify.
+export function perfOf(details, steam64) {
+  let k = 0, d = 0, r = 0, mk = 0, n = 0, withMulti = 0;
+  for (const m of details) {
+    const p = m?.players?.find((x) => x.steam64 === steam64);
+    if (!p || !p.rounds) continue;
+    n++;
+    k += p.k ?? 0;
+    d += p.d ?? 0;
+    r += p.rounds;
+    if (p.k1 != null && p.k2 != null) {
+      withMulti += p.rounds;
+      mk += (p.k1 ?? 0) + 4 * (p.k2 ?? 0) + 9 * (p.k3 ?? 0) + 16 * (p.k4 ?? 0) + 25 * (p.k5 ?? 0);
+    }
+  }
+  if (!n) return null;
+  const kd = d ? k / d : k;
+  let hltv = null;
+  if (withMulti === r && r > 0) {
+    hltv = (k / r / 0.679 + (0.7 * (r - d)) / r / 0.317 + mk / r / 1.277) / 2.7;
+  }
+  return { kd: Math.round(kd * 100) / 100, hltv: hltv == null ? null : Math.round(hltv * 100) / 100, matches: n };
+}

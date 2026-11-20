@@ -9,9 +9,13 @@ const app = document.getElementById('app');
 
 // Colonnes du classement, triables en cliquant sur l'en-tête comme dans le navigateur de serveurs.
 const COLUMNS = {
-  elo: { label: 'FACEIT', source: 'faceit' },
-  premier: { label: 'Premier', source: 'premier' },
-  mm: { label: 'MM', source: 'mm' },
+  elo: 'FACEIT',
+  premier: 'Premier',
+  mm: 'MM',
+  wingman: 'Wingman',
+  leetify: 'Leetify',
+  kd: 'K/D',
+  hltv: 'HLTV 1.0',
 };
 
 const store = {
@@ -70,52 +74,6 @@ function staleBanner() {
   return `<div class="sunken mt-2.5 flex items-start gap-2 px-2.5 py-2 text-[13px]"><span class="accent">${icon('warning')}</span><span>${msg}</span></div>`;
 }
 
-function summary() {
-  const { latest, model } = state;
-  const { players, today } = model;
-  const avg = (key) => {
-    const v = players.map((p) => p.cur[key]).filter((x) => x != null);
-    return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null;
-  };
-  const todayMatches = new Set(players.flatMap((p) => p.matches.filter((m) => m.day === today).map((m) => m.id))).size;
-  const stat = (label, value) => `<span class="whitespace-nowrap"><span class="muted">${label}</span> <b class="accent tabular-nums">${fmt(value)}</b></span>`;
-  return win(latest.group ?? 'Traphouse', `
-    <p class="m-0 text-[13px] muted">Mis à jour ${ago(latest.generatedAt, state.now)}</p>
-    <div class="sunken mt-2 flex flex-wrap gap-x-4 gap-y-1 px-2.5 py-1.5 text-[13px]">
-      ${stat('Joueurs', players.length)}
-      ${stat('Matchs aujourd’hui', todayMatches)}
-      ${stat('ELO moyen', avg('elo'))}
-      ${stat('Premier moyen', avg('premier'))}
-    </div>
-    ${staleBanner()}`, 'no-resize');
-}
-
-const AWARD_LABEL = { day: 'Aujourd’hui', week: '7 jours', month: '30 jours' };
-
-function awards() {
-  const rows = state.model.awards.map(({ key, winner }) => {
-    if (!winner) {
-      return `<div class="lv-row aw-grid"><span class="muted">${AWARD_LABEL[key]}</span><span class="muted italic">personne n’a joué</span><span></span></div>`;
-    }
-    const { player: p, score, elo, premier, w, l } = winner;
-    const parts = [`${w} V · ${l} D`];
-    if (elo) parts.push(`${signed(elo)} ELO`);
-    if (premier) parts.push(`${signed(premier)} Premier`);
-    return `<a class="lv-row aw-grid" href="${playerLink(p)}">
-      <span class="muted">${AWARD_LABEL[key]}</span>
-      <span class="min-w-0"><b class="block truncate">${esc(p.name)}</b><span class="block truncate text-[12px] muted">${parts.join(' · ')}</span></span>
-      <b class="tabular-nums text-right ${score >= 0 ? 'up' : 'down'}">${signed(score)} pts</b>
-    </a>`;
-  }).join('');
-  return win('Distinctions', `
-    <div class="sunken">
-      <div class="lv-head aw-grid caps !text-[10px] muted"><span>Période</span><span>Joueur</span><span class="text-right">Score</span></div>
-      ${rows}
-    </div>
-    <p class="mx-0 mb-0 mt-2 text-[12px] muted">Score = ELO gagné + gain Premier ÷ 10 + 15 par victoire − 10 par défaite, au moins un match joué.</p>`,
-  'no-resize', 'awards');
-}
-
 function rankingRows() {
   const { sort, period, query } = state;
   const q = query.trim().toLowerCase();
@@ -124,73 +82,63 @@ function rankingRows() {
     if (va == null && vb == null) return a.name.localeCompare(b.name);
     if (va == null) return 1;
     if (vb == null) return -1;
-    return vb - va || (b.cur.premier ?? 0) - (a.cur.premier ?? 0);
+    return vb - va || (b.cur.elo ?? 0) - (a.cur.elo ?? 0);
   });
   const shown = sorted.map((p, i) => ({ p, i }))
     .filter(({ p }) => !q || `${p.name} ${p.faceit?.nickname ?? ''} ${p.steamName ?? ''}`.toLowerCase().includes(q));
 
+  const dash = '<span class="muted">—</span>';
   const cell = (p, key) => {
     const v = p.cur[key];
-    if (v == null) return '<span class="muted">—</span>';
+    if (v == null) return dash;
     let html;
-    if (key === 'elo') html = `<span class="inline-flex items-center gap-1">${faceitBadge(p.faceit.level, 18)}<b class="tabular-nums">${fmt(v)}</b></span>`;
+    if (key === 'elo') html = `<span class="inline-flex items-center gap-1">${faceitBadge(p.faceit.level, 18)}<b>${fmt(v)}</b></span>`;
     else if (key === 'premier') html = premierBadge(v, premierColor(v));
-    else html = mmBadge(v, mmName(v), 20);
-    if (key !== sort) return html;
-    const d = p.delta[period][key];
+    else if (key === 'mm') html = mmBadge(v, `${mmName(v)} · ${p.leetify.mmBest.map}`, 20);
+    else if (key === 'wingman') html = wingmanBadge(v, mmName(v), 20);
+    else if (key === 'leetify') html = `<b class="${v >= 0 ? 'up' : 'down'}">${v > 0 ? '+' : ''}${v.toFixed(2).replace('.', ',')}</b>`;
+    else html = `<b class="${key === 'hltv' ? (v >= 1 ? 'up' : 'down') : v >= 1 ? 'up' : 'down'}">${v.toFixed(2).replace('.', ',')}</b>`;
+    const d = key === sort ? p.delta[period]?.[key] : null;
     if (!d) return html;
     return `${html}<br><span class="text-[11px]">${delta(d, key === 'mm' ? (Math.abs(d) > 1 ? 'rangs' : 'rang') : '')}</span>`;
   };
 
-  const head = Object.entries(COLUMNS).map(([k, c]) =>
-    `<a href="#ranking" data-sort="${k}" class="text-right !no-underline ${k === sort ? 'accent' : 'muted'}">${c.label}${k === sort ? ' ▼' : ''}</a>`).join('');
+  const head = Object.entries(COLUMNS).map(([k, label]) =>
+    `<th><a href="#" data-sort="${k}" class="${k === sort ? 'accent' : ''}">${label}${k === sort ? ' ▼' : ''}</a></th>`).join('');
 
   const rows = shown.map(({ p, i }) => {
     const ranked = p.cur[sort] != null;
-    return `<a class="lv-row lv-grid" href="${playerLink(p)}">
-      <span class="text-[12px] tabular-nums ${ranked && i < 3 ? 'accent font-bold' : 'muted'}">${ranked ? i + 1 : '–'}</span>
-      <span class="min-w-0 truncate">${esc(p.name)}</span>
-      <span class="text-right">${cell(p, 'elo')}</span>
-      <span class="text-right">${cell(p, 'premier')}</span>
-      <span class="text-right">${cell(p, 'mm')}</span>
-    </a>`;
+    return `<tr data-href="${playerLink(p)}">
+      <td class="rank ${ranked && i < 3 ? 'accent font-bold' : 'muted'}">${ranked ? i + 1 : '–'}</td>
+      <td class="who"><a href="${playerLink(p)}">${avatar(p, 26)}<span>${esc(p.name)}</span></a></td>
+      ${Object.keys(COLUMNS).map((k) => `<td>${cell(p, k)}</td>`).join('')}
+    </tr>`;
   }).join('');
 
-  const empty = !shown.length ? `<div class="lv-row muted italic">${q ? 'Aucun joueur trouvé' : 'Aucun joueur'}</div>` : '';
-  return `<div class="sunken">
-      <div class="lv-head lv-grid caps !text-[10px]"><span class="muted">#</span><span class="muted">Joueur</span>${head}</div>
-      ${rows}${empty}
+  return `<div class="sunken ranking-scroll">
+      <table class="ranking">
+        <thead><tr><th class="rank">#</th><th class="who">Joueur</th>${head}</tr></thead>
+        <tbody>${rows || `<tr><td colspan="9" class="muted italic">${q ? 'Aucun joueur trouvé' : 'Aucun joueur'}</td></tr>`}</tbody>
+      </table>
     </div>`;
 }
 
 function ranking() {
-  return win('Classement', `
+  const { latest } = state;
+  return win(latest.group ?? 'Traphouse', `
     <div class="mb-2 flex items-center gap-3">
       <input id="search" class="search" type="search" placeholder="Rechercher un joueur…" autocomplete="off" value="${esc(state.query)}">
       <label class="check text-[13px]"><input type="checkbox" data-toggle="period" ${state.period === 7 ? 'checked' : ''}>Sur 7 jours</label>
     </div>
-    <div id="rows">${rankingRows()}</div>
-    <p class="mx-0 mb-0 mt-2 text-[12px] muted">Clique sur une colonne pour trier. Évolution ${state.period === 7 ? 'sur 7 jours' : 'depuis hier soir'}. MM = meilleur rang toutes cartes.</p>`,
+    ${staleBanner()}
+    <div id="rows" class="${staleBanner() ? 'mt-2' : ''}">${rankingRows()}</div>
+    <p id="ranking-note" class="mx-0 mb-0 mt-2 text-[12px] muted">${rankingNote()}</p>`,
   'no-resize', 'ranking');
 }
 
-function funStats() {
-  const f = state.model.fun;
-  const row = (label, p, value, name) => {
-    const who = p ? `<b class="truncate">${esc(p.name)}</b>` : `<b class="truncate">${name ?? '—'}</b>`;
-    const inner = `<span class="muted">${label}</span>${who}<span class="tabular-nums text-right">${value}</span>`;
-    return p ? `<a class="lv-row st-grid" href="${playerLink(p)}">${inner}</a>` : `<div class="lv-row st-grid">${inner}</div>`;
-  };
-  const rows = [
-    row('Plus longue série', f.streak?.player, f.streak ? `${f.streak.streak} victoires` : '—'),
-    row('Le + de matchs', f.tryhard?.player, f.tryhard ? `${f.tryhard.games} matchs` : '—'),
-    row('Plus grosse perte', f.drop?.player, f.drop ? `${signed(f.drop.drop)} ELO` : '—', f.drop ? null : 'personne'),
-    row('Meilleur rating', f.rating?.player, f.rating ? leetifyRating(f.rating.rating) : '—'),
-    row('Map la + jouée', null, f.map ? `${f.map.n} matchs` : '—', f.map ? esc(f.map.map) : '—'),
-  ].join('');
-  return win('Stats', `
-    <div class="sunken">${rows}</div>
-    <p class="mx-0 mb-0 mt-2 text-[12px] muted">Série et map sur 30 jours, le reste sur 7 jours. Rating = moyenne Leetify, 5 matchs minimum.</p>`, 'no-resize', 'fun');
+function rankingNote() {
+  return `Mis à jour ${ago(state.latest.generatedAt, state.now)}. Clique sur une colonne pour trier, fais glisser le tableau pour voir les autres colonnes. `
+    + `Évolution ${state.period === 7 ? 'sur 7 jours' : 'depuis hier soir'}. MM = meilleur rang toutes cartes. K/D et HLTV 1.0 calculés sur les matchs des 30 derniers jours.`;
 }
 
 function footer() {
@@ -200,12 +148,12 @@ function footer() {
 }
 
 function homeContent() {
-  return ranking() + awards() + funStats() + footer();
+  return ranking() + footer();
 }
 
 function renderHome() {
   document.title = state.latest.group ?? 'Traphouse';
-  app.innerHTML = `<div class="app">${summary()}<div id="content">${homeContent()}</div></div>`;
+  app.innerHTML = `<div class="app"><div id="content">${homeContent()}</div></div>`;
 }
 
 function sortBy(key) {
@@ -494,6 +442,12 @@ function renderLoading() {
 }
 
 app.addEventListener('click', (e) => {
+  const tr = e.target.closest('tr[data-href]');
+  if (tr && !e.target.closest('a')) {
+    location.hash = tr.dataset.href;
+    return;
+  }
+
   const sortLink = e.target.closest('[data-sort]');
   if (sortLink) {
     e.preventDefault();
@@ -536,8 +490,8 @@ app.addEventListener('change', (e) => {
     state.period = e.target.checked ? 7 : 1;
     store.set('period', state.period);
     rerenderRows();
-    const note = document.querySelector('#ranking > p:last-child');
-    if (note) note.textContent = `Clique sur une colonne pour trier. Évolution ${state.period === 7 ? 'sur 7 jours' : 'depuis hier soir'}. MM = meilleur rang toutes cartes.`;
+    const note = document.getElementById('ranking-note');
+    if (note) note.textContent = rankingNote();
   }
 });
 

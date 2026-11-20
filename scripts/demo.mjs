@@ -1,6 +1,6 @@
 // Génère demo/ avec 25 joueurs fictifs et 45 jours d'historique, au même format que fetch.mjs.
 import { mkdir, rm, writeFile } from 'node:fs/promises';
-import { addDays, dayKey, mergeMatches, snapshotOf, writeAll } from './lib/store.mjs';
+import { addDays, dayKey, mergeMatches, perfOf, snapshotOf, writeAll } from './lib/store.mjs';
 
 const OUT = new URL('../demo', import.meta.url).pathname;
 const TZ = 'Europe/Zurich';
@@ -125,6 +125,7 @@ function toLatest(p) {
       : null,
     // Sans Leetify, FACEIT ne donne que la date et le résultat.
     matches: mergeMatches([], p.hasLeetify ? p.matches : p.matches.filter((m) => m.source === 'faceit').map(({ id, source, at, result }) => ({ id, source, at, result })), now),
+    perf: p.perf ?? null,
     errors: [],
   };
 }
@@ -147,7 +148,7 @@ for (const p of players) {
         steam64, name, team, k, d: dd, a: Math.round(between(1, 8)),
         adr: Math.round((k / rounds) * 105 + between(-12, 12)), hs: between(0.12, 0.32), hsKills: Math.round(k * between(0.3, 0.6)),
         rating: Math.round(((k - dd) / rounds * 0.12 + between(-0.02, 0.02)) * 1e4) / 1e4, mvps: Math.round(between(0, 5)),
-        k3: Math.round(between(0, 2)), k4: rand() < 0.2 ? 1 : 0, k5: rand() < 0.04 ? 1 : 0,
+        k1: Math.round(k * 0.45), k2: Math.round(k * 0.12), k3: Math.round(between(0, 2)), k4: rand() < 0.2 ? 1 : 0, k5: rand() < 0.04 ? 1 : 0,
         acc: between(0.25, 0.5), preaim: between(7, 15), reaction: between(0.45, 0.75), flashed: Math.round(between(2, 12)),
         flashKills: Math.round(between(0, 3)), he: between(2, 12), trades: Math.round(between(0, 4)), rounds,
       };
@@ -161,6 +162,8 @@ for (const p of players) {
     };
   }
 }
+
+for (const p of players) p.perf = perfOf(Object.values(details), p.steam64);
 
 await writeAll(OUT, {
   generatedAt: new Date(now.getTime() - 14 * 60e3).toISOString(),

@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-20T14:33:19.371Z",
+ "generatedAt": "2026-11-20T15:15:15.839Z",
  "timezone": "Europe/Zurich",
  "group": "Traphouse",
  "sources": {
@@ -31,7 +31,7 @@
     "elo": 1840,
     "level": 9,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Max",
@@ -73,7 +73,7 @@
     "winrate": 0.5680000000000001,
     "totalMatches": 707,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -246,6 +246,11 @@
      "rank": 20267
     }
    ],
+   "perf": {
+    "kd": 1.34,
+    "hltv": 1.15,
+    "matches": 11
+   },
    "errors": []
   },
   {
@@ -261,7 +266,7 @@
     "elo": 1048,
     "level": 4,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Léa",
@@ -315,7 +320,7 @@
     "winrate": 0.4611362606670114,
     "totalMatches": 638,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -744,6 +749,11 @@
      "rank": 11143
     }
    ],
+   "perf": {
+    "kd": 0.55,
+    "hltv": 0.69,
+    "matches": 12
+   },
    "errors": []
   },
   {
@@ -759,7 +769,7 @@
     "elo": 1257,
     "level": 6,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Tom",
@@ -805,7 +815,7 @@
     "winrate": 0.5055057483217733,
     "totalMatches": 650,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -1978,6 +1988,11 @@
      "rating": -0.0302
     }
    ],
+   "perf": {
+    "kd": 0.73,
+    "hltv": 0.82,
+    "matches": 13
+   },
    "errors": []
   },
   {
@@ -2039,7 +2054,7 @@
     "winrate": 0.4219708266127583,
     "totalMatches": 960,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -2298,6 +2313,11 @@
      "rank": 7154
     }
    ],
+   "perf": {
+    "kd": 0.39,
+    "hltv": 0.59,
+    "matches": 9
+   },
    "errors": []
   },
   {
@@ -2313,7 +2333,7 @@
     "elo": 618,
     "level": 2,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Hugo",
@@ -2363,7 +2383,7 @@
     "winrate": 0.44,
     "totalMatches": 639,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -3337,6 +3357,11 @@
      "rating": -0.0014
     }
    ],
+   "perf": {
+    "kd": 0.46,
+    "hltv": 0.63,
+    "matches": 14
+   },
    "errors": []
   },
   {
@@ -3352,7 +3377,7 @@
     "elo": 1381,
     "level": 7,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Inès",
@@ -3402,7 +3427,7 @@
     "winrate": 0.5073739668050539,
     "totalMatches": 1066,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -3727,6 +3752,11 @@
      "rating": -0.0481
     }
    ],
+   "perf": {
+    "kd": 0.84,
+    "hltv": 0.9,
+    "matches": 12
+   },
    "errors": []
   },
   {
@@ -3742,7 +3772,7 @@
     "elo": 1635,
     "level": 8,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Sami",
@@ -3784,7 +3814,7 @@
     "winrate": 0.5395233230660886,
     "totalMatches": 923,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -4366,6 +4396,11 @@
      "rank": 18275
     }
    ],
+   "perf": {
+    "kd": 1.07,
+    "hltv": 0.99,
+    "matches": 10
+   },
    "errors": []
   },
   {
@@ -4381,7 +4416,7 @@
     "elo": 538,
     "level": 2,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Jules",
@@ -4423,7 +4458,7 @@
     "winrate": 0.4599024855717109,
     "totalMatches": 1012,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -6405,6 +6440,11 @@
      "rank": 9599
     }
    ],
+   "perf": {
+    "kd": 0.49,
+    "hltv": 0.64,
+    "matches": 9
+   },
    "errors": []
   },
   {
@@ -6420,7 +6460,7 @@
     "elo": 1636,
     "level": 8,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Yanis",
@@ -6474,7 +6514,7 @@
     "winrate": 0.5266309525320595,
     "totalMatches": 908,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -7478,6 +7518,11 @@
      "rating": 0.0174
     }
    ],
+   "perf": {
+    "kd": 1.09,
+    "hltv": 1.07,
+    "matches": 9
+   },
    "errors": []
   },
   {
@@ -7493,7 +7538,7 @@
     "elo": 1330,
     "level": 6,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Chloé",
@@ -7543,7 +7588,7 @@
     "winrate": 0.5049960839049854,
     "totalMatches": 852,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -8044,6 +8089,11 @@
      "rating": 0.0118
     }
    ],
+   "perf": {
+    "kd": 0.66,
+    "hltv": 0.76,
+    "matches": 8
+   },
    "errors": []
   },
   {
@@ -8059,7 +8109,7 @@
     "elo": 1592,
     "level": 8,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Bastien",
@@ -8101,7 +8151,7 @@
     "winrate": 0.5321664854438664,
     "totalMatches": 347,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -8701,6 +8751,11 @@
      "rank": 17686
     }
    ],
+   "perf": {
+    "kd": 1.01,
+    "hltv": 0.97,
+    "matches": 12
+   },
    "errors": []
   },
   {
@@ -8762,7 +8817,7 @@
     "winrate": 0.4785061960467195,
     "totalMatches": 388,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -9814,6 +9869,11 @@
      "rank": 7
     }
    ],
+   "perf": {
+    "kd": 0.68,
+    "hltv": 0.9,
+    "matches": 9
+   },
    "errors": []
   },
   {
@@ -9829,7 +9889,7 @@
     "elo": 1118,
     "level": 5,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Lucas",
@@ -9871,7 +9931,7 @@
     "winrate": 0.4826698518383036,
     "totalMatches": 698,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -10268,6 +10328,11 @@
      "rating": -0.024
     }
    ],
+   "perf": {
+    "kd": 0.57,
+    "hltv": 0.67,
+    "matches": 8
+   },
    "errors": []
   },
   {
@@ -10283,7 +10348,7 @@
     "elo": 1937,
     "level": 9,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Malik",
@@ -10333,7 +10398,7 @@
     "winrate": 0.5782597383095508,
     "totalMatches": 333,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -10974,6 +11039,11 @@
      "rank": 21092
     }
    ],
+   "perf": {
+    "kd": 1.57,
+    "hltv": 1.29,
+    "matches": 11
+   },
    "errors": []
   },
   {
@@ -10989,7 +11059,7 @@
     "elo": 1352,
     "level": 7,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Théo",
@@ -11031,7 +11101,7 @@
     "winrate": 0.5142894518508477,
     "totalMatches": 625,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -11818,6 +11888,11 @@
      "rank": 12
     }
    ],
+   "perf": {
+    "kd": 0.9,
+    "hltv": 0.94,
+    "matches": 12
+   },
    "errors": []
   },
   {
@@ -11833,7 +11908,7 @@
     "elo": 499,
     "level": 1,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Romain",
@@ -11879,7 +11954,7 @@
     "winrate": 0.43738065385947067,
     "totalMatches": 702,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -12359,6 +12434,11 @@
      "rating": -0.024
     }
    ],
+   "perf": {
+    "kd": 0.43,
+    "hltv": 0.6,
+    "matches": 9
+   },
    "errors": []
   },
   {
@@ -12374,7 +12454,7 @@
     "elo": 1727,
     "level": 8,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Sarah",
@@ -12428,7 +12508,7 @@
     "winrate": 0.5471111622146435,
     "totalMatches": 1072,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -12927,6 +13007,11 @@
      "rank": 16676
     }
    ],
+   "perf": {
+    "kd": 1.17,
+    "hltv": 1.2,
+    "matches": 7
+   },
    "errors": []
   },
   {
@@ -12942,7 +13027,7 @@
     "elo": 2402,
     "level": 10,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Kevin",
@@ -12984,7 +13069,7 @@
     "winrate": 0.5794571373606633,
     "totalMatches": 1062,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -14094,6 +14179,11 @@
      "rating": 0.0356
     }
    ],
+   "perf": {
+    "kd": 1.75,
+    "hltv": 1.39,
+    "matches": 7
+   },
    "errors": []
   },
   {
@@ -14109,7 +14199,7 @@
     "elo": 1674,
     "level": 8,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Axel",
@@ -14159,7 +14249,7 @@
     "winrate": 0.5468828478147116,
     "totalMatches": 365,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -14575,6 +14665,11 @@
      "rank": 14
     }
    ],
+   "perf": {
+    "kd": 1.07,
+    "hltv": 1.1,
+    "matches": 7
+   },
    "errors": []
   },
   {
@@ -14636,7 +14731,7 @@
     "winrate": 0.4936177585214542,
     "totalMatches": 470,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -15233,6 +15328,11 @@
      "rank": 11896
     }
    ],
+   "perf": {
+    "kd": 0.78,
+    "hltv": 0.84,
+    "matches": 7
+   },
    "errors": []
   },
   {
@@ -15248,7 +15348,7 @@
     "elo": 1332,
     "level": 6,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Mathis",
@@ -15302,7 +15402,7 @@
     "winrate": 0.5239044119640295,
     "totalMatches": 437,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -15855,6 +15955,11 @@
      "rating": 0.0217
     }
    ],
+   "perf": {
+    "kd": 1.08,
+    "hltv": 0.98,
+    "matches": 10
+   },
    "errors": []
   },
   {
@@ -15870,7 +15975,7 @@
     "elo": 1302,
     "level": 6,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Camille",
@@ -15916,7 +16021,7 @@
     "winrate": 0.5056980307453294,
     "totalMatches": 398,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -16227,6 +16332,11 @@
      "rating": -0.0493
     }
    ],
+   "perf": {
+    "kd": 0.94,
+    "hltv": 0.99,
+    "matches": 8
+   },
    "errors": []
   },
   {
@@ -16242,7 +16352,7 @@
     "elo": 491,
     "level": 1,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": null,
    "matches": [
@@ -16439,6 +16549,7 @@
      "result": "W"
     }
    ],
+   "perf": null,
    "errors": []
   },
   {
@@ -16454,7 +16565,7 @@
     "elo": 2044,
     "level": 10,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Rayan",
@@ -16512,7 +16623,7 @@
     "winrate": 0.5614073935723001,
     "totalMatches": 333,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -17703,6 +17814,11 @@
      "rating": -0.0182
     }
    ],
+   "perf": {
+    "kd": 1.45,
+    "hltv": 1.25,
+    "matches": 8
+   },
    "errors": []
   },
   {
@@ -17718,7 +17834,7 @@
     "elo": 1473,
     "level": 7,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "leetify": {
     "name": "Lina",
@@ -17772,7 +17888,7 @@
     "winrate": 0.5193598346592484,
     "totalMatches": 1163,
     "url": null,
-    "updatedAt": "2026-11-20T14:47:19.371Z"
+    "updatedAt": "2026-11-20T15:29:15.839Z"
    },
    "matches": [
     {
@@ -18086,6 +18202,11 @@
      "rank": 16416
     }
    ],
+   "perf": {
+    "kd": 0.85,
+    "hltv": 0.86,
+    "matches": 7
+   },
    "errors": []
   }
  ]

@@ -1,6 +1,6 @@
 # Traphouse
 
-Tableau de bord CS2 pour notre groupe : classements FACEIT, Premier et Matchmaking, joueur du jour / de la semaine / du mois, et quelques stats pour se chambrer.
+Classement CS2 de notre groupe : photo de profil, ELO FACEIT, Premier, meilleur rang MM, rang Wingman, rating Leetify, K/D et rating HLTV 1.0, triables par colonne. Un clic sur un joueur ouvre sa page et ses derniers matchs, un clic sur un match ouvre son tableau des scores.
 
 Le site est 100 % statique (GitHub Pages). Toutes les heures, un workflow GitHub Actions interroge les API avec les clés rangées dans les Secrets, puis écrit des JSON dans `data/`. Le navigateur ne voit jamais une clé.
 
@@ -84,6 +84,8 @@ Le commit relance le workflow : le joueur apparaît en 2 à 3 minutes. Pour reti
 - La carte et le score d'un match FACEIT viennent aussi de Leetify (l'historique FACEIT ne donne que la date et le vainqueur).
 
 ## Calculs
+
+- **K/D et rating HLTV 1.0** : sur les matchs des 30 derniers jours qui ont un tableau des scores Leetify. Le 1.0 suit la formule publique d'HLTV (kills, survie et multi-kills par round). Le 2.0 n'est pas possible : HLTV n'a pas publié sa formule, et elle utilise le KAST et un score d'impact que Leetify ne donne pas.
 
 - **Distinctions** : `ELO gagné + gain Premier ÷ 10 + 15 × victoires − 10 × défaites`, sur aujourd'hui / 7 jours / 30 jours, avec au moins un match joué. Égalité départagée au nombre de victoires.
 - **Variation** : valeur actuelle moins la dernière valeur connue la veille au soir (ou il y a 7 jours).

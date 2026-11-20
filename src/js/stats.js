@@ -34,7 +34,15 @@ export function buildModel(latest, series, now = new Date()) {
 
   const players = latest.players.map((p) => {
     const s = series?.players?.[p.id];
-    const cur = { elo: p.faceit?.elo ?? null, premier: p.leetify?.premier ?? null, mm: p.leetify?.mmBest?.rank ?? null };
+    const cur = {
+      elo: p.faceit?.elo ?? null,
+      premier: p.leetify?.premier ?? null,
+      mm: p.leetify?.mmBest?.rank ?? null,
+      wingman: p.leetify?.wingman || null,
+      leetify: typeof p.leetify?.leetify === 'number' ? p.leetify.leetify : null,
+      kd: p.perf?.kd ?? null,
+      hltv: p.perf?.hltv ?? null,
+    };
     const base = (days) =>
       Object.fromEntries(METRICS.map((m) => [m, valueAt(dates, s?.[m], addDays(today, -days), today)]));
     const delta = (days) => {

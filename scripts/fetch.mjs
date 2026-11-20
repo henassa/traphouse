@@ -2,7 +2,7 @@
 // Une source qui échoue ne casse rien : on garde les dernières valeurs connues du joueur.
 import { mkdir, readdir, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { mergeMatches, readJson, writeAll } from './lib/store.mjs';
+import { mergeMatches, perfOf, readJson, writeAll } from './lib/store.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const DATA = join(ROOT, 'data');
@@ -207,6 +207,8 @@ function trimDetails(d) {
       hsKills: p.total_hs_kills,
       rating: p.leetify_rating,
       mvps: p.mvps,
+      k1: p.multi1k,
+      k2: p.multi2k,
       k3: p.multi3k,
       k4: p.multi4k,
       k5: p.multi5k,
@@ -256,6 +258,19 @@ async function fetchDetails(players, key, leetifyDown) {
     }
   }
   for (const p of players) for (const m of p.matches) m.details = !!(m.leetifyId && have.has(m.leetifyId));
+
+  // K/D et rating HLTV 1.0 sur les 30 derniers jours, à partir des tableaux des scores.
+  const cutoff = Date.now() - 30 * 864e5;
+  const cache = new Map();
+  for (const p of players) {
+    const ids = p.matches.filter((m) => m.details && new Date(m.at).getTime() >= cutoff).map((m) => m.leetifyId);
+    const list = [];
+    for (const id of ids) {
+      if (!cache.has(id)) cache.set(id, await readJson(join(MATCHES, `${id}.json`)));
+      list.push(cache.get(id));
+    }
+    p.perf = perfOf(list, p.steam64);
+  }
   console.log(`Détails de matchs : ${fetched} nouveaux, ${have.size} en tout`);
 }
 
@@ -366,7 +381,9 @@ async function main() {
       matches: mergeMatches(prevMatches, fresh, now),
       errors,
     });
-    console.log(`${(cfg.name || id).padEnd(18)} ${errors.length ? errors.join(' | ') : 'ok'}`);
+    const found = [faceit && `FACEIT ${faceit.elo}`, leetify && (leetify.premier ? `Premier ${leetify.premier}` : 'Leetify')].filter(Boolean);
+    const status = errors.length ? errors.join(' | ') : found.length ? found.join(', ') : 'introuvable sur FACEIT et Leetify (Steam ID correct ?)';
+    console.log(`${(cfg.name || id).padEnd(18)} ${status}`);
   }
 
   if (leetifyDown) sources.leetify.error = 'Limite de requêtes atteinte (429)';
