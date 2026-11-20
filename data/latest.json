@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-20T15:32:19.670Z",
+ "generatedAt": "2026-11-20T15:37:13.766Z",
  "timezone": "Europe/Zurich",
  "group": "Traphouse",
  "sources": {
@@ -33,7 +33,7 @@
     "elo": 2439,
     "level": 10,
     "url": "https://www.faceit.com/fr/players/Xeno--",
-    "updatedAt": "2026-11-20T15:32:19.670Z"
+    "updatedAt": "2026-11-20T15:37:13.766Z"
    },
    "leetify": {
     "name": "Xeno--",
@@ -55,7 +55,7 @@
     "winrate": 0.3,
     "totalMatches": 3471,
     "url": "https://leetify.com/app/profile/76561198329257038",
-    "updatedAt": "2026-11-20T15:32:19.670Z"
+    "updatedAt": "2026-11-20T15:37:13.766Z"
    },
    "matches": [
     {
@@ -576,14 +576,14 @@
      ],
      "rating": 0.0096,
      "rank": null,
-     "details": false
+     "details": true
     }
    ],
    "errors": [],
    "perf": {
-    "kd": 0.93,
+    "kd": 0.94,
     "hltv": null,
-    "matches": 15
+    "matches": 16
    }
   },
   {
@@ -599,7 +599,7 @@
     "elo": 2013,
     "level": 10,
     "url": "https://www.faceit.com/fr/players/-Xafi-",
-    "updatedAt": "2026-11-20T15:32:19.670Z"
+    "updatedAt": "2026-11-20T15:37:13.766Z"
    },
    "leetify": {
     "name": "Xafi 𒉭",
@@ -641,7 +641,7 @@
     "winrate": 0.4333,
     "totalMatches": 2395,
     "url": "https://leetify.com/app/profile/76561199010607370",
-    "updatedAt": "2026-11-20T15:32:19.670Z"
+    "updatedAt": "2026-11-20T15:37:13.766Z"
    },
    "matches": [
     {
@@ -925,7 +925,7 @@
      ],
      "rating": 0.0198,
      "rank": 24879,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:6d7a56c4-48a7-408e-84f1-21500deea889",
@@ -940,7 +940,7 @@
      ],
      "rating": -0.011,
      "rank": 24999,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:22604d4d-ce17-4ecb-af15-642d4dddd23e",
@@ -955,7 +955,7 @@
      ],
      "rating": 0.124,
      "rank": 24930,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:acbb37bc-8386-42e0-ac8e-a14d08bcbbc5",
@@ -970,7 +970,7 @@
      ],
      "rating": 0.0111,
      "rank": 24531,
-     "details": false
+     "details": true
     },
     {
      "id": "faceit:1-dd05d2d4-0b13-4f5a-9297-4ccac865a3b0",
@@ -1001,7 +1001,7 @@
       13
      ],
      "rating": -0.0142,
-     "details": false
+     "details": true
     },
     {
      "id": "faceit:1-fa5b875e-99ee-43ec-92bb-410cab1ddfac",
@@ -1056,7 +1056,7 @@
       13
      ],
      "rating": -0.0331,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:736669c5-7a5b-41c2-8b96-71e3d062c464",
@@ -1071,7 +1071,7 @@
      ],
      "rating": 0.0365,
      "rank": 24647,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:23a15b34-e8c2-465b-bef4-1fe972914c89",
@@ -1086,7 +1086,7 @@
      ],
      "rating": 0.168,
      "rank": 24193,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:2bf42180-cdc9-4b77-ade5-88150a0b8751",
@@ -1101,7 +1101,7 @@
      ],
      "rating": 0.0033,
      "rank": 23762,
-     "details": false
+     "details": true
     },
     {
      "id": "faceit:1-5434c930-0b3f-4321-a2ec-2e42e976a7d7",
@@ -1156,7 +1156,7 @@
      ],
      "rating": 0.0376,
      "rank": 23871,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:e422d891-5567-4e09-8701-f6b3b2160f5e",
@@ -1171,7 +1171,7 @@
      ],
      "rating": 0.1518,
      "rank": 23971,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:59ee5c31-ba39-4606-9d40-d2de9a9f6909",
@@ -1186,7 +1186,7 @@
      ],
      "rating": 0.0618,
      "rank": 23514,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:7c857aff-61eb-4498-b41f-34b6b26dfbe5",
@@ -1201,7 +1201,7 @@
      ],
      "rating": 0.0596,
      "rank": 23106,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:b98442f0-46f3-4c7b-84ed-9826a2121650",
@@ -1435,9 +1435,9 @@
    ],
    "errors": [],
    "perf": {
-    "kd": 0.68,
+    "kd": 1.14,
     "hltv": null,
-    "matches": 4
+    "matches": 17
    }
   },
   {
@@ -1453,7 +1453,7 @@
     "elo": 1127,
     "level": 5,
     "url": "https://www.faceit.com/fr/players/XaGroZz",
-    "updatedAt": "2026-11-20T15:32:19.670Z"
+    "updatedAt": "2026-11-20T15:37:13.766Z"
    },
    "leetify": {
     "name": "xa",
@@ -1519,7 +1519,7 @@
     "winrate": 0.4286,
     "totalMatches": 344,
     "url": "https://leetify.com/app/profile/76561198372275494",
-    "updatedAt": "2026-11-20T15:32:19.670Z"
+    "updatedAt": "2026-11-20T15:37:13.766Z"
    },
    "matches": [
     {
@@ -1859,7 +1859,7 @@
      ],
      "rating": 0.0618,
      "rank": 10,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:944983fb-aae8-4a73-bd3f-edd678ede286",
@@ -1874,7 +1874,7 @@
      ],
      "rating": 0.0439,
      "rank": 11,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:822f56d2-88d1-466d-9eb2-8ae80d64ebe4",
@@ -1889,7 +1889,7 @@
      ],
      "rating": 0.0381,
      "rank": 11,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:a6b7fbab-e313-4d5a-8332-e0ddbfbcb687",
@@ -1904,7 +1904,7 @@
      ],
      "rating": -0.0288,
      "rank": 13,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:ce638a39-bac7-4e26-9ad3-37ff37900b9e",
@@ -1919,7 +1919,7 @@
      ],
      "rating": 0.0274,
      "rank": 11,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:a07372c9-2519-4cb0-a026-55764dc056b7",
@@ -1934,7 +1934,7 @@
      ],
      "rating": -0.0619,
      "rank": null,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:c29828ec-080f-43e0-810f-e51f633292eb",
@@ -1949,7 +1949,7 @@
      ],
      "rating": 0.0062,
      "rank": null,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:06fe759a-cd1a-42a2-a765-da834161997f",
@@ -1964,7 +1964,7 @@
      ],
      "rating": 0.0059,
      "rank": 9,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:198f8d91-88f5-4629-9a11-bd9d6e83746f",
@@ -1979,7 +1979,7 @@
      ],
      "rating": -0.0536,
      "rank": 19115,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:663a1f3d-6efa-4fb5-ab73-2a9aa1026131",
@@ -1994,7 +1994,7 @@
      ],
      "rating": 0.0006,
      "rank": 19226,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:c8df1bad-52b0-40ef-9ae0-dc0fa768986e",
@@ -2009,7 +2009,7 @@
      ],
      "rating": -0.0058,
      "rank": null,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:4e36f841-8552-4c78-a943-725045ea31d1",
@@ -2024,7 +2024,7 @@
      ],
      "rating": -0.0397,
      "rank": null,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:0cb7322f-3731-4ee3-bae6-891fe160463d",
@@ -2039,7 +2039,7 @@
      ],
      "rating": 0.0793,
      "rank": 10,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:23fba1d0-b196-45a6-9aa1-c1acaacbb245",
@@ -2054,7 +2054,7 @@
      ],
      "rating": 0.0501,
      "rank": 10,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:bcca7f94-b804-44e2-9262-10a71569d0b1",
@@ -2241,7 +2241,7 @@
    "perf": {
     "kd": 0.99,
     "hltv": null,
-    "matches": 20
+    "matches": 34
    }
   },
   {
@@ -2257,7 +2257,7 @@
     "elo": 1036,
     "level": 4,
     "url": "https://www.faceit.com/fr/players/vyia",
-    "updatedAt": "2026-11-20T15:32:19.670Z"
+    "updatedAt": "2026-11-20T15:37:13.766Z"
    },
    "leetify": null,
    "matches": [],
@@ -2277,7 +2277,7 @@
     "elo": 0,
     "level": 0,
     "url": "https://www.faceit.com/fr/players/Ulyxx3",
-    "updatedAt": "2026-11-20T15:32:19.670Z"
+    "updatedAt": "2026-11-20T15:37:13.766Z"
    },
    "leetify": null,
    "matches": [],
@@ -2297,7 +2297,7 @@
     "elo": 1278,
     "level": 6,
     "url": "https://www.faceit.com/fr/players/Togrqm",
-    "updatedAt": "2026-11-20T15:32:19.670Z"
+    "updatedAt": "2026-11-20T15:37:13.766Z"
    },
    "leetify": {
     "name": "Togrqm",
@@ -2351,7 +2351,7 @@
     "winrate": 0.3333,
     "totalMatches": 2272,
     "url": "https://leetify.com/app/profile/76561198143478066",
-    "updatedAt": "2026-11-20T15:32:19.670Z"
+    "updatedAt": "2026-11-20T15:37:13.766Z"
    },
    "matches": [
     {
@@ -2539,7 +2539,7 @@
     "elo": 2552,
     "level": 10,
     "url": "https://www.faceit.com/fr/players/zengwer",
-    "updatedAt": "2026-11-20T15:32:19.670Z"
+    "updatedAt": "2026-11-20T15:37:13.766Z"
    },
    "leetify": {
     "name": "zengwer",
@@ -2585,7 +2585,7 @@
     "winrate": 0.3103,
     "totalMatches": 1682,
     "url": "https://leetify.com/app/profile/76561198877467745",
-    "updatedAt": "2026-11-20T15:32:19.670Z"
+    "updatedAt": "2026-11-20T15:37:13.766Z"
    },
    "matches": [],
    "errors": [],
@@ -2604,7 +2604,7 @@
     "elo": 892,
     "level": 3,
     "url": "https://www.faceit.com/fr/players/Stannah_",
-    "updatedAt": "2026-11-20T15:32:19.670Z"
+    "updatedAt": "2026-11-20T15:37:13.766Z"
    },
    "leetify": null,
    "matches": [
@@ -2649,7 +2649,7 @@
     "elo": 2846,
     "level": 10,
     "url": "https://www.faceit.com/fr/players/Slyrik",
-    "updatedAt": "2026-11-20T15:32:19.670Z"
+    "updatedAt": "2026-11-20T15:37:13.766Z"
    },
    "leetify": {
     "name": "Slyrik",
@@ -2703,7 +2703,7 @@
     "winrate": 0.4,
     "totalMatches": 2280,
     "url": "https://leetify.com/app/profile/76561198123379225",
-    "updatedAt": "2026-11-20T15:32:19.670Z"
+    "updatedAt": "2026-11-20T15:37:13.766Z"
    },
    "matches": [],
    "errors": [],
@@ -2722,7 +2722,7 @@
     "elo": 2235,
     "level": 10,
     "url": "https://www.faceit.com/fr/players/shyzzfp",
-    "updatedAt": "2026-11-20T15:32:19.670Z"
+    "updatedAt": "2026-11-20T15:37:13.766Z"
    },
    "leetify": {
     "name": "shyzzfp",
@@ -2776,7 +2776,7 @@
     "winrate": 0.4333,
     "totalMatches": 1347,
     "url": "https://leetify.com/app/profile/76561199557339456",
-    "updatedAt": "2026-11-20T15:32:19.670Z"
+    "updatedAt": "2026-11-20T15:37:13.766Z"
    },
    "matches": [
     {
@@ -3227,7 +3227,7 @@
       5
      ],
      "rating": 0.0589,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:7f221b1e-68ad-47ec-9026-f3255553e9ab",
@@ -3242,7 +3242,7 @@
      ],
      "rating": -0.0252,
      "rank": 22540,
-     "details": false
+     "details": true
     },
     {
      "id": "faceit:1-b6a4a21c-584f-44f7-943c-e1d26cc03c21",
@@ -3257,7 +3257,7 @@
       13
      ],
      "rating": -0.0603,
-     "details": false
+     "details": true
     },
     {
      "id": "faceit:1-81c33168-5af7-4d95-9b07-48a63d54c63a",
@@ -3272,7 +3272,7 @@
       13
      ],
      "rating": -0.0779,
-     "details": false
+     "details": true
     },
     {
      "id": "faceit:1-105f2fdf-5072-48f9-838e-6c5de5cebb06",
@@ -3287,7 +3287,7 @@
       16
      ],
      "rating": -0.042,
-     "details": false
+     "details": true
     },
     {
      "id": "faceit:1-3597d662-7ea3-4985-a861-d0702394be9a",
@@ -3302,7 +3302,7 @@
       13
      ],
      "rating": -0.0569,
-     "details": false
+     "details": true
     },
     {
      "id": "faceit:1-fa8ddeec-ca9d-4aef-99f3-12f2bdb4428c",
@@ -3317,7 +3317,7 @@
       11
      ],
      "rating": 0.0767,
-     "details": false
+     "details": true
     },
     {
      "id": "faceit:1-cff9c13e-2051-4010-ae65-587bb76c6bc8",
@@ -3332,7 +3332,7 @@
       8
      ],
      "rating": 0.0465,
-     "details": false
+     "details": true
     },
     {
      "id": "faceit:1-f51b3381-d517-4d24-af64-89e2aacf1a13",
@@ -3347,7 +3347,7 @@
       6
      ],
      "rating": 0.0332,
-     "details": false
+     "details": true
     },
     {
      "id": "faceit:1-ad1c0e32-3aee-472f-8ad1-f04e65042f66",
@@ -3362,7 +3362,7 @@
       13
      ],
      "rating": 0.0152,
-     "details": false
+     "details": true
     },
     {
      "id": "faceit:1-5a87a0ee-6dee-421b-b5f5-ea23311bdebf",
@@ -3377,7 +3377,7 @@
       13
      ],
      "rating": -0.0207,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:2ce4e473-5a75-4497-990f-83a2123677ff",
@@ -3392,7 +3392,7 @@
      ],
      "rating": 0.0365,
      "rank": null,
-     "details": false
+     "details": true
     },
     {
      "id": "leetify:e718fd79-bc5a-4e42-a6de-aceaf43b5416",
@@ -3407,7 +3407,7 @@
      ],
      "rating": 0.0011,
      "rank": 11,
-     "details": false
+     "details": true
     },
     {
      "id": "faceit:1-58d38e25-32b6-43c4-b136-2432a545b6a5",
@@ -3660,9 +3660,9 @@
    ],
    "errors": [],
    "perf": {
-    "kd": 0.86,
+    "kd": 0.94,
     "hltv": null,
-    "matches": 29
+    "matches": 42
    }
   },
   {
@@ -3678,7 +3678,7 @@
     "elo": 2504,
     "level": 10,
     "url": "https://www.faceit.com/fr/players/sayga",
-    "updatedAt": "2026-11-20T15:32:19.670Z"
+    "updatedAt": "2026-11-20T15:37:13.766Z"
    },
    "leetify": null,
    "matches": [
