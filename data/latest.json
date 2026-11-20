@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-19T18:40:06.108Z",
+ "generatedAt": "2026-11-20T01:16:36.282Z",
  "timezone": "Europe/Zurich",
  "group": "traphouse",
  "sources": {
@@ -34,7 +34,7 @@
     "elo": 2514,
     "level": 10,
     "url": "https://www.faceit.com/fr/players/vie2reve",
-    "updatedAt": "2026-11-19T18:40:06.108Z"
+    "updatedAt": "2026-11-20T01:16:36.282Z"
    },
    "leetify": {
     "name": "didou",
@@ -112,7 +112,7 @@
     "winrate": 0.4138,
     "totalMatches": 2559,
     "url": "https://leetify.com/app/profile/76561198123365503",
-    "updatedAt": "2026-11-19T18:40:06.108Z"
+    "updatedAt": "2026-11-20T01:16:36.282Z"
    },
    "matches": [
     {
@@ -1264,71 +1264,6 @@
       13
      ],
      "rating": 0.0112,
-     "rank": 17
-    },
-    {
-     "id": "leetify:bbceb281-95fd-40c6-998d-7502c0df0d73",
-     "source": "premier",
-     "at": "2026-10-05T22:49:05.000Z",
-     "map": "Ancient",
-     "result": "L",
-     "score": [
-      10,
-      13
-     ],
-     "rating": 0.0386,
-     "rank": 26260
-    },
-    {
-     "id": "leetify:2bad38d8-f88f-4e0e-87b2-748943410564",
-     "source": "premier",
-     "at": "2026-10-05T22:22:10.000Z",
-     "map": "Nuke",
-     "result": "L",
-     "score": [
-      5,
-      13
-     ],
-     "rating": 0.0708,
-     "rank": 26484
-    },
-    {
-     "id": "leetify:8f76bdcc-acec-4411-831f-7b0db5d2bf10",
-     "source": "premier",
-     "at": "2026-10-05T21:37:34.000Z",
-     "map": "Cache",
-     "result": "W",
-     "score": [
-      13,
-      9
-     ],
-     "rating": 0.0977,
-     "rank": 26744
-    },
-    {
-     "id": "leetify:9793e356-815d-4d96-bf0f-d24e669fbfe9",
-     "source": "mm",
-     "at": "2026-10-05T21:09:40.000Z",
-     "map": "Inferno",
-     "result": "W",
-     "score": [
-      13,
-      1
-     ],
-     "rating": 0.0256,
-     "rank": 17
-    },
-    {
-     "id": "leetify:937bbc2d-3eff-4238-bbcc-10b25ef30fb1",
-     "source": "mm",
-     "at": "2026-10-05T19:55:56.000Z",
-     "map": "Inferno",
-     "result": "L",
-     "score": [
-      8,
-      13
-     ],
-     "rating": -0.0406,
      "rank": 17
     }
    ],
