@@ -4,6 +4,7 @@ import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { addDays, dayKey, mergeMatches, perfOf, readJson, snapshotOf } from './lib/store.mjs';
 import { downloadTiers, fetchValorant } from './valorant.mjs';
+import { fetchLol } from './lol.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const DATA = join(ROOT, 'data');
@@ -16,6 +17,7 @@ let leetifyHeaderMode = 'bearer';
 const leetifyHeaders = (key) => (!key ? {} : leetifyHeaderMode === 'raw' ? { _leetify_key: key } : { Authorization: `Bearer ${key}` });
 const STEAM_KEY = process.env.STEAM_API_KEY;
 const HENRIK_KEY = (process.env.HENRIK_API_KEY ?? '').trim() || null;
+const RIOT_KEY = (process.env.RIOT_API_KEY ?? '').trim() || null;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -496,7 +498,15 @@ async function main() {
     console.log('[Valo] pas de secret HENRIK_API_KEY : tableau Valorant non mis à jour');
   }
 
-  const latest = { generatedAt: now.toISOString(), timezone, group: config.group ?? 'Traphouse', sources, players, valorant };
+  // League of Legends : clé personnelle Riot + Riot ID listés dans players.json.
+  let lol = previous.lol ?? null;
+  if (RIOT_KEY && config.lol?.length) {
+    lol = await fetchLol(config, previous.lol, RIOT_KEY, now);
+  } else if (config.lol?.length) {
+    console.log('[LoL] pas de secret RIOT_API_KEY : tableau League of Legends non mis à jour');
+  }
+
+  const latest = { generatedAt: now.toISOString(), timezone, group: config.group ?? 'Traphouse', sources, players, valorant, lol };
   const series = updateSeries(prevSeries, dayKey(now, timezone), players);
 
   // Écrit dans data/, qui n'est pas suivi par git : le workflow publie ces fichiers avec le site.

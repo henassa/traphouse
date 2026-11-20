@@ -187,6 +187,26 @@ const valorant = {
   }),
 };
 
+// Tableau League of Legends de démo.
+const LOL_T = ['IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'EMERALD', 'DIAMOND', 'MASTER', 'GRANDMASTER', 'CHALLENGER'];
+const LOL_D = ['IV', 'III', 'II', 'I'];
+const lolQueue = (skill) => {
+  const t = Math.max(0, Math.min(8, Math.round(4 + skill * 4 + between(-1, 1))));
+  const games = Math.round(between(30, 260));
+  const wins = Math.round(games * (0.48 + skill * 0.05 + between(-0.03, 0.03)));
+  return { tier: LOL_T[t], division: t >= 7 ? 'I' : pick(LOL_D), lp: t >= 7 ? Math.round(between(0, 600)) : Math.round(between(0, 99)), wins, losses: games - wins };
+};
+const LOL_NAMES = ['Max', 'Tom', 'Hugo', 'Sarah', 'Axel', 'Enzo', 'Lucas', 'Camille', 'Romain', 'Théo'];
+const lol = {
+  generatedAt: new Date(now.getTime() - 14 * 60e3).toISOString(),
+  sources: { ok: LOL_NAMES.length, failed: 0, error: null },
+  players: LOL_NAMES.map((name, i) => {
+    const skill = between(-1, 1);
+    return { id: `${name.toLowerCase()}#euw`, riotId: `${name}#EUW`, name, region: 'euw', avatar: null, errors: [],
+      solo: i === 9 ? null : lolQueue(skill), flex: rand() < 0.6 ? lolQueue(skill - 0.2) : null };
+  }),
+};
+
 await writeAll(OUT, {
   generatedAt: new Date(now.getTime() - 14 * 60e3).toISOString(),
   timezone: TZ,
@@ -194,6 +214,7 @@ await writeAll(OUT, {
   sources: { faceit: { ok: 22, failed: 0 }, leetify: { ok: 24, failed: 0 }, steam: { ok: 0, failed: 0, skipped: true } },
   players: players.map(toLatest),
   valorant,
+  lol,
 }, { now });
 
 await writeFile(`${OUT}/matches.json`, JSON.stringify(details) + '\n');

@@ -25,6 +25,24 @@ const VAL_COLUMNS = {
   winrate: { label: 'Victoires', width: 84 },
 };
 
+const LOL_COLUMNS = {
+  solo: { label: 'Solo/Duo', width: 170 },
+  lp: { label: 'LP', width: 60 },
+  flex: { label: 'Flex', width: 190 },
+  winrate: { label: 'Victoires', width: 84 },
+  games: { label: 'Parties', width: 70 },
+};
+
+// Paliers LoL, du plus bas au plus haut, avec une couleur par palier.
+const LOL_TIERS = ['IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'EMERALD', 'DIAMOND', 'MASTER', 'GRANDMASTER', 'CHALLENGER'];
+const LOL_COLORS = { IRON: '#8a8a8a', BRONZE: '#b0764b', SILVER: '#aab4c0', GOLD: '#e5b84c', PLATINUM: '#4fb8a8', EMERALD: '#3fc36b', DIAMOND: '#6f8cff', MASTER: '#c45cff', GRANDMASTER: '#ff5555', CHALLENGER: '#f4d27a' };
+const LOL_DIVS = { IV: 0, III: 1, II: 2, I: 3 };
+const lolScore = (q) => (q ? LOL_TIERS.indexOf(q.tier) * 400 + (LOL_DIVS[q.division] ?? 0) * 100 + (q.lp ?? 0) : null);
+const lolTierName = (q) => {
+  const t = q.tier.charAt(0) + q.tier.slice(1).toLowerCase();
+  return LOL_TIERS.indexOf(q.tier) >= 7 ? t : `${t} ${q.division ?? ''}`.trim();
+};
+
 // Emblèmes de rang du catalogue public de Riot (servis par valorant-api.com).
 // Emblème publié avec le site par le workflow ; à défaut, la même image chez valorant-api.com.
 const valTierIcon = (tier) => `${BASE}valorant-tiers/${tier}.png`;
@@ -42,7 +60,9 @@ const state = {
   // Toujours par ELO FACEIT à l'ouverture, du plus haut au plus bas.
   sort: 'elo',
   sortDir: 'desc',
-  game: location.hash === '#valorant' ? 'val' : 'cs',
+  game: location.hash === '#valorant' ? 'val' : location.hash === '#lol' ? 'lol' : 'cs',
+  lolSort: 'solo',
+  lolSortDir: 'desc',
   valSort: 'elo',
   valSortDir: 'desc',
   period: 1,
@@ -217,36 +237,94 @@ function tableHtml(columns, sort, sortDir, shown, cell, q) {
     </div>`;
 }
 
+function lolPlayers() {
+  return (state.latest.lol?.players ?? []).map((p) => {
+    const g = p.solo ? p.solo.wins + p.solo.losses : null;
+    return {
+      ...p,
+      cur: {
+        solo: lolScore(p.solo),
+        lp: p.solo ? p.solo.lp : null,
+        flex: lolScore(p.flex),
+        winrate: g ? Math.round((p.solo.wins / g) * 100) : null,
+        games: g || null,
+      },
+    };
+  });
+}
+
+function lolRows() {
+  const { lolSort: sort, lolSortDir: sortDir, query } = state;
+  const q = query.trim().toLowerCase();
+  const dir = sortDir === 'asc' ? 1 : -1;
+  const sorted = lolPlayers().sort((a, b) => {
+    const va = a.cur[sort], vb = b.cur[sort];
+    if (va == null && vb == null) return a.name.localeCompare(b.name);
+    if (va == null) return 1;
+    if (vb == null) return -1;
+    return (va - vb) * dir || (b.cur.solo ?? 0) - (a.cur.solo ?? 0);
+  });
+  const shown = sorted.map((p, i) => ({ p, i })).filter(({ p }) => !q || `${p.name} ${p.riotId}`.toLowerCase().includes(q));
+  const dash = '<span class="muted">—</span>';
+  // Emblèmes officiels Riot (ranked-emblems-latest), réduits dans src/img/lol.
+  const rank = (r) => `<span class="inline-flex items-center gap-1.5"><img class="rank-img" src="img/lol/${r.tier}.png" alt="" style="height:26px;width:auto" onerror="this.remove()"><b style="color:${LOL_COLORS[r.tier] ?? 'inherit'}">${esc(lolTierName(r))}</b></span>`;
+  const cell = (p, key) => {
+    const v = p.cur[key];
+    if (v == null) return dash;
+    switch (key) {
+      case 'solo': return rank(p.solo);
+      case 'flex': return `${rank(p.flex)} <span class="text-[11px] muted">${p.flex.lp} LP</span>`;
+      case 'lp': return `<b>${v}</b>`;
+      case 'winrate': return `<b class="${v >= 50 ? 'up' : 'down'}">${v} %</b><br><span class="text-[11px] muted">${p.solo.wins} V · ${p.solo.losses} D</span>`;
+      default: return `<b>${v}</b>`;
+    }
+  };
+  return tableHtml(LOL_COLUMNS, sort, sortDir, shown, cell, q);
+}
+
+const LOL_NOTE = 'Rangs Solo/Duo et Flex via l’API officielle de Riot. LP, victoires et parties en Solo/Duo sur la saison en cours.';
+
 const CS_NOTE = 'Évolution FACEIT et Premier depuis hier soir. MM = meilleur rang toutes cartes. Leetify = rating global Leetify, Rating = moyenne des ratings Leetify sur ses derniers matchs. K/D calculé sur les tableaux des scores Leetify depuis le début du suivi.';
 const VAL_NOTE = 'Rang, RR (avec la variation du dernier match) et pic de rang via HenrikDev. K/D et victoires sur les 20 derniers matchs compétitifs.';
 
 function gameTabs() {
-  return `<nav class="tabs" style="grid-template-columns:repeat(2,1fr)">
-    <li aria-selected="${state.game === 'cs'}"><a href="#" data-game="cs">Counter-Strike 2</a></li>
+  return `<nav class="tabs" style="grid-template-columns:repeat(3,1fr)">
+    <li aria-selected="${state.game === 'cs'}"><a href="#" data-game="cs">CS2</a></li>
     <li aria-selected="${state.game === 'val'}"><a href="#valorant" data-game="val">Valorant</a></li>
+    <li aria-selected="${state.game === 'lol'}"><a href="#lol" data-game="lol">LoL</a></li>
   </nav>`;
 }
 
 function currentRows() {
-  return state.game === 'val' ? valRows() : rankingRows();
+  return state.game === 'val' ? valRows() : state.game === 'lol' ? lolRows() : rankingRows();
+}
+
+// Données absentes pour un jeu : on explique quoi configurer.
+function missingFor(game) {
+  if (game === 'val' && !state.latest.valorant) return 'Pas encore de données Valorant : ajoute le secret <code>HENRIK_API_KEY</code> et des Riot ID dans la liste <code>valorant</code> de <code>players.json</code>.';
+  if (game === 'lol' && !state.latest.lol) return 'Pas encore de données League of Legends : ajoute le secret <code>RIOT_API_KEY</code> (clé personnelle Riot) et des Riot ID dans la liste <code>lol</code> de <code>players.json</code>.';
+  return null;
 }
 
 function ranking() {
-  const val = state.game === 'val';
-  const updated = val ? state.latest.valorant?.generatedAt : state.latest.generatedAt;
-  const missing = val && !state.latest.valorant;
+  const g = state.game;
+  const data = g === 'val' ? state.latest.valorant : g === 'lol' ? state.latest.lol : state.latest;
+  const missing = missingFor(g);
+  const note = g === 'val' ? VAL_NOTE : g === 'lol' ? LOL_NOTE : CS_NOTE;
   return win('Traphouse', `
     <input id="search" class="search mb-2" type="search" placeholder="Rechercher un joueur…" autocomplete="off" value="${esc(state.query)}">
-    ${!val && staleBanner() ? `<div class="mb-2">${staleBanner()}</div>` : ''}
-    <div id="rows">${missing ? '<div class="sunken px-2.5 py-2 text-[13px]">Pas encore de données Valorant : ajoute le secret <code>HENRIK_API_KEY</code> et des Riot ID dans <code>players.json</code>.</div>' : currentRows()}</div>
-    <p class="mx-0 mb-0 mt-2 text-[12px] muted">${updated ? `Mis à jour ${ago(updated, state.now)}. ` : ''}Clique sur une colonne pour trier, une deuxième fois pour inverser. ${val ? VAL_NOTE : CS_NOTE}</p>`,
+    ${g === 'cs' && staleBanner() ? `<div class="mb-2">${staleBanner()}</div>` : ''}
+    <div id="rows">${missing ? `<div class="sunken px-2.5 py-2 text-[13px]">${missing}</div>` : currentRows()}</div>
+    <p class="mx-0 mb-0 mt-2 text-[12px] muted">${data?.generatedAt ? `Mis à jour ${ago(data.generatedAt, state.now)}. ` : ''}Clique sur une colonne pour trier, une deuxième fois pour inverser. ${note}</p>`,
   'no-resize', 'ranking');
 }
 
 function footer() {
   const { latest } = state;
   const at = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'medium', timeStyle: 'short', timeZone: latest.timezone }).format(new Date(latest.generatedAt));
-  return `<p class="mx-0 mt-4 text-center text-[12px] muted">Données FACEIT, Leetify et HenrikDev, mises à jour toutes les heures.<br>Dernière mise à jour : ${at}${DEMO ? ' · données de démonstration' : ''}</p>`;
+  // Mention exigée par la politique développeur de Riot (Valorant et League of Legends).
+  return `<p class="mx-0 mt-4 text-center text-[12px] muted">Données FACEIT, Leetify, HenrikDev et Riot, mises à jour toutes les heures.<br>Dernière mise à jour : ${at}${DEMO ? ' · données de démonstration' : ''}</p>
+    <p class="mx-auto mt-2 max-w-[640px] text-center text-[11px] muted">TRAPHOUSE is not endorsed by Riot Games and does not reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</p>`;
 }
 
 function homeContent() {
@@ -260,7 +338,7 @@ function renderHome() {
 
 function sortBy(key) {
   // Deuxième clic sur la même colonne : on inverse le sens.
-  const [k, d] = state.game === 'val' ? ['valSort', 'valSortDir'] : ['sort', 'sortDir'];
+  const [k, d] = state.game === 'val' ? ['valSort', 'valSortDir'] : state.game === 'lol' ? ['lolSort', 'lolSortDir'] : ['sort', 'sortDir'];
   state[d] = state[k] === key && state[d] === 'desc' ? 'asc' : 'desc';
   state[k] = key;
   rerenderRows();
@@ -269,7 +347,7 @@ function sortBy(key) {
 // On ne redessine que la liste : le champ de recherche garde le focus.
 function rerenderRows() {
   const rows = document.getElementById('rows');
-  if (rows && !(state.game === 'val' && !state.latest.valorant)) rows.innerHTML = currentRows();
+  if (rows && !missingFor(state.game)) rows.innerHTML = currentRows();
 }
 
 function render() {
@@ -295,7 +373,7 @@ app.addEventListener('click', (e) => {
   if (game) {
     e.preventDefault();
     state.game = game.dataset.game;
-    history.replaceState(null, '', state.game === 'val' ? '#valorant' : location.pathname + location.search);
+    history.replaceState(null, '', state.game === 'val' ? '#valorant' : state.game === 'lol' ? '#lol' : location.pathname + location.search);
     renderHome();
     return;
   }

@@ -42,6 +42,7 @@ jobs:
           LEETIFY_API_KEY: ${{ secrets.LEETIFY_API_KEY }}
           STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
           HENRIK_API_KEY: ${{ secrets.HENRIK_API_KEY }}
+          RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
         run: node scripts/fetch.mjs
 
       - run: npm run build
