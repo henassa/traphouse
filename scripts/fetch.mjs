@@ -58,7 +58,8 @@ async function fetchFaceit(player) {
 
   const profile = await getJson(`${base}/players?${query}`, { headers: auth, gap: 250 });
   const cs2 = profile?.games?.cs2;
-  if (!cs2) return { profile: null, matches: [] };
+  // CS2 ajouté sur FACEIT mais jamais joué en classé : pas de niveau, ELO par défaut (0 ou 1000). On l'ignore.
+  if (!cs2 || !cs2.skill_level || !cs2.faceit_elo) return { profile: null, matches: [] };
 
   const from = Math.floor(Date.now() / 1000) - 35 * 86400;
   const history = await getJson(
@@ -171,11 +172,17 @@ function combineMatches(faceitMatches, leetifyMatches) {
 
 // Photo de profil Steam sans clé : le profil public existe aussi en XML.
 async function fetchSteamAvatar(steam64) {
-  const res = await fetch(`https://steamcommunity.com/profiles/${steam64}/?xml=1`, { signal: AbortSignal.timeout(10000) });
-  if (!res.ok) return null;
+  const url = `https://steamcommunity.com/profiles/${steam64}/?xml=1`;
+  const res = await fetch(url, {
+    headers: { 'User-Agent': 'Mozilla/5.0 (traphouse dashboard)' },
+    signal: AbortSignal.timeout(10000),
+  });
+  if (!res.ok) throw new HttpError(res.status, url);
   const xml = await res.text();
   const pick = (tag) => xml.match(new RegExp(`<${tag}><!\\[CDATA\\[([^\\]]*)\\]\\]></${tag}>`))?.[1] ?? null;
-  return { avatar: pick('avatarFull'), name: pick('steamID') };
+  const avatar = pick('avatarFull');
+  if (!avatar) throw new Error('profil sans photo ou réponse inattendue');
+  return { avatar, name: pick('steamID') };
 }
 
 // Steam (optionnel) : avatar et pseudo Steam, une seule requête pour 100 joueurs.
@@ -340,6 +347,7 @@ async function main() {
     steam: { ok: 0, failed: 0, skipped: !STEAM_KEY },
   };
   let leetifyDown = false;
+  const avatarStats = { ok: 0, failed: 0, last: null };
   let leetifyKey = LEETIFY_KEY;
 
   // Vérification documentée par Leetify (/api-key/validate) : on essaie les deux en-têtes acceptés.
@@ -422,10 +430,17 @@ async function main() {
     );
     let s = steam.get(id);
     let steamCheckedAt = prev.steamCheckedAt ?? null;
-    if (!s && (!steamCheckedAt || now - new Date(steamCheckedAt) > 864e5)) {
-      s = await fetchSteamAvatar(id).catch(() => null);
-      steamCheckedAt = now.toISOString();
-      await sleep(300);
+    // Sans clé Steam : photo lue sur le profil public, une fois par jour. Un échec sera retenté au passage suivant.
+    if (!s && (!prev.steamAvatar || !steamCheckedAt || now - new Date(steamCheckedAt) > 864e5)) {
+      try {
+        s = await fetchSteamAvatar(id);
+        steamCheckedAt = now.toISOString();
+        avatarStats.ok++;
+      } catch (e) {
+        avatarStats.failed++;
+        avatarStats.last = e.message;
+      }
+      await sleep(400);
     }
 
     players.push({
@@ -450,6 +465,7 @@ async function main() {
 
   if (leetifyDown) sources.leetify.error = 'Limite de requêtes atteinte (429)';
 
+  console.log(`Photos Steam : ${avatarStats.ok} récupérées, ${avatarStats.failed} échecs${avatarStats.last ? ` (dernier : ${avatarStats.last})` : ''}${STEAM_KEY ? ', clé Steam utilisée' : ''}`);
   await fetchDetails(players, bundle, leetifyKey, leetifyDown);
   const weekAgo = Date.now() - 7 * 864e5;
   const week = Object.values(bundle).filter((d) => new Date(d.finishedAt).getTime() >= weekAgo);

@@ -9,16 +9,14 @@ const app = document.getElementById('app');
 
 // Colonnes du classement : largeur fixe pour que rien ne bouge quand on trie.
 const COLUMNS = {
-  elo: { label: 'FACEIT', width: 96 },
-  premier: { label: 'Premier', width: 92 },
-  mm: { label: 'MM', width: 76 },
+  elo: { label: 'FACEIT', width: 100 },
+  premier: { label: 'Premier', width: 96 },
+  mm: { label: 'MM', width: 80 },
   wingman: { label: 'Wingman', width: 84 },
-  leetify: { label: 'Leetify', width: 72 },
-  aim: { label: 'Aim', width: 52 },
-  kd: { label: 'K/D', width: 56 },
-  kd7: { label: 'K/D 7 j', width: 66 },
-  hltv: { label: 'HLTV', width: 58 },
-  hltv7: { label: 'HLTV 7 j', width: 72 },
+  leetify: { label: 'Leetify', width: 76 },
+  aim: { label: 'Aim', width: 60 },
+  kd: { label: 'K/D', width: 64 },
+  hltv: { label: 'HLTV', width: 68 },
 };
 
 const store = {
@@ -139,7 +137,7 @@ function ranking() {
     <input id="search" class="search mb-2" type="search" placeholder="Rechercher un joueur…" autocomplete="off" value="${esc(state.query)}">
     ${staleBanner() ? `<div class="mb-2">${staleBanner()}</div>` : ''}
     <div id="rows">${rankingRows()}</div>
-    <p class="mx-0 mb-0 mt-2 text-[12px] muted">Mis à jour ${ago(state.latest.generatedAt, state.now)}. Clique sur une colonne pour trier, une deuxième fois pour inverser. Évolution FACEIT et Premier depuis hier soir. MM = meilleur rang toutes cartes. K/D et HLTV 1.0 calculés sur les tableaux des scores Leetify : « total » depuis le début du suivi, « 7 j » sur la dernière semaine.</p>`,
+    <p class="mx-0 mb-0 mt-2 text-[12px] muted">Mis à jour ${ago(state.latest.generatedAt, state.now)}. Clique sur une colonne pour trier, une deuxième fois pour inverser. Évolution FACEIT et Premier depuis hier soir. MM = meilleur rang toutes cartes. Aim = note de visée Leetify. K/D et HLTV 1.0 calculés sur tous les tableaux des scores Leetify depuis le début du suivi.</p>`,
   'no-resize', 'ranking');
 }
 

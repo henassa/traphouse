@@ -60,7 +60,8 @@
   body { margin: 0; padding: 0 0 env(safe-area-inset-bottom); -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
   #app, #app *, #app *::before, #app *::after { box-sizing: border-box; }
 
-  .app { width: 100%; min-width: 0; max-width: 780px; margin: 0 auto; padding: 10px 8px 28px; }
+  main#app { max-width: none; }
+  .app { width: 100%; min-width: 0; max-width: 860px; margin: 0 auto; padding: 10px 8px 28px; }
 
   /* Navbar VGUI collée en haut, trois onglets de même largeur. */
   nav.tabs {
@@ -101,7 +102,7 @@
   /* Classement façon navigateur de serveurs : tableau large qui défile, rang et joueur restent visibles. */
   .ranking-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
   table.ranking { border-collapse: collapse; table-layout: fixed; font-size: 13px; white-space: nowrap; }
-  table.ranking th, table.ranking td { padding: 0 8px; height: 50px; overflow: hidden; text-align: right; vertical-align: middle; border-bottom: 1px solid color-mix(in srgb, var(--shade-dark) 60%, transparent); }
+  table.ranking th, table.ranking td { padding: 0 6px; height: 50px; overflow: hidden; text-align: center; vertical-align: middle; border-bottom: 1px solid color-mix(in srgb, var(--shade-dark) 60%, transparent); }
   table.ranking thead th { height: 30px; }
   table.ranking .arrow { display: inline-block; width: 12px; text-align: right; }
   table.ranking th { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: bold; color: var(--muted); border-bottom-color: var(--shade-dark); }
