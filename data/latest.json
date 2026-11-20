@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-20T15:07:14.969Z",
+ "generatedAt": "2026-11-20T15:14:37.202Z",
  "timezone": "Europe/Zurich",
  "group": "Traphouse",
  "sources": {
@@ -11,8 +11,7 @@
   "leetify": {
    "ok": 4,
    "failed": 0,
-   "skipped": false,
-   "error": "Clé refusée, collecte sans clé"
+   "skipped": false
   },
   "steam": {
    "ok": 0,
