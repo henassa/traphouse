@@ -1,31 +1,80 @@
 {
  "date": "2026-11-20",
- "updatedAt": "2026-11-20T15:07:14.969Z",
+ "updatedAt": "2026-11-20T15:23:41.020Z",
  "players": {
-  "76561198000000001": {
-   "elo": null,
-   "level": null,
+  "76561198329257038": {
+   "elo": 2439,
+   "level": 10,
    "premier": null,
    "mm": null,
    "mmMap": null
   },
-  "76561198000000002": {
-   "elo": null,
-   "level": null,
+  "76561199010607370": {
+   "elo": 2013,
+   "level": 10,
+   "premier": 24773,
+   "mm": 15,
+   "mmMap": "Dust2"
+  },
+  "76561198372275494": {
+   "elo": 1127,
+   "level": 5,
+   "premier": 18601,
+   "mm": 13,
+   "mmMap": "Dust2"
+  },
+  "76561198358098002": {
+   "elo": 1036,
+   "level": 4,
    "premier": null,
    "mm": null,
    "mmMap": null
   },
-  "76561198000000003": {
-   "elo": null,
-   "level": null,
+  "76561199087202006": {
+   "elo": 0,
+   "level": 0,
    "premier": null,
    "mm": null,
    "mmMap": null
   },
-  "76561198000000004": {
-   "elo": null,
-   "level": null,
+  "76561198143478066": {
+   "elo": 1278,
+   "level": 6,
+   "premier": null,
+   "mm": 12,
+   "mmMap": "Nuke"
+  },
+  "76561198877467745": {
+   "elo": 2552,
+   "level": 10,
+   "premier": null,
+   "mm": 13,
+   "mmMap": "Mirage"
+  },
+  "76561198016931975": {
+   "elo": 892,
+   "level": 3,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561198123379225": {
+   "elo": 2846,
+   "level": 10,
+   "premier": null,
+   "mm": 13,
+   "mmMap": "Dust2"
+  },
+  "76561199557339456": {
+   "elo": 2235,
+   "level": 10,
+   "premier": 23274,
+   "mm": 14,
+   "mmMap": "Ancient"
+  },
+  "76561198025946650": {
+   "elo": 2504,
+   "level": 10,
    "premier": null,
    "mm": null,
    "mmMap": null
