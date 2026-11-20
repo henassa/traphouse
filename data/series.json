@@ -1,0 +1,778 @@
+{
+ "dates": [
+  "2026-11-19",
+  "2026-11-20"
+ ],
+ "players": {
+  "76561198123365503": {
+   "elo": [
+    2514,
+    null
+   ],
+   "premier": [
+    26543,
+    null
+   ],
+   "mm": [
+    18,
+    null
+   ]
+  },
+  "76561198329257038": {
+   "elo": [
+    null,
+    2439
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561199010607370": {
+   "elo": [
+    null,
+    2013
+   ],
+   "premier": [
+    null,
+    24773
+   ],
+   "mm": [
+    null,
+    15
+   ]
+  },
+  "76561198372275494": {
+   "elo": [
+    null,
+    1127
+   ],
+   "premier": [
+    null,
+    18601
+   ],
+   "mm": [
+    null,
+    13
+   ]
+  },
+  "76561198358098002": {
+   "elo": [
+    null,
+    1036
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561199087202006": {
+   "elo": [
+    null,
+    0
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198143478066": {
+   "elo": [
+    null,
+    1278
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    12
+   ]
+  },
+  "76561198877467745": {
+   "elo": [
+    null,
+    2552
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    13
+   ]
+  },
+  "76561198016931975": {
+   "elo": [
+    null,
+    892
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198123379225": {
+   "elo": [
+    null,
+    2846
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    13
+   ]
+  },
+  "76561199557339456": {
+   "elo": [
+    null,
+    2235
+   ],
+   "premier": [
+    null,
+    23274
+   ],
+   "mm": [
+    null,
+    14
+   ]
+  },
+  "76561198025946650": {
+   "elo": [
+    null,
+    2504
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561199090147744": {
+   "elo": [
+    null,
+    910
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198369128117": {
+   "elo": [
+    null,
+    1039
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198142689403": {
+   "elo": [
+    null,
+    729
+   ],
+   "premier": [
+    null,
+    10547
+   ],
+   "mm": [
+    null,
+    7
+   ]
+  },
+  "76561198882768460": {
+   "elo": [
+    null,
+    898
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198084533783": {
+   "elo": [
+    null,
+    2286
+   ],
+   "premier": [
+    null,
+    23998
+   ],
+   "mm": [
+    null,
+    13
+   ]
+  },
+  "76561198807979563": {
+   "elo": [
+    null,
+    949
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198113791453": {
+   "elo": [
+    null,
+    1229
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    8
+   ]
+  },
+  "76561199140368088": {
+   "elo": [
+    null,
+    1703
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    7
+   ]
+  },
+  "76561198200098141": {
+   "elo": [
+    null,
+    1000
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198383028566": {
+   "elo": [
+    null,
+    1203
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198332437870": {
+   "elo": [
+    null,
+    2517
+   ],
+   "premier": [
+    null,
+    24321
+   ],
+   "mm": [
+    null,
+    15
+   ]
+  },
+  "76561198351001632": {
+   "elo": [
+    null,
+    953
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198149308963": {
+   "elo": [
+    null,
+    null
+   ],
+   "premier": [
+    null,
+    21398
+   ],
+   "mm": [
+    null,
+    16
+   ]
+  },
+  "76561199224352089": {
+   "elo": [
+    null,
+    860
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198935677261": {
+   "elo": [
+    null,
+    2410
+   ],
+   "premier": [
+    null,
+    24113
+   ],
+   "mm": [
+    null,
+    15
+   ]
+  },
+  "76561199586455292": {
+   "elo": [
+    null,
+    1000
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198873722778": {
+   "elo": [
+    null,
+    1000
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198310011467": {
+   "elo": [
+    null,
+    1549
+   ],
+   "premier": [
+    null,
+    17824
+   ],
+   "mm": [
+    null,
+    15
+   ]
+  },
+  "76561198282049491": {
+   "elo": [
+    null,
+    855
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561199031928617": {
+   "elo": [
+    null,
+    809
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    1
+   ]
+  },
+  "76561199084367900": {
+   "elo": [
+    null,
+    926
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198836770861": {
+   "elo": [
+    null,
+    1272
+   ],
+   "premier": [
+    null,
+    17106
+   ],
+   "mm": [
+    null,
+    15
+   ]
+  },
+  "76561199209440591": {
+   "elo": [
+    null,
+    1543
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    10
+   ]
+  },
+  "76561198217350221": {
+   "elo": [
+    null,
+    936
+   ],
+   "premier": [
+    null,
+    10833
+   ],
+   "mm": [
+    null,
+    8
+   ]
+  },
+  "76561198151064204": {
+   "elo": [
+    null,
+    1299
+   ],
+   "premier": [
+    null,
+    16291
+   ],
+   "mm": [
+    null,
+    10
+   ]
+  },
+  "76561198252005762": {
+   "elo": [
+    null,
+    2036
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    13
+   ]
+  },
+  "76561199120465590": {
+   "elo": [
+    null,
+    1047
+   ],
+   "premier": [
+    null,
+    17621
+   ],
+   "mm": [
+    null,
+    11
+   ]
+  },
+  "76561198356051532": {
+   "elo": [
+    null,
+    939
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    11
+   ]
+  },
+  "76561198391827654": {
+   "elo": [
+    null,
+    null
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    8
+   ]
+  },
+  "76561198409214986": {
+   "elo": [
+    null,
+    1329
+   ],
+   "premier": [
+    null,
+    15595
+   ],
+   "mm": [
+    null,
+    9
+   ]
+  },
+  "76561199100423262": {
+   "elo": [
+    null,
+    1085
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198119141964": {
+   "elo": [
+    null,
+    2065
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    16
+   ]
+  },
+  "76561199054204778": {
+   "elo": [
+    null,
+    2249
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    16
+   ]
+  },
+  "76561198223273952": {
+   "elo": [
+    null,
+    878
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198834504716": {
+   "elo": [
+    null,
+    1000
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198414712451": {
+   "elo": [
+    null,
+    2123
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198040404351": {
+   "elo": [
+    null,
+    1537
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198964879287": {
+   "elo": [
+    null,
+    980
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    6
+   ]
+  },
+  "76561198008039153": {
+   "elo": [
+    null,
+    2203
+   ],
+   "premier": [
+    null,
+    25245
+   ],
+   "mm": [
+    null,
+    18
+   ]
+  },
+  "76561198118146069": {
+   "elo": [
+    null,
+    2160
+   ],
+   "premier": [
+    null,
+    22222
+   ],
+   "mm": [
+    null,
+    11
+   ]
+  },
+  "76561198158653120": {
+   "elo": [
+    null,
+    2504
+   ],
+   "premier": [
+    null,
+    24607
+   ],
+   "mm": [
+    null,
+    16
+   ]
+  },
+  "76561197963277267": {
+   "elo": [
+    null,
+    1677
+   ],
+   "premier": [
+    null,
+    22448
+   ],
+   "mm": [
+    null,
+    15
+   ]
+  },
+  "76561198113356567": {
+   "elo": [
+    null,
+    1743
+   ],
+   "premier": [
+    null,
+    21093
+   ],
+   "mm": [
+    null,
+    12
+   ]
+  }
+ }
+}
