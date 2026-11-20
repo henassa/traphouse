@@ -1,5 +1,6 @@
 import { cp, mkdir, readdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
+import { existsSync } from 'node:fs';
 
 const out = '_site';
 await rm(out, { recursive: true, force: true });
@@ -36,5 +37,6 @@ await cp('src/img', `${out}/img`, { recursive: true });
 // Liste des emblèmes Premier / MM déposés dans src/img/ranks, pour que le site sache lesquels existent.
 const ranks = (await readdir('src/img/ranks')).filter((f) => /^(premier-[1-7]|mm-([1-9]|1[0-8]))\.(png|webp|svg)$/.test(f));
 await writeFile(`${out}/img/ranks/index.json`, JSON.stringify(ranks));
-await cp('data', `${out}/data`, { recursive: true });
+// data/ n'existe que pendant le workflow (créé par fetch.mjs).
+if (existsSync('data')) await cp('data', `${out}/data`, { recursive: true });
 await cp('demo', `${out}/demo`, { recursive: true });

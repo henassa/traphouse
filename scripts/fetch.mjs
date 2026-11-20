@@ -1,8 +1,8 @@
 // Appelé par le workflow : lit players.json, interroge FACEIT / Leetify / Steam et écrit data/.
 // Une source qui échoue ne casse rien : on garde les dernières valeurs connues du joueur.
-import { mkdir, readdir, rm, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { mergeMatches, perfOf, readJson, writeAll } from './lib/store.mjs';
+import { addDays, dayKey, mergeMatches, perfOf, readJson, snapshotOf } from './lib/store.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const DATA = join(ROOT, 'data');
@@ -193,8 +193,9 @@ async function fetchSteam(ids) {
 }
 
 // Détails des matchs (tableau des scores complet) : récupérés une seule fois par match, dans data/matches/.
-const MATCHES = join(DATA, 'matches');
 const MAX_DETAILS = 40;
+const DETAIL_DAYS = 45;
+const SERIES_DAYS = 90;
 
 function trimDetails(d) {
   return {
@@ -233,49 +234,104 @@ function trimDetails(d) {
   };
 }
 
-async function fetchDetails(players, key, leetifyDown) {
-  await mkdir(MATCHES, { recursive: true });
-  const have = new Set((await readdir(MATCHES)).map((f) => f.replace(/\.json$/, '')));
-  const headers = leetifyHeaders(key);
+// Les données ne sont pas gardées dans le dépôt : on relit celles du site publié, on les met à jour, on republie.
+// Si le site ne répond pas (autre chose qu'un 404 du tout premier passage), on s'arrête :
+// mieux vaut sauter une mise à jour que republier un site sans son historique.
+async function loadPublished(file, fallback) {
+  const base = process.env.PAGES_URL;
+  if (!base) return fallback;
+  const url = new URL(`data/${file}`, base.endsWith('/') ? base : base + '/');
+  const res = await fetch(url, { cache: 'no-store', signal: AbortSignal.timeout(20000) });
+  if (res.status === 404) return fallback;
+  if (!res.ok) throw new Error(`Site publié illisible (${res.status} sur ${url.pathname}), mise à jour annulée`);
+  return res.json();
+}
 
-  let fetched = 0;
-  // Les plus récents d'abord, pour que les derniers matchs soient cliquables rapidement.
-  const todo = players.flatMap((p) => p.matches).filter((m) => m.leetifyId && !have.has(m.leetifyId))
+// Tableaux des scores : un seul fichier, limité aux 45 derniers jours.
+async function fetchDetails(players, bundle, key, leetifyDown) {
+  const cutoff = Date.now() - DETAIL_DAYS * 864e5;
+  for (const [id, d] of Object.entries(bundle)) if (new Date(d.finishedAt).getTime() < cutoff) delete bundle[id];
+
+  const headers = leetifyHeaders(key);
+  const todo = players.flatMap((p) => p.matches)
+    .filter((m) => m.leetifyId && !bundle[m.leetifyId] && new Date(m.at).getTime() >= cutoff)
     .sort((a, b) => b.at.localeCompare(a.at))
     .map((m) => m.leetifyId)
     .filter((id, i, all) => all.indexOf(id) === i);
 
+  let fetched = 0;
   for (const id of leetifyDown ? [] : todo.slice(0, MAX_DETAILS)) {
     try {
       const d = await getJson(`https://api-public.cs-prod.leetify.com/v2/matches/${id}`, { headers, gap: 1200 });
       if (!d) continue;
-      await writeFile(join(MATCHES, `${id}.json`), JSON.stringify(trimDetails(d)) + '\n');
-      have.add(id);
+      bundle[id] = trimDetails(d);
       fetched++;
     } catch (e) {
       console.log(`Détails ${id} : ${e.message}`);
       if (e.status === 429) break;
     }
   }
+  for (const p of players) for (const m of p.matches) m.details = !!(m.leetifyId && bundle[m.leetifyId]);
+  console.log(`Détails de matchs : ${fetched} nouveaux, ${Object.keys(bundle).length} sur 45 jours`);
+}
 
-  // Les tableaux des scores sont gardés : ils servent au K/D et au HLTV « total » (depuis le début du suivi).
-  for (const p of players) for (const m of p.matches) m.details = !!(m.leetifyId && have.has(m.leetifyId));
-
-  const all = [];
-  for (const id of have) all.push(await readJson(join(MATCHES, `${id}.json`)));
-  const weekAgo = Date.now() - 7 * 864e5;
-  const week = all.filter((d) => d && new Date(d.finishedAt).getTime() >= weekAgo);
-  for (const p of players) {
-    p.perf = { all: perfOf(all, p.steam64), week: perfOf(week, p.steam64) };
+// K/D et HLTV « total » : des compteurs cumulés, pour ne pas avoir à garder les vieux matchs.
+function updateTotals(p, prevTotals, bundle) {
+  const t = prevTotals ? { ...prevTotals, ids: [...(prevTotals.ids ?? [])] } : { k: 0, d: 0, r: 0, mk: 0, n: 0, ids: [] };
+  for (const [id, m] of Object.entries(bundle)) {
+    if (t.ids.includes(id)) continue;
+    const row = m.players?.find((x) => x.steam64 === p.steam64);
+    if (!row?.rounds || row.k1 == null) continue;
+    t.k += row.k ?? 0;
+    t.d += row.d ?? 0;
+    t.r += row.rounds;
+    t.mk += (row.k1 ?? 0) + 4 * (row.k2 ?? 0) + 9 * (row.k3 ?? 0) + 16 * (row.k4 ?? 0) + 25 * (row.k5 ?? 0);
+    t.n++;
+    t.ids.push(id);
   }
-  console.log(`Détails de matchs : ${fetched} nouveaux, ${have.size} en tout`);
+  // Un match sorti de la fenêtre de 45 jours ne peut plus revenir : inutile de garder son identifiant.
+  t.ids = t.ids.filter((id) => bundle[id]);
+  return t;
+}
+
+function perfFromTotals(t) {
+  if (!t?.n || !t.r) return null;
+  const kd = t.d ? t.k / t.d : t.k;
+  const hltv = (t.k / t.r / 0.679 + (0.7 * (t.r - t.d)) / t.r / 0.317 + t.mk / t.r / 1.277) / 2.7;
+  return { kd: Math.round(kd * 100) / 100, hltv: Math.round(hltv * 100) / 100, matches: t.n };
+}
+
+// Un point par jour et par joueur, sur 90 jours, pour les évolutions et les graphiques.
+function updateSeries(series, today, players) {
+  const s = series?.dates ? series : { dates: [], players: {} };
+  if (s.dates.at(-1) !== today) {
+    s.dates.push(today);
+    for (const v of Object.values(s.players)) for (const k of ['elo', 'premier', 'mm']) v[k].push(null);
+  }
+  const i = s.dates.length - 1;
+  for (const p of players) {
+    s.players[p.id] ??= { elo: Array(s.dates.length).fill(null), premier: Array(s.dates.length).fill(null), mm: Array(s.dates.length).fill(null) };
+    const snap = snapshotOf(p);
+    for (const k of ['elo', 'premier', 'mm']) s.players[p.id][k][i] = snap[k];
+  }
+  const first = s.dates.findIndex((d) => d > addDays(today, -SERIES_DAYS));
+  if (first > 0) {
+    s.dates = s.dates.slice(first);
+    for (const v of Object.values(s.players)) for (const k of ['elo', 'premier', 'mm']) v[k] = v[k].slice(first);
+  }
+  const ids = new Set(players.map((p) => p.id));
+  for (const id of Object.keys(s.players)) if (!ids.has(id)) delete s.players[id];
+  return s;
 }
 
 async function main() {
   const config = await readJson(join(ROOT, 'players.json'));
   if (!config?.players?.length) throw new Error('players.json est vide ou illisible');
 
-  const previous = await readJson(join(DATA, 'latest.json'), { players: [] });
+  const previous = await loadPublished('latest.json', { players: [] });
+  const prevSeries = await loadPublished('series.json', null);
+  const bundle = await loadPublished('matches.json', {});
+  console.log(`Données publiées relues : ${previous.players.length} joueurs, ${Object.keys(bundle).length} matchs détaillés`);
   const prevById = new Map(previous.players.map((p) => [p.id, p]));
   const now = new Date();
   const sources = {
@@ -394,15 +450,23 @@ async function main() {
 
   if (leetifyDown) sources.leetify.error = 'Limite de requêtes atteinte (429)';
 
-  await fetchDetails(players, leetifyKey, leetifyDown);
+  await fetchDetails(players, bundle, leetifyKey, leetifyDown);
+  const weekAgo = Date.now() - 7 * 864e5;
+  const week = Object.values(bundle).filter((d) => new Date(d.finishedAt).getTime() >= weekAgo);
+  for (const p of players) {
+    p.totals = updateTotals(p, prevById.get(p.id)?.totals, bundle);
+    p.perf = { all: perfFromTotals(p.totals), week: perfOf(week, p.steam64) };
+  }
 
-  await writeAll(DATA, {
-    generatedAt: now.toISOString(),
-    timezone: config.timezone ?? 'Europe/Zurich',
-    group: config.group ?? 'Traphouse',
-    sources,
-    players,
-  }, { now });
+  const timezone = config.timezone ?? 'Europe/Zurich';
+  const latest = { generatedAt: now.toISOString(), timezone, group: config.group ?? 'Traphouse', sources, players };
+  const series = updateSeries(prevSeries, dayKey(now, timezone), players);
+
+  // Écrit dans data/, qui n'est pas suivi par git : le workflow publie ces fichiers avec le site.
+  await mkdir(DATA, { recursive: true });
+  await writeFile(join(DATA, 'latest.json'), JSON.stringify(latest));
+  await writeFile(join(DATA, 'series.json'), JSON.stringify(series));
+  await writeFile(join(DATA, 'matches.json'), JSON.stringify(bundle));
 }
 
 main().catch((e) => {

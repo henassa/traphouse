@@ -2,12 +2,16 @@
 
 Classement CS2 de notre groupe : photo de profil Steam, ELO FACEIT, Premier, meilleur rang MM, rang Wingman, rating Leetify, Aim, K/D et rating HLTV 1.0 (total et 7 derniers jours), triables dans les deux sens. Un clic sur un joueur ouvre sa page et ses derniers matchs, un clic sur un match ouvre son tableau des scores.
 
-Le site est 100 % statique (GitHub Pages). Toutes les heures, un workflow GitHub Actions interroge les API avec les clés rangées dans les Secrets, puis écrit des JSON dans `data/`. Le navigateur ne voit jamais une clé.
+Le site est 100 % statique (GitHub Pages). Toutes les heures, un workflow GitHub Actions relit les données du site publié, interroge FACEIT et Leetify avec les clés rangées dans les Secrets, puis republie le site. Rien n'est enregistré dans le dépôt : pas de dossier `data/`, pas de commit automatique. Le navigateur ne voit jamais une clé.
 
 ```
-players.json ──► Actions (toutes les heures) ──► data/latest.json
-                  FACEIT · Leetify · Steam       data/history/AAAA-MM-JJ.json
-                                                 data/series.json ──► site
+players.json + données du site en ligne
+        │
+        ▼
+Actions (toutes les heures) ── FACEIT · Leetify · Steam
+        │
+        ▼
+site republié : data/latest.json · series.json · matches.json
 ```
 
 Le look vient de [vgui.css](https://github.com/AlpyneDreams/vgui.css) (MIT) : Greensteam en mode clair, Blacksteam en mode sombre, choisi automatiquement selon le réglage du téléphone. Le framework est copié tel quel dans `vendor/vgui/`, et le build le range dans une couche CSS sous Tailwind pour que les utilitaires restent prioritaires.
@@ -47,7 +51,6 @@ Pour voir le rendu avec de fausses données : ajouter `?demo` à l'URL.
 - **Pas de dossier `.github` dans le dépôt :** c'est un dossier caché, souvent oublié au glisser-déposer. Fais **Add file → Create new file**, tape `.github/workflows/update.yml` comme nom (les `/` créent les dossiers) et colle le contenu du fichier du zip.
 - **Aucun workflow dans l'onglet Actions :** va dans **Settings → Actions → General → Allow all actions and reusable workflows**.
 - **Croix rouge sur l'étape `deploy` :** **Settings → Pages → Source** doit être **GitHub Actions**, pas « Deploy from a branch ».
-- **Croix rouge sur « Enregistrer les données » :** **Settings → Actions → General → Workflow permissions → Read and write permissions**.
 - **Rien ne se passe :** le premier passage planifié peut tarder. Lance-le à la main avec **Actions → Mise à jour → Run workflow**.
 
 ## Ajouter ou retirer un joueur
@@ -76,6 +79,12 @@ Le commit relance le workflow : le joueur apparaît en 2 à 3 minutes. Pour reti
 - **Matchmaking et Wingman** : les emblèmes du jeu, rangs 1 (Silver I) à 18 (Global Elite), dans `src/img/ranks/` (`mm-N.png`, `wingman-N.png`).
 - **Premier** : le fond du bandeau du jeu (`src/img/ranks/premier.svg`), teinté en CSS à la couleur du palier, avec le rating exact écrit par-dessus.
 
+## Où sont les données
+
+Nulle part dans le dépôt. Le site publié contient trois fichiers, `data/latest.json` (le classement), `data/series.json` (un point par jour sur 90 jours, pour les évolutions et les graphiques) et `data/matches.json` (les tableaux des scores des 45 derniers jours). À chaque passage, le workflow les relit sur le site en ligne, les met à jour et republie. Si le site ne répond pas, le passage s'arrête sans rien publier : le site garde sa version précédente, rien n'est perdu.
+
+Si ton dépôt contient encore un dossier `data/` d'une version précédente, supprime-le : ouvre-le sur GitHub, menu **…** → **Delete directory**, puis **Commit changes**.
+
 ## Ce que les API ne donnent pas
 
 - **Pas de classement Matchmaking global**, et même pas de rang MM unique : en CS2 le compétitif est classé par carte. L'onglet Matchmaking prend le **meilleur rang toutes cartes** de chaque joueur (via Leetify) et la page joueur montre le détail par carte.
@@ -85,7 +94,7 @@ Le commit relance le workflow : le joueur apparaît en 2 à 3 minutes. Pour reti
 
 ## Calculs
 
-- **K/D et rating HLTV 1.0** : calculés sur les tableaux des scores Leetify, gardés dans `data/matches/`. « Total » = depuis le début du suivi (le premier passage récupère les ~50 derniers matchs de chacun), « 7 j » = la dernière semaine. Le 1.0 suit la formule publique d'HLTV (kills, survie et multi-kills par round). Le 2.0 n'est pas possible : HLTV n'a pas publié sa formule, et elle utilise le KAST et un score d'impact que Leetify ne donne pas.
+- **K/D et rating HLTV 1.0** : calculés sur les tableaux des scores Leetify. « Total » = depuis le début du suivi, gardé sous forme de compteurs cumulés (le premier passage compte les ~50 derniers matchs de chacun) ; « 7 j » = la dernière semaine. Le 1.0 suit la formule publique d'HLTV (kills, survie et multi-kills par round). Le 2.0 n'est pas possible : HLTV n'a pas publié sa formule, et elle utilise le KAST et un score d'impact que Leetify ne donne pas.
 
 - **Distinctions** : `ELO gagné + gain Premier ÷ 10 + 15 × victoires − 10 × défaites`, sur aujourd'hui / 7 jours / 30 jours, avec au moins un match joué. Égalité départagée au nombre de victoires.
 - **Variation** : valeur actuelle moins la dernière valeur connue la veille au soir (ou il y a 7 jours).
@@ -95,7 +104,7 @@ Le commit relance le workflow : le joueur apparaît en 2 à 3 minutes. Pour reti
 
 - Les appels sont espacés (≈ 4 req/s pour FACEIT, moins d'1 req/s pour Leetify), avec 3 essais et un back-off en cas de 429 ou d'erreur serveur. Si Leetify renvoie un 429 qui persiste, on arrête de l'appeler jusqu'au passage suivant.
 - Une source qui échoue n'efface rien : le joueur garde ses dernières valeurs, et le site affiche un bandeau avec l'heure de la dernière mise à jour.
-- Les matchs sont conservés 45 jours dans `latest.json`, et un snapshot par jour est gardé dans `data/history/`. `series.json` en compacte les 90 derniers jours.
+- Les matchs et leurs tableaux des scores sont conservés 45 jours, l'historique des rangs 90 jours. Tout est sur le site publié, rien dans le dépôt.
 - Le cron de GitHub peut avoir un peu de retard aux heures chargées, c'est normal.
 - Un commit par heure, ça fait ~700 commits par mois dans l'historique du dépôt. C'est sans conséquence.
 
@@ -118,6 +127,5 @@ scripts/lib/store.mjs   snapshots, fusion des matchs, series.json
 scripts/demo.mjs        données de démo
 src/                    index.html, styles.css (Tailwind + composants), js/, img/
 vendor/vgui/            vgui.css (Greensteam, Blacksteam) et sa licence
-data/                   écrit par le workflow
 .github/workflows/      mise à jour + déploiement Pages
 ```

@@ -312,14 +312,11 @@ function renderPlayer(id) {
 
 // Détails d'un match : le tableau des scores complet récupéré chez Leetify.
 
-let demoMatches = null;
+// Tous les tableaux des scores des 45 derniers jours sont dans un seul fichier, chargé au premier clic.
+let matchesBundle = null;
 async function loadMatch(id) {
-  if (DEMO) {
-    demoMatches ??= await fetch('demo/matches.json').then((r) => r.json()).catch(() => ({}));
-    return demoMatches[id] ?? null;
-  }
-  const res = await fetch(`data/matches/${encodeURIComponent(id)}.json`, { cache: 'no-cache' }).catch(() => null);
-  return res?.ok ? res.json() : null;
+  matchesBundle ??= await fetch(BASE + 'matches.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : {})).catch(() => ({}));
+  return matchesBundle[id] ?? null;
 }
 
 const pct = (x) => (typeof x === 'number' ? `${Math.round(x <= 1 ? x * 100 : x)} %` : '—');
@@ -361,7 +358,7 @@ async function renderMatch(id, focusId) {
   const d = await loadMatch(id);
   if (current !== 'match') return;
   if (!d) {
-    app.innerHTML = `<div class="app">${back}${win('Match', '<p class="m-0">Les détails de ce match ne sont pas encore disponibles. Ils arrivent au prochain passage du workflow.</p>', 'no-resize')}</div>`;
+    app.innerHTML = `<div class="app">${back}${win('Match', '<p class="m-0">Les détails de ce match ne sont pas disponibles (pas encore récupérés, ou match de plus de 45 jours).</p>', 'no-resize')}</div>`;
     return;
   }
 

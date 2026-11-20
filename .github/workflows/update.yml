@@ -7,8 +7,9 @@ on:
   push:
     branches: [main]
 
+# Rien n'est enregistré dans le dépôt : les données vivent seulement sur le site publié.
 permissions:
-  contents: write
+  contents: read
   pages: write
   id-token: write
 
@@ -29,30 +30,21 @@ jobs:
 
       - run: npm ci
 
-      # Si une API tombe, on déploie quand même avec les dernières données connues.
+      - id: pages
+        uses: actions/configure-pages@v5
+
+      # Relit les données du site en ligne, les met à jour, les écrit dans data/ (non suivi par git).
+      # Si ça échoue, rien n'est publié : le site garde sa version précédente.
       - name: Récupérer les données
-        continue-on-error: true
         env:
+          PAGES_URL: ${{ steps.pages.outputs.base_url }}
           FACEIT_API_KEY: ${{ secrets.FACEIT_API_KEY }}
           LEETIFY_API_KEY: ${{ secrets.LEETIFY_API_KEY }}
           STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
         run: node scripts/fetch.mjs
 
-      - name: Enregistrer les données
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data
-          if git diff --cached --quiet; then
-            echo "Rien de nouveau"
-          else
-            git commit -m "data: $(date -u +'%Y-%m-%d %H:%M') UTC"
-            git pull --rebase --autostash && git push
-          fi
-
       - run: npm run build
 
-      - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
