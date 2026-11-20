@@ -2,9 +2,13 @@
   "group": "Traphouse",
   "timezone": "Europe/Zurich",
   "players": [
+<<<<<<< HEAD
     "76561198000000001",
     "76561198000000002",
     { "steam64": "76561198000000003", "name": "Tom" },
     { "steam64": "76561198000000004", "faceit": false }
+=======
+    { "name": "Didou", "steam64": "76561198123365503", "faceit": "vie2reve" }
+>>>>>>> 27f0ec8b9a4cccdfe21c38128b780166523ae2a1
   ]
 }

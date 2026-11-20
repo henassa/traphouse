@@ -1,0 +1,1273 @@
+{
+ "generatedAt": "2026-11-20T08:40:35.946Z",
+ "timezone": "Europe/Zurich",
+ "group": "traphouse",
+ "sources": {
+  "faceit": {
+   "ok": 1,
+   "failed": 0,
+   "skipped": false
+  },
+  "leetify": {
+   "ok": 1,
+   "failed": 0,
+   "skipped": false,
+   "error": "Clé refusée, collecte sans clé"
+  },
+  "steam": {
+   "ok": 0,
+   "failed": 0,
+   "skipped": true
+  }
+ },
+ "players": [
+  {
+   "id": "76561198123365503",
+   "name": "Didou",
+   "steam64": "76561198123365503",
+   "avatar": "https://distribution.faceit-cdn.net/images/f7df5b2a-387f-4766-a4ad-6ee4bde0a9e9.jpg",
+   "steamName": null,
+   "faceit": {
+    "playerId": "ea83ecf5-1e21-4b18-a340-06407488bcd0",
+    "nickname": "vie2reve",
+    "avatar": "https://distribution.faceit-cdn.net/images/f7df5b2a-387f-4766-a4ad-6ee4bde0a9e9.jpg",
+    "elo": 2514,
+    "level": 10,
+    "url": "https://www.faceit.com/fr/players/vie2reve",
+    "updatedAt": "2026-11-20T08:40:35.946Z"
+   },
+   "leetify": {
+    "name": "didou",
+    "privacy": "public",
+    "premier": 26543,
+    "wingman": 18,
+    "leetify": 4.32,
+    "competitive": [
+     {
+      "map": "Vertigo",
+      "rank": 18
+     },
+     {
+      "map": "Nuke",
+      "rank": 17
+     },
+     {
+      "map": "Train",
+      "rank": 17
+     },
+     {
+      "map": "Inferno",
+      "rank": 17
+     },
+     {
+      "map": "Overpass",
+      "rank": 17
+     },
+     {
+      "map": "Dust2",
+      "rank": 16
+     },
+     {
+      "map": "Anubis",
+      "rank": 16
+     },
+     {
+      "map": "Mirage",
+      "rank": 16
+     },
+     {
+      "map": "Warden",
+      "rank": 16
+     },
+     {
+      "map": "Alpine",
+      "rank": 13
+     },
+     {
+      "map": "Italy",
+      "rank": 11
+     },
+     {
+      "map": "Mills",
+      "rank": 9
+     },
+     {
+      "map": "Edin",
+      "rank": 3
+     }
+    ],
+    "mmBest": {
+     "map": "Vertigo",
+     "rank": 18
+    },
+    "rating": {
+     "aim": 93.1888,
+     "positioning": 67.7242,
+     "utility": 52.5168,
+     "clutch": 0.1473,
+     "opening": 0.0199,
+     "ct_leetify": 0.0573,
+     "t_leetify": 0.0291
+    },
+    "winrate": 0.4138,
+    "totalMatches": 2559,
+    "url": "https://leetify.com/app/profile/76561198123365503",
+    "updatedAt": "2026-11-20T08:40:35.946Z"
+   },
+   "matches": [
+    {
+     "id": "leetify:8411e254-44ac-4f5b-94ee-18cdd15c2b1e",
+     "source": "premier",
+     "at": "2026-11-18T23:51:44.000Z",
+     "map": "Cbble",
+     "result": "L",
+     "score": [
+      10,
+      13
+     ],
+     "rating": 0.0574,
+     "rank": null
+    },
+    {
+     "id": "leetify:34a534c0-66c1-41f4-9837-51cac8ffc76d",
+     "source": "mm",
+     "at": "2026-11-15T19:21:24.000Z",
+     "map": "Inferno",
+     "result": "T",
+     "score": [
+      12,
+      12
+     ],
+     "rating": 0.069,
+     "rank": 17
+    },
+    {
+     "id": "faceit:1-af8b29dd-7389-4e90-9785-f152f9d2f8eb",
+     "source": "faceit",
+     "at": "2026-11-14T03:26:48.000Z",
+     "result": "W",
+     "url": "https://www.faceit.com/fr/cs2/room/1-af8b29dd-7389-4e90-9785-f152f9d2f8eb"
+    },
+    {
+     "id": "faceit:1-bb740db3-0bac-4dd0-89f3-30b180de85f9",
+     "source": "faceit",
+     "at": "2026-11-14T02:39:45.000Z",
+     "result": "L",
+     "url": "https://www.faceit.com/fr/cs2/room/1-bb740db3-0bac-4dd0-89f3-30b180de85f9"
+    },
+    {
+     "id": "faceit:1-8665975b-b240-4faa-aee2-ae018a29dcea",
+     "source": "faceit",
+     "at": "2026-11-14T01:59:58.000Z",
+     "result": "W",
+     "url": "https://www.faceit.com/fr/cs2/room/1-8665975b-b240-4faa-aee2-ae018a29dcea"
+    },
+    {
+     "id": "faceit:1-6142e0e2-c8c7-4745-8211-adcb352259a2",
+     "source": "faceit",
+     "at": "2026-11-14T01:13:38.000Z",
+     "result": "L",
+     "url": "https://www.faceit.com/fr/cs2/room/1-6142e0e2-c8c7-4745-8211-adcb352259a2"
+    },
+    {
+     "id": "leetify:73ed528b-ace2-400a-aa9f-f484a30c2f14",
+     "source": "mm",
+     "at": "2026-11-12T02:13:46.000Z",
+     "map": "Dust2",
+     "result": "L",
+     "score": [
+      4,
+      13
+     ],
+     "rating": -0.0365,
+     "rank": 16
+    },
+    {
+     "id": "leetify:42f8af95-a462-423a-8f5c-a52e04a69e7d",
+     "source": "premier",
+     "at": "2026-11-11T23:16:46.000Z",
+     "map": "Cache",
+     "result": "L",
+     "score": [
+      10,
+      13
+     ],
+     "rating": 0.0487,
+     "rank": null
+    },
+    {
+     "id": "leetify:be9fa8a7-0ff4-4f1a-99f3-6f814c0d3f58",
+     "source": "mm",
+     "at": "2026-11-11T22:43:33.000Z",
+     "map": "Anubis",
+     "result": "W",
+     "score": [
+      13,
+      2
+     ],
+     "rating": 0.0213,
+     "rank": 16
+    },
+    {
+     "id": "faceit:1-d70148a4-bf14-4cc2-b605-0fec17e01a07",
+     "source": "faceit",
+     "at": "2026-11-11T18:10:35.000Z",
+     "result": "L",
+     "url": "https://www.faceit.com/fr/cs2/room/1-d70148a4-bf14-4cc2-b605-0fec17e01a07"
+    },
+    {
+     "id": "leetify:059a405c-d92b-4894-9230-c5ab22fd7a90",
+     "source": "mm",
+     "at": "2026-11-11T02:23:17.000Z",
+     "map": "Mirage",
+     "result": "W",
+     "score": [
+      13,
+      6
+     ],
+     "rating": 0.0528,
+     "rank": 16
+    },
+    {
+     "id": "leetify:03ed6b59-3d45-40dc-9254-fa2c09936cbe",
+     "source": "mm",
+     "at": "2026-11-11T01:54:23.000Z",
+     "map": "Mirage",
+     "result": "W",
+     "score": [
+      13,
+      4
+     ],
+     "rating": 0.0713,
+     "rank": 16
+    },
+    {
+     "id": "leetify:c2b87b04-3f5b-433d-ae10-dac6d2ac785e",
+     "source": "premier",
+     "at": "2026-11-11T00:55:34.000Z",
+     "map": "Ancient",
+     "result": "L",
+     "score": [
+      1,
+      13
+     ],
+     "rating": -0.0414,
+     "rank": null
+    },
+    {
+     "id": "leetify:0527b2c9-8bbf-42f4-b76b-f7bb22aa169a",
+     "source": "premier",
+     "at": "2026-11-11T00:03:28.000Z",
+     "map": "Inferno",
+     "result": "L",
+     "score": [
+      11,
+      13
+     ],
+     "rating": 0.0589,
+     "rank": 26543
+    },
+    {
+     "id": "leetify:995b3408-a320-476f-a5d7-a1c215f4cd9b",
+     "source": "premier",
+     "at": "2026-11-10T22:52:34.000Z",
+     "map": "Dust2",
+     "result": "L",
+     "score": [
+      9,
+      13
+     ],
+     "rating": 0.0333,
+     "rank": 26751
+    },
+    {
+     "id": "faceit:1-bfbef675-2d87-4c30-80fc-4db00746cdd4",
+     "source": "faceit",
+     "at": "2026-11-10T21:01:53.000Z",
+     "result": "L",
+     "url": "https://www.faceit.com/fr/cs2/room/1-bfbef675-2d87-4c30-80fc-4db00746cdd4"
+    },
+    {
+     "id": "leetify:4bf73f99-9c52-43ef-b49f-90d0bb9c7567",
+     "source": "premier",
+     "at": "2026-11-09T21:39:15.000Z",
+     "map": "Nuke",
+     "result": "L",
+     "score": [
+      10,
+      13
+     ],
+     "rating": -0.0401,
+     "rank": 26751
+    },
+    {
+     "id": "leetify:8cec4725-3b72-4c63-b819-f551a984c276",
+     "source": "premier",
+     "at": "2026-11-09T20:49:48.000Z",
+     "map": "Inferno",
+     "result": "W",
+     "score": [
+      13,
+      9
+     ],
+     "rating": 0.1037,
+     "rank": 26865
+    },
+    {
+     "id": "leetify:11151b26-f88c-48a3-a6db-f4cf216f3c39",
+     "source": "premier",
+     "at": "2026-11-09T20:24:20.000Z",
+     "map": "Nuke",
+     "result": "L",
+     "score": [
+      4,
+      13
+     ],
+     "rating": -0.0095,
+     "rank": 26493
+    },
+    {
+     "id": "faceit:1-9f483456-2f67-4a9b-8798-b8cfa0b5f06b",
+     "source": "faceit",
+     "at": "2026-11-07T22:28:11.000Z",
+     "result": "W",
+     "url": "https://www.faceit.com/fr/cs2/room/1-9f483456-2f67-4a9b-8798-b8cfa0b5f06b",
+     "map": "Dust2",
+     "score": [
+      16,
+      14
+     ],
+     "rating": 0.0562
+    },
+    {
+     "id": "leetify:27a0ed75-85d7-47f3-b82a-c76c27322d43",
+     "source": "premier",
+     "at": "2026-11-07T13:43:33.000Z",
+     "map": "Mirage",
+     "result": "L",
+     "score": [
+      0,
+      13
+     ],
+     "rating": 0.0082,
+     "rank": 26602
+    },
+    {
+     "id": "faceit:1-ee8e0026-3ba9-4461-a48a-9f5d68cbf8d2",
+     "source": "faceit",
+     "at": "2026-11-07T13:05:56.000Z",
+     "result": "L",
+     "url": "https://www.faceit.com/fr/cs2/room/1-ee8e0026-3ba9-4461-a48a-9f5d68cbf8d2"
+    },
+    {
+     "id": "leetify:b166fb8f-bcf7-457a-959a-e7c353c05c03",
+     "source": "mm",
+     "at": "2026-11-07T02:25:21.000Z",
+     "map": "Train",
+     "result": "W",
+     "score": [
+      13,
+      10
+     ],
+     "rating": 0.1857,
+     "rank": 17
+    },
+    {
+     "id": "leetify:56e45860-69c7-4198-81af-e826d09d77fc",
+     "source": "premier",
+     "at": "2026-11-05T21:22:58.000Z",
+     "map": "Nuke",
+     "result": "W",
+     "score": [
+      13,
+      11
+     ],
+     "rating": 0.0252,
+     "rank": 26708
+    },
+    {
+     "id": "leetify:beb97d37-7ca7-4a75-9ea1-8433a850d29f",
+     "source": "premier",
+     "at": "2026-11-05T20:47:58.000Z",
+     "map": "Ancient",
+     "result": "W",
+     "score": [
+      13,
+      7
+     ],
+     "rating": 0.0102,
+     "rank": 26300
+    },
+    {
+     "id": "leetify:932ca7d4-7d2d-4936-964b-bf1f48674b7c",
+     "source": "premier",
+     "at": "2026-11-05T17:37:32.000Z",
+     "map": "Ancient",
+     "result": "L",
+     "score": [
+      9,
+      13
+     ],
+     "rating": -0.0342,
+     "rank": 25855
+    },
+    {
+     "id": "leetify:0fbbdda5-b8f9-4837-bd09-e1a2841f2467",
+     "source": "premier",
+     "at": "2026-11-05T16:47:56.000Z",
+     "map": "Anubis",
+     "result": "L",
+     "score": [
+      11,
+      13
+     ],
+     "rating": -0.0182,
+     "rank": 26855
+    },
+    {
+     "id": "faceit:1-2ef7e5b5-ad5c-4c4c-a4fc-2d55551240da",
+     "source": "faceit",
+     "at": "2026-11-05T00:19:00.000Z",
+     "result": "W",
+     "url": "https://www.faceit.com/fr/cs2/room/1-2ef7e5b5-ad5c-4c4c-a4fc-2d55551240da"
+    },
+    {
+     "id": "faceit:1-4a537b97-a63b-4cfb-bd57-e8af24d75d01",
+     "source": "faceit",
+     "at": "2026-11-04T23:43:21.000Z",
+     "result": "W",
+     "url": "https://www.faceit.com/fr/cs2/room/1-4a537b97-a63b-4cfb-bd57-e8af24d75d01"
+    },
+    {
+     "id": "faceit:1-38257467-ace4-4f71-a3d6-e0518d1b9626",
+     "source": "faceit",
+     "at": "2026-11-04T22:59:30.000Z",
+     "result": "W",
+     "url": "https://www.faceit.com/fr/cs2/room/1-38257467-ace4-4f71-a3d6-e0518d1b9626"
+    },
+    {
+     "id": "faceit:1-b108df4e-5a00-49e9-b4aa-5f84149edbca",
+     "source": "faceit",
+     "at": "2026-11-04T21:39:43.000Z",
+     "result": "L",
+     "url": "https://www.faceit.com/fr/cs2/room/1-b108df4e-5a00-49e9-b4aa-5f84149edbca"
+    },
+    {
+     "id": "faceit:1-a614cba8-2910-43ee-81b5-1d04267a1fd0",
+     "source": "faceit",
+     "at": "2026-11-04T21:02:16.000Z",
+     "result": "L",
+     "url": "https://www.faceit.com/fr/cs2/room/1-a614cba8-2910-43ee-81b5-1d04267a1fd0"
+    },
+    {
+     "id": "faceit:1-33a7d93d-cb8a-4da4-940b-facaaa79ccdc",
+     "source": "faceit",
+     "at": "2026-11-04T20:16:06.000Z",
+     "result": "L",
+     "url": "https://www.faceit.com/fr/cs2/room/1-33a7d93d-cb8a-4da4-940b-facaaa79ccdc"
+    },
+    {
+     "id": "leetify:93099222-0f8e-4052-87fe-90ad79ba38eb",
+     "source": "premier",
+     "at": "2026-11-03T22:13:28.000Z",
+     "map": "Anubis",
+     "result": "L",
+     "score": [
+      6,
+      13
+     ],
+     "rating": 0.0297,
+     "rank": 26969
+    },
+    {
+     "id": "leetify:bab59433-3b96-40ad-9792-b2acd5af1ec0",
+     "source": "mm",
+     "at": "2026-11-03T00:31:45.000Z",
+     "map": "Mirage",
+     "result": "L",
+     "score": [
+      10,
+      13
+     ],
+     "rating": 0.0287,
+     "rank": 16
+    },
+    {
+     "id": "leetify:72dd9fc4-9bf0-47e8-b5f5-c877b53d4508",
+     "source": "mm",
+     "at": "2026-11-03T00:20:03.000Z",
+     "map": "Vertigo",
+     "result": "W",
+     "score": [
+      7,
+      1
+     ],
+     "rating": 0.2899,
+     "rank": 18
+    },
+    {
+     "id": "leetify:0b4413ff-41d8-45f1-b162-15f68876f427",
+     "source": "premier",
+     "at": "2026-11-02T23:39:03.000Z",
+     "map": "Anubis",
+     "result": "L",
+     "score": [
+      4,
+      13
+     ],
+     "rating": 0.0335,
+     "rank": 27086
+    },
+    {
+     "id": "leetify:f099c84d-329f-4a98-a8d8-61b14b5b6646",
+     "source": "wingman",
+     "at": "2026-11-02T23:24:00.000Z",
+     "map": "Nuke",
+     "result": "W",
+     "score": [
+      9,
+      6
+     ],
+     "rating": 0.2018,
+     "rank": 18
+    },
+    {
+     "id": "leetify:2a1c8e4e-32da-47ed-8c02-89768e26b682",
+     "source": "premier",
+     "at": "2026-10-30T00:40:17.000Z",
+     "map": "Anubis",
+     "result": "L",
+     "score": [
+      11,
+      13
+     ],
+     "rating": 0.009,
+     "rank": 27192
+    },
+    {
+     "id": "leetify:6d7a56c4-48a7-408e-84f1-21500deea889",
+     "source": "premier",
+     "at": "2026-10-29T23:56:57.000Z",
+     "map": "Ancient",
+     "result": "W",
+     "score": [
+      13,
+      10
+     ],
+     "rating": 0.0163,
+     "rank": 27293
+    },
+    {
+     "id": "leetify:22604d4d-ce17-4ecb-af15-642d4dddd23e",
+     "source": "premier",
+     "at": "2026-10-29T23:02:15.000Z",
+     "map": "Mirage",
+     "result": "W",
+     "score": [
+      13,
+      9
+     ],
+     "rating": 0.0672,
+     "rank": 26908
+    },
+    {
+     "id": "faceit:1-ce5f0482-663b-4a16-896b-f6735c5086f3",
+     "source": "faceit",
+     "at": "2026-10-29T19:03:10.000Z",
+     "result": "W",
+     "url": "https://www.faceit.com/fr/cs2/room/1-ce5f0482-663b-4a16-896b-f6735c5086f3"
+    },
+    {
+     "id": "leetify:2e7ba82b-91b6-45d2-a47e-9d27349d39d0",
+     "source": "premier",
+     "at": "2026-10-29T02:57:32.000Z",
+     "map": "Dust2",
+     "result": "L",
+     "score": [
+      8,
+      13
+     ],
+     "rating": 0.1639,
+     "rank": 26529
+    },
+    {
+     "id": "leetify:bcae496a-77f7-42d9-9551-ddcc299e57f9",
+     "source": "premier",
+     "at": "2026-10-29T02:09:12.000Z",
+     "map": "Mirage",
+     "result": "L",
+     "score": [
+      13,
+      16
+     ],
+     "rating": 0.0522,
+     "rank": 26632
+    },
+    {
+     "id": "leetify:974432dd-c4bf-403c-8c7e-bd525eb70a13",
+     "source": "premier",
+     "at": "2026-10-29T01:32:31.000Z",
+     "map": "Nuke",
+     "result": "W",
+     "score": [
+      10,
+      7
+     ],
+     "rating": 0.0667,
+     "rank": 26749
+    },
+    {
+     "id": "leetify:9f0dae7f-ed53-45ab-a072-1fc76f15459c",
+     "source": "premier",
+     "at": "2026-10-29T01:04:03.000Z",
+     "map": "Nuke",
+     "result": "L",
+     "score": [
+      4,
+      13
+     ],
+     "rating": 0.0483,
+     "rank": 26367
+    },
+    {
+     "id": "leetify:300732ee-8d9d-4020-836b-47400b8f9859",
+     "source": "mm",
+     "at": "2026-10-27T18:23:25.000Z",
+     "map": "Vertigo",
+     "result": "L",
+     "score": [
+      8,
+      13
+     ],
+     "rating": 0.1145,
+     "rank": 18
+    },
+    {
+     "id": "leetify:785c16db-5166-4844-b3e8-75811bbaafcd",
+     "source": "premier",
+     "at": "2026-10-27T01:10:23.000Z",
+     "map": "Anubis",
+     "result": "W",
+     "score": [
+      13,
+      1
+     ],
+     "rating": 0.1022,
+     "rank": 26491
+    },
+    {
+     "id": "leetify:41878c77-1e77-46be-9638-fb3aa67b2ebf",
+     "source": "premier",
+     "at": "2026-10-26T23:48:50.000Z",
+     "map": "Cache",
+     "result": "W",
+     "score": [
+      13,
+      11
+     ],
+     "rating": 0.1469,
+     "rank": 26110
+    },
+    {
+     "id": "leetify:52860eba-f4a8-40f1-9160-819bc4b4daa3",
+     "source": "premier",
+     "at": "2026-10-26T14:48:39.000Z",
+     "map": "Inferno",
+     "result": "L",
+     "score": [
+      10,
+      13
+     ],
+     "rating": 0.0332,
+     "rank": 25720
+    },
+    {
+     "id": "leetify:935ed994-167d-4698-a8f5-a1da14a8de96",
+     "source": "premier",
+     "at": "2026-10-26T14:25:01.000Z",
+     "map": "Nuke",
+     "result": "L",
+     "score": [
+      2,
+      13
+     ],
+     "rating": -0.0822,
+     "rank": 25833
+    },
+    {
+     "id": "leetify:852bea47-5db3-481b-9c5a-af5aeec94889",
+     "source": "premier",
+     "at": "2026-10-26T13:59:54.000Z",
+     "map": "Ancient",
+     "result": "L",
+     "score": [
+      2,
+      13
+     ],
+     "rating": -0.0098,
+     "rank": 25936
+    },
+    {
+     "id": "leetify:d1aa6246-b9a6-4bdc-84e1-a3d71e23e138",
+     "source": "premier",
+     "at": "2026-10-26T13:27:48.000Z",
+     "map": "Anubis",
+     "result": "L",
+     "score": [
+      4,
+      13
+     ],
+     "rating": -0.0446,
+     "rank": 26036
+    },
+    {
+     "id": "leetify:b62e0033-da2f-4861-9909-bed44fa8223c",
+     "source": "premier",
+     "at": "2026-10-26T01:59:42.000Z",
+     "map": "Ancient",
+     "result": "W",
+     "score": [
+      13,
+      2
+     ],
+     "rating": 0.1793,
+     "rank": 26139
+    },
+    {
+     "id": "leetify:e5786dac-30e0-49b2-ae54-2a844e601d22",
+     "source": "premier",
+     "at": "2026-10-26T01:32:00.000Z",
+     "map": "Dust2",
+     "result": "W",
+     "score": [
+      13,
+      4
+     ],
+     "rating": 0.1895,
+     "rank": 25763
+    },
+    {
+     "id": "leetify:5637fb01-e892-4e17-a30d-f059f305fc20",
+     "source": "wingman",
+     "at": "2026-10-22T23:59:09.000Z",
+     "map": "Poseidon",
+     "result": "W",
+     "score": [
+      9,
+      4
+     ],
+     "rating": 0.2201,
+     "rank": 18
+    },
+    {
+     "id": "leetify:af8f6b28-bd51-490b-9245-d4a94c245096",
+     "source": "premier",
+     "at": "2026-10-22T22:20:38.000Z",
+     "map": "Mirage",
+     "result": "L",
+     "score": [
+      9,
+      13
+     ],
+     "rating": 0.0303,
+     "rank": 25664
+    },
+    {
+     "id": "leetify:fa3f8841-0375-407a-97db-49631991e47d",
+     "source": "wingman",
+     "at": "2026-10-22T18:33:40.000Z",
+     "map": "Inferno",
+     "result": "L",
+     "score": [
+      7,
+      9
+     ],
+     "rating": 0.1344,
+     "rank": 18
+    },
+    {
+     "id": "leetify:79f18fe2-1eba-4243-bd79-268a2658e7ae",
+     "source": "wingman",
+     "at": "2026-10-22T18:18:54.000Z",
+     "map": "Overpass",
+     "result": "T",
+     "score": [
+      8,
+      8
+     ],
+     "rating": 0.1936,
+     "rank": 18
+    },
+    {
+     "id": "leetify:829e6715-5c73-42ea-95cf-d8ada1200575",
+     "source": "wingman",
+     "at": "2026-10-22T18:04:27.000Z",
+     "map": "Vertigo",
+     "result": "T",
+     "score": [
+      8,
+      8
+     ],
+     "rating": 0.1095,
+     "rank": 18
+    },
+    {
+     "id": "leetify:2dc15138-c84a-425f-8aa3-6fe3ca3b30fc",
+     "source": "mm",
+     "at": "2026-10-21T23:55:49.000Z",
+     "map": "Dust2",
+     "result": "L",
+     "score": [
+      9,
+      13
+     ],
+     "rating": 0.1684,
+     "rank": 16
+    },
+    {
+     "id": "leetify:7014bfd9-7b4a-477d-a68c-9120c9e93cf0",
+     "source": "premier",
+     "at": "2026-10-19T17:27:03.000Z",
+     "map": "Nuke",
+     "result": "L",
+     "score": [
+      9,
+      13
+     ],
+     "rating": 0.0378,
+     "rank": 25664
+    },
+    {
+     "id": "leetify:12b306a1-00f6-45dc-ba3e-dac10cc4ea95",
+     "source": "mm",
+     "at": "2026-10-18T01:02:43.000Z",
+     "map": "Mirage",
+     "result": "L",
+     "score": [
+      1,
+      13
+     ],
+     "rating": 0.0256,
+     "rank": 16
+    },
+    {
+     "id": "leetify:24239dab-e454-4152-897e-36998dabe325",
+     "source": "mm",
+     "at": "2026-10-18T00:48:24.000Z",
+     "map": "Mirage",
+     "result": "W",
+     "score": [
+      4,
+      3
+     ],
+     "rating": 0.0198,
+     "rank": 16
+    },
+    {
+     "id": "leetify:d733b381-1f78-49a7-b47a-c0fc5f476e0b",
+     "source": "mm",
+     "at": "2026-10-18T00:11:34.000Z",
+     "map": "Nuke",
+     "result": "T",
+     "score": [
+      12,
+      12
+     ],
+     "rating": 0.0419,
+     "rank": 17
+    },
+    {
+     "id": "leetify:d073fde0-d640-49bf-ac35-33faa9933843",
+     "source": "premier",
+     "at": "2026-10-16T21:50:33.000Z",
+     "map": "Nuke",
+     "result": "L",
+     "score": [
+      5,
+      13
+     ],
+     "rating": 0.0416,
+     "rank": 26043
+    },
+    {
+     "id": "leetify:b6e5a36f-8c21-41ec-b019-6c23e22e6aa3",
+     "source": "premier",
+     "at": "2026-10-16T21:11:54.000Z",
+     "map": "Inferno",
+     "result": "W",
+     "score": [
+      13,
+      2
+     ],
+     "rating": 0.0435,
+     "rank": 26279
+    },
+    {
+     "id": "leetify:ad1940cd-2270-4b86-b26d-da49819945f9",
+     "source": "premier",
+     "at": "2026-10-16T20:47:46.000Z",
+     "map": "Ancient",
+     "result": "L",
+     "score": [
+      2,
+      13
+     ],
+     "rating": -0.0305,
+     "rank": 26176
+    },
+    {
+     "id": "leetify:2fd1151e-e5a0-469b-b868-5d4c566b8ddc",
+     "source": "premier",
+     "at": "2026-10-16T20:21:32.000Z",
+     "map": "Dust2",
+     "result": "W",
+     "score": [
+      13,
+      3
+     ],
+     "rating": 0.0518,
+     "rank": 26522
+    },
+    {
+     "id": "leetify:c8f1aff0-8d6e-4994-af7c-afb2264df298",
+     "source": "mm",
+     "at": "2026-10-16T13:40:14.000Z",
+     "map": "Nuke",
+     "result": "T",
+     "score": [
+      12,
+      12
+     ],
+     "rating": 0.1224,
+     "rank": 17
+    },
+    {
+     "id": "leetify:fbd09a18-abcd-4017-82cd-a08e19a1fcb7",
+     "source": "mm",
+     "at": "2026-10-16T13:10:34.000Z",
+     "map": "Inferno",
+     "result": "W",
+     "score": [
+      13,
+      2
+     ],
+     "rating": 0.0296,
+     "rank": 17
+    },
+    {
+     "id": "leetify:7d61d781-85fe-4fd0-abe5-33c718a89abc",
+     "source": "wingman",
+     "at": "2026-10-15T23:13:22.000Z",
+     "map": "Inferno",
+     "result": "T",
+     "score": [
+      8,
+      8
+     ],
+     "rating": 0.0831,
+     "rank": 18
+    },
+    {
+     "id": "leetify:5e6601ac-1fa4-4762-b2ed-e6aeba414e08",
+     "source": "mm",
+     "at": "2026-10-15T22:19:02.000Z",
+     "map": "Inferno",
+     "result": "T",
+     "score": [
+      12,
+      12
+     ],
+     "rating": 0.0246,
+     "rank": 17
+    },
+    {
+     "id": "leetify:4afdd449-78aa-4bf0-b13f-1d895af674a3",
+     "source": "mm",
+     "at": "2026-10-15T21:45:55.000Z",
+     "map": "Vertigo",
+     "result": "L",
+     "score": [
+      7,
+      13
+     ],
+     "rating": 0.0917,
+     "rank": 18
+    },
+    {
+     "id": "leetify:20b15245-7e0b-4859-9450-5d3b9fb1e58f",
+     "source": "mm",
+     "at": "2026-10-15T21:07:41.000Z",
+     "map": "Vertigo",
+     "result": "W",
+     "score": [
+      13,
+      6
+     ],
+     "rating": 0.1215,
+     "rank": 18
+    },
+    {
+     "id": "leetify:f7ab169f-17d1-4df8-91c5-730f1497679c",
+     "source": "mm",
+     "at": "2026-10-15T14:48:02.000Z",
+     "map": "Inferno",
+     "result": "T",
+     "score": [
+      12,
+      12
+     ],
+     "rating": -0.017,
+     "rank": 17
+    },
+    {
+     "id": "leetify:3e7402c1-aede-4600-a2a8-1aaf60c71c74",
+     "source": "wingman",
+     "at": "2026-10-13T23:54:35.000Z",
+     "map": "Inferno",
+     "result": "T",
+     "score": [
+      8,
+      8
+     ],
+     "rating": 0.1492,
+     "rank": 18
+    },
+    {
+     "id": "leetify:a0d504ab-199c-48ec-9710-58f3ab8e3405",
+     "source": "premier",
+     "at": "2026-10-13T21:36:06.000Z",
+     "map": "Dust2",
+     "result": "W",
+     "score": [
+      16,
+      14
+     ],
+     "rating": -0.0081,
+     "rank": 26403
+    },
+    {
+     "id": "leetify:8e1ef704-e18c-4ac7-84a9-9a6a0b36ba5d",
+     "source": "premier",
+     "at": "2026-10-13T19:49:36.000Z",
+     "map": "Mirage",
+     "result": "L",
+     "score": [
+      8,
+      13
+     ],
+     "rating": 0.0058,
+     "rank": null
+    },
+    {
+     "id": "leetify:31d3b856-3261-41ff-8315-820208bb3868",
+     "source": "mm",
+     "at": "2026-10-12T20:00:58.000Z",
+     "map": "Nuke",
+     "result": "T",
+     "score": [
+      12,
+      12
+     ],
+     "rating": 0.0648,
+     "rank": 17
+    },
+    {
+     "id": "leetify:6c0313ea-7275-4ca4-80c3-c57b76cf9139",
+     "source": "mm",
+     "at": "2026-10-09T23:13:18.000Z",
+     "map": "Anubis",
+     "result": "L",
+     "score": [
+      6,
+      13
+     ],
+     "rating": -0.0949,
+     "rank": 17
+    },
+    {
+     "id": "leetify:ef8352a3-a618-44e3-ae9c-387805b0e79d",
+     "source": "mm",
+     "at": "2026-10-09T22:42:35.000Z",
+     "map": "Nuke",
+     "result": "W",
+     "score": [
+      13,
+      10
+     ],
+     "rating": 0.0708,
+     "rank": 17
+    },
+    {
+     "id": "leetify:1566c162-c142-49eb-8ba3-9cb8ffcba83c",
+     "source": "other",
+     "at": "2026-10-09T22:22:51.000Z",
+     "map": "Rush 001",
+     "result": "W",
+     "score": [
+      8,
+      7
+     ],
+     "rating": 0.1036,
+     "rank": null
+    },
+    {
+     "id": "leetify:9aba1308-933c-4a30-b605-b1f49f704f1c",
+     "source": "other",
+     "at": "2026-10-09T22:18:04.000Z",
+     "map": "Rush 001",
+     "result": "L",
+     "score": [
+      0,
+      4
+     ],
+     "rating": -0.1221,
+     "rank": null
+    },
+    {
+     "id": "leetify:b6d0efd8-ef0f-416d-8602-e00440564662",
+     "source": "mm",
+     "at": "2026-10-08T22:14:47.000Z",
+     "map": "Train",
+     "result": "L",
+     "score": [
+      8,
+      13
+     ],
+     "rating": 0.0909,
+     "rank": 17
+    },
+    {
+     "id": "leetify:153f4a0d-9e8d-49ed-afbe-2b92b0e3140b",
+     "source": "mm",
+     "at": "2026-10-08T21:50:12.000Z",
+     "map": "Vertigo",
+     "result": "W",
+     "score": [
+      13,
+      3
+     ],
+     "rating": 0.1202,
+     "rank": 17
+    },
+    {
+     "id": "leetify:72884c1e-64ee-459e-9db6-0b59659a9a36",
+     "source": "mm",
+     "at": "2026-10-08T21:12:19.000Z",
+     "map": "Nuke",
+     "result": "L",
+     "score": [
+      7,
+      13
+     ],
+     "rating": 0.071,
+     "rank": 17
+    },
+    {
+     "id": "leetify:88a78621-2740-4957-8764-bd570b71addf",
+     "source": "mm",
+     "at": "2026-10-08T20:40:34.000Z",
+     "map": "Train",
+     "result": "W",
+     "score": [
+      13,
+      7
+     ],
+     "rating": 0.1266,
+     "rank": 17
+    },
+    {
+     "id": "leetify:084d77ad-5778-4ae1-8535-9b1d36869f32",
+     "source": "premier",
+     "at": "2026-10-07T21:07:50.000Z",
+     "map": "Nuke",
+     "result": "L",
+     "score": [
+      9,
+      13
+     ],
+     "rating": -0.018,
+     "rank": 26174
+    },
+    {
+     "id": "leetify:f5526da8-527a-4fce-b50e-725459e80e0e",
+     "source": "premier",
+     "at": "2026-10-07T20:12:58.000Z",
+     "map": "Inferno",
+     "result": "L",
+     "score": [
+      10,
+      13
+     ],
+     "rating": -0.0107,
+     "rank": 26318
+    },
+    {
+     "id": "leetify:9cc251ce-aefc-4f14-914b-471a39080c22",
+     "source": "mm",
+     "at": "2026-10-07T15:01:06.000Z",
+     "map": "Train",
+     "result": "L",
+     "score": [
+      3,
+      13
+     ],
+     "rating": 0.0435,
+     "rank": 17
+    },
+    {
+     "id": "leetify:4215bc16-6505-429a-97f8-064fa9d12e67",
+     "source": "premier",
+     "at": "2026-10-06T22:06:24.000Z",
+     "map": "Ancient",
+     "result": "W",
+     "score": [
+      13,
+      11
+     ],
+     "rating": 0.0855,
+     "rank": 26572
+    },
+    {
+     "id": "leetify:a7ab464d-f5ba-43b9-a60e-ef53e45c5121",
+     "source": "premier",
+     "at": "2026-10-06T21:35:47.000Z",
+     "map": "Mirage",
+     "result": "W",
+     "score": [
+      13,
+      7
+     ],
+     "rating": 0.0197,
+     "rank": 26472
+    },
+    {
+     "id": "leetify:8fa98459-fa2a-4ca1-ab12-dce8b9a8ebf4",
+     "source": "mm",
+     "at": "2026-10-06T15:32:47.000Z",
+     "map": "Overpass",
+     "result": "W",
+     "score": [
+      13,
+      4
+     ],
+     "rating": 0.1,
+     "rank": 17
+    },
+    {
+     "id": "leetify:89a5ecbe-3c14-44bb-9fe8-871da4b5eb60",
+     "source": "mm",
+     "at": "2026-10-06T15:06:29.000Z",
+     "map": "Vertigo",
+     "result": "L",
+     "score": [
+      5,
+      13
+     ],
+     "rating": 0.0112,
+     "rank": 17
+    }
+   ],
+   "errors": []
+  }
+ ]
+}
