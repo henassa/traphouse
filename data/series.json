@@ -7,15 +7,71 @@
   "76561198123365503": {
    "elo": [
     2514,
-    2514
+    null
    ],
    "premier": [
     26543,
-    26543
+    null
    ],
    "mm": [
     18,
-    18
+    null
+   ]
+  },
+  "76561198000000001": {
+   "elo": [
+    null,
+    null
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198000000002": {
+   "elo": [
+    null,
+    null
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198000000003": {
+   "elo": [
+    null,
+    null
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
+   ]
+  },
+  "76561198000000004": {
+   "elo": [
+    null,
+    null
+   ],
+   "premier": [
+    null,
+    null
+   ],
+   "mm": [
+    null,
+    null
    ]
   }
  }
