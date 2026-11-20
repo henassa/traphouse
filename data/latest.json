@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-20T01:16:36.282Z",
+ "generatedAt": "2026-11-20T08:40:35.946Z",
  "timezone": "Europe/Zurich",
  "group": "traphouse",
  "sources": {
@@ -34,7 +34,7 @@
     "elo": 2514,
     "level": 10,
     "url": "https://www.faceit.com/fr/players/vie2reve",
-    "updatedAt": "2026-11-20T01:16:36.282Z"
+    "updatedAt": "2026-11-20T08:40:35.946Z"
    },
    "leetify": {
     "name": "didou",
@@ -112,7 +112,7 @@
     "winrate": 0.4138,
     "totalMatches": 2559,
     "url": "https://leetify.com/app/profile/76561198123365503",
-    "updatedAt": "2026-11-20T01:16:36.282Z"
+    "updatedAt": "2026-11-20T08:40:35.946Z"
    },
    "matches": [
     {
