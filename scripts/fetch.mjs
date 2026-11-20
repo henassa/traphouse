@@ -143,6 +143,12 @@ async function fetchLeetify(player, key) {
       premier: p.ranks?.premier ?? null,
       wingman: p.ranks?.wingman ?? null,
       leetify: p.ranks?.leetify ?? null,
+      // Rating moyen sur les derniers matchs, tel que Leetify le donne match par match.
+      avgRating: (() => {
+        const r = (p.recent_matches ?? []).map((m) => m.leetify_rating).filter((x) => typeof x === 'number');
+        return r.length ? r.reduce((a, b) => a + b, 0) / r.length : null;
+      })(),
+      avgRatingMatches: (p.recent_matches ?? []).filter((m) => typeof m.leetify_rating === 'number').length,
       competitive,
       mmBest: competitive[0] ?? null,
       rating: p.rating ?? null,

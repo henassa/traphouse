@@ -106,6 +106,7 @@ function toLatest(p) {
           premier: p.premier,
           wingman: Math.max(1, Math.min(18, Math.round(10 + p.skill * 7 + between(-3, 3)))),
           leetify: Math.round((p.skill * 3 + 0.2) * 100) / 100,
+          avgRating: (() => { const r = p.matches.map((m) => m.rating).filter((x) => typeof x === 'number').slice(0, 50); return r.length ? r.reduce((a, b) => a + b, 0) / r.length : null; })(),
           competitive,
           mmBest: competitive[0] ?? null,
           rating: {

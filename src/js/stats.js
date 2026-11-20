@@ -42,7 +42,7 @@ export function buildModel(latest, series, now = new Date()) {
       leetify: typeof p.leetify?.leetify === 'number' ? p.leetify.leetify : null,
       aim: typeof p.leetify?.rating?.aim === 'number' ? p.leetify.rating.aim : null,
       kd: p.perf?.all?.kd ?? null,
-      hltv: p.perf?.all?.hltv ?? null,
+      avg: typeof p.leetify?.avgRating === 'number' ? p.leetify.avgRating : null,
     };
     const base = (days) =>
       Object.fromEntries(METRICS.map((m) => [m, valueAt(dates, s?.[m], addDays(today, -days), today)]));
