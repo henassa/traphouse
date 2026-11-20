@@ -76,7 +76,7 @@
     border-color: var(--shade-dark) var(--shade-light) var(--shade-light) var(--shade-dark);
   }
 
-  .window, .box { margin: 0 0 10px; max-width: none; }
+  .window, .box { margin: 0 0 10px; max-width: none; scroll-margin-top: 48px; }
 
   .sunken { background: var(--primary-dark); border: 1px solid; border-color: var(--shade-dark) var(--shade-light) var(--shade-light) var(--shade-dark); }
 
@@ -88,17 +88,21 @@
   .lv-head { display: flex; gap: 10px; padding: 4px 8px; border-bottom: 1px solid var(--shade-dark); }
   .lv-row { display: flex; align-items: center; gap: 10px; padding: 6px 8px; color: var(--text); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--shade-dark) 60%, transparent); }
   .lv-row:last-child { border-bottom: 0; }
+  .mt-grid { display: grid; grid-template-columns: minmax(0, 1fr) 22px 22px 22px 32px 36px 44px; align-items: center; gap: 5px; font-size: 13px; }
+  .lv-grid { display: grid; grid-template-columns: 20px minmax(0, 1fr) 80px 64px 52px; align-items: center; gap: 6px; }
   a.lv-row:hover, a.lv-row:focus-visible, a.lv-row:active { background: var(--accent-dark); color: #fff; text-decoration: none; outline: none; }
   a.lv-row:hover .muted, a.lv-row:active .muted { color: #f1ecd0; }
 
   .tag { display: inline-block; padding: 0 5px; line-height: 18px; font-weight: bold; font-size: 13px; background: var(--primary-dark); border: 1px solid; border-color: var(--shade-dark) var(--shade-light) var(--shade-light) var(--shade-dark); font-variant-numeric: tabular-nums; }
 
   .rank-img { display: inline-block; flex-shrink: 0; margin: 0; border: 0; image-rendering: auto; vertical-align: middle; }
-  .premier-badge {
-    display: inline-flex; align-items: center; justify-content: center; min-width: 74px; height: 24px; padding: 0 10px 0 16px;
-    background: center / 100% 100% no-repeat; image-rendering: auto;
-    font-weight: bold; font-style: italic; font-size: 14px; font-variant-numeric: tabular-nums; text-shadow: 0 1px 1px #000;
-  }
+  /* Bandeau Premier : le fond gris du jeu, recoloré au palier par un calque en mode "color". */
+  .premier { position: relative; isolation: isolate; display: inline-grid; place-items: center; flex-shrink: 0; height: 22px; aspect-ratio: 178 / 64; }
+  .premier::before, .premier::after { content: ""; position: absolute; inset: 0; z-index: -2; background: url("img/ranks/premier.svg") center / 100% 100% no-repeat; }
+  .premier::after { z-index: -1; background: var(--p); -webkit-mask: url("img/ranks/premier.svg") center / 100% 100% no-repeat; mask: url("img/ranks/premier.svg") center / 100% 100% no-repeat; mix-blend-mode: color; opacity: 0.9; }
+  .premier b { padding-left: 12%; color: #fff; font-style: italic; font-weight: 800; font-size: 12px; font-variant-numeric: tabular-nums; text-shadow: 0 1px 2px #000; }
+  .premier.big { height: 34px; }
+  .premier.big b { font-size: 17px; }
 
   .up { color: var(--up); }
   .down { color: var(--down); }
@@ -117,19 +121,7 @@
   button.small { height: 22px; min-width: 0; padding: 0 8px; font-size: 12px; }
   button[aria-pressed="true"] { border-color: var(--shade-dark) var(--shade-light) var(--shade-light) var(--shade-dark); background: var(--primary-dark); color: var(--accent); }
 
-  .fold { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.35s cubic-bezier(0.32, 0.72, 0, 1); }
-  .fold > * { overflow: hidden; min-height: 0; }
-  .fold.open { grid-template-rows: 1fr; }
-
-  .pop { animation: pop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both; }
-  .fade-in { animation: fade-in 0.3s ease-out both; }
-  .blink { animation: blink 1s steps(1) infinite; }
-}
-
-@keyframes pop { 0% { transform: scale(0.96); opacity: 0; } 60% { transform: scale(1.01); opacity: 1; } 100% { transform: none; } }
-@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
-@keyframes blink { 50% { opacity: 0; } }
-
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  /* Pas d'animation : on affiche ou on masque, comme l'ancien client Steam. */
+  .fold { display: none; }
+  .fold.open { display: block; }
 }

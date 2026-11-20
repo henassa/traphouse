@@ -52,27 +52,29 @@ Pour voir le rendu avec de fausses données : ajouter `?demo` à l'URL.
 
 ## Ajouter ou retirer un joueur
 
-Ouvrir `players.json` sur GitHub, cliquer sur le crayon, modifier, **Commit changes**. Le commit relance le workflow.
+Ouvre `players.json` sur GitHub, clique sur le crayon, ajoute son Steam ID dans la liste, puis **Commit changes** :
 
 ```json
-{ "name": "Max", "steam64": "76561198000000001", "faceit": "MaxLeGrand" }
+"players": [
+  "76561198000000001",
+  "76561198000000002",
+  { "steam64": "76561198000000003", "name": "Tom" },
+  { "steam64": "76561198000000004", "faceit": false }
+]
 ```
 
-- `steam64` : l'ID à 17 chiffres (sur [steamid.io](https://steamid.io) à partir du lien du profil).
-- `faceit` : pseudo FACEIT. Si on l'omet, on cherche le compte FACEIT lié au Steam ID. `false` si le joueur n'a pas de compte.
-- `name` : le nom affiché sur le site, et le Steam ID sert d'identifiant. On peut donc renommer quelqu'un sans perdre son historique.
+- **Le Steam ID suffit** (17 chiffres, sur [steamid.io](https://steamid.io) à partir du lien du profil). Le compte FACEIT lié est retrouvé automatiquement.
+- **Le nom affiché** est son pseudo FACEIT, sinon son nom Leetify, sinon son pseudo Steam. Pour en imposer un, utilise la forme `{ "steam64": "…", "name": "Tom" }`.
+- **`"faceit"`** : facultatif. Mets son pseudo FACEIT si le compte n'est pas lié à son Steam, ou `false` s'il n'a pas FACEIT.
+- **Virgules** : une entre chaque joueur, pas après le dernier.
+
+Le commit relance le workflow : le joueur apparaît en 2 à 3 minutes. Pour retirer quelqu'un, supprime sa ligne. Le Steam ID sert d'identifiant, donc renommer quelqu'un ne fait pas perdre son historique.
 
 ## Emblèmes de rang
 
-- **FACEIT** : les icônes de niveau 1 à 10 sont dans `src/img/faceit/`.
-- **Premier et Matchmaking** : dépose les images dans `src/img/ranks/` (Add file → Upload files sur GitHub). Le site les prend automatiquement au déploiement suivant. Tant qu'un fichier manque, il affiche une petite case colorée à la place.
-
-| Fichier | Rang |
-|---|---|
-| `premier-1.png` … `premier-7.png` | fond du rating Premier par palier : gris (< 5 000), bleu clair, bleu, violet, rose, rouge, or (30 000 +). Le chiffre est écrit par-dessus. |
-| `mm-1.png` … `mm-18.png` | Silver I (1) → Global Elite (18) |
-
-PNG, WebP ou SVG, idéalement en fond transparent et en 2× pour les écrans Retina.
+- **FACEIT** : niveaux 1 à 10 dans `src/img/faceit/`.
+- **Matchmaking et Wingman** : les emblèmes du jeu, rangs 1 (Silver I) à 18 (Global Elite), dans `src/img/ranks/` (`mm-N.png`, `wingman-N.png`).
+- **Premier** : le fond du bandeau du jeu (`src/img/ranks/premier.svg`), teinté en CSS à la couleur du palier, avec le rating exact écrit par-dessus.
 
 ## Ce que les API ne donnent pas
 

@@ -104,7 +104,7 @@ function toLatest(p) {
           name: p.name,
           privacy: p.privateLeetify ? 'private' : 'public',
           premier: p.premier,
-          wingman: null,
+          wingman: Math.max(1, Math.min(18, Math.round(10 + p.skill * 7 + between(-3, 3)))),
           leetify: Math.round((p.skill * 3 + 0.2) * 100) / 100,
           competitive,
           mmBest: competitive[0] ?? null,
@@ -129,6 +129,39 @@ function toLatest(p) {
   };
 }
 
+// Tableaux des scores fictifs pour les 4 derniers matchs de chaque joueur (un seul fichier pour la démo).
+const OTHERS = ['zoro', 'kebabmaster', 'Nyx', 'pipou', 'xX_Sn1p3r_Xx', 'tartiflette', 'Raven', 'b0ss', 'mumu', 'Kaze', 'flicky', 'lemon', 'Vortex', 'gégé', 'Ozzy'];
+const details = {};
+for (const p of players) {
+  if (!p.hasLeetify) continue;
+  for (const m of [...p.matches].sort((a, b) => b.at.localeCompare(a.at)).slice(0, 4)) {
+    m.leetifyId = `demo-${p.steam64.slice(-4)}-${new Date(m.at).getTime()}`;
+    m.details = true;
+    const [mine, theirs] = m.score;
+    const rounds = mine + theirs;
+    const mates = players.filter((o) => o !== p && o.hasLeetify && rand() < 0.08).slice(0, 2);
+    const row = (steam64, name, team, skill) => {
+      const k = Math.max(2, Math.round(rounds * (0.55 + skill * 0.25 + between(-0.25, 0.3))));
+      const dd = Math.max(3, Math.round(rounds * (0.7 - skill * 0.15 + between(-0.2, 0.2))));
+      return {
+        steam64, name, team, k, d: dd, a: Math.round(between(1, 8)),
+        adr: Math.round((k / rounds) * 105 + between(-12, 12)), hs: between(0.12, 0.32), hsKills: Math.round(k * between(0.3, 0.6)),
+        rating: Math.round(((k - dd) / rounds * 0.12 + between(-0.02, 0.02)) * 1e4) / 1e4, mvps: Math.round(between(0, 5)),
+        k3: Math.round(between(0, 2)), k4: rand() < 0.2 ? 1 : 0, k5: rand() < 0.04 ? 1 : 0,
+        acc: between(0.25, 0.5), preaim: between(7, 15), reaction: between(0.45, 0.75), flashed: Math.round(between(2, 12)),
+        flashKills: Math.round(between(0, 3)), he: between(2, 12), trades: Math.round(between(0, 4)), rounds,
+      };
+    };
+    const team = [row(p.steam64, p.name, 3, p.skill), ...mates.map((o) => row(o.steam64, o.name, 3, o.skill))];
+    while (team.length < 5) team.push(row(`7656119${Math.floor(rand() * 1e10)}`, pick(OTHERS), 3, between(-0.5, 0.5)));
+    const enemies = Array.from({ length: 5 }, () => row(`7656119${Math.floor(rand() * 1e10)}`, pick(OTHERS), 2, between(-0.4, 0.6)));
+    details[m.leetifyId] = {
+      id: m.leetifyId, finishedAt: m.at, dataSource: m.source, map: m.map, bannedPlayer: false,
+      teams: [{ team: 3, score: mine }, { team: 2, score: theirs }], players: [...team, ...enemies],
+    };
+  }
+}
+
 await writeAll(OUT, {
   generatedAt: new Date(now.getTime() - 14 * 60e3).toISOString(),
   timezone: TZ,
@@ -137,4 +170,5 @@ await writeAll(OUT, {
   players: players.map(toLatest),
 }, { now });
 
-console.log(`demo/ : ${players.length} joueurs, ${DAYS} jours`);
+await writeFile(`${OUT}/matches.json`, JSON.stringify(details) + '\n');
+console.log(`demo/ : ${players.length} joueurs, ${DAYS} jours, ${Object.keys(details).length} matchs détaillés`);

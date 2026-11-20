@@ -1,16 +1,17 @@
 import { bindChart, lineChart } from './chart.js';
 import { mmColor, mmName, mmShort, premierColor, PREMIER_HEX, SOURCE_COLOR, SOURCE_LABEL } from './ranks.js';
 import { addDays, avgRating, buildModel, currentStreak, favoriteMap, record } from './stats.js';
-import { ago, avatar, countUp, delta, esc, faceitBadge, fillMeters, fmt, icon, leetifyRating, loadRankImages, mmBadge, premierBadge, rankColor, reducedMotion, signed, tag, when } from './ui.js';
+import { ago, avatar, delta, esc, faceitBadge, fmt, icon, leetifyRating, mmBadge, premierBadge, rankColor, signed, tag, when, wingmanBadge } from './ui.js';
 
 const DEMO = new URLSearchParams(location.search).has('demo');
 const BASE = DEMO ? 'demo/' : 'data/';
 const app = document.getElementById('app');
 
-const TABS = {
+// Colonnes du classement, triables en cliquant sur l'en-tête comme dans le navigateur de serveurs.
+const COLUMNS = {
   elo: { label: 'FACEIT', source: 'faceit' },
   premier: { label: 'Premier', source: 'premier' },
-  mm: { label: 'Matchmaking', source: 'mm' },
+  mm: { label: 'MM', source: 'mm' },
 };
 
 const store = {
@@ -22,13 +23,13 @@ const state = {
   model: null,
   latest: null,
   now: new Date(),
-  tab: store.get('tab', 'elo'),
+  sort: store.get('sort', 'elo'),
   period: store.get('period', 1),
   query: '',
   funOpen: store.get('funOpen', true),
   homeScroll: 0,
   playerMetric: null,
-  cameFromHome: false,
+  navigated: false,
 };
 
 async function load() {
@@ -78,7 +79,7 @@ function summary() {
   };
   const todayMatches = new Set(players.flatMap((p) => p.matches.filter((m) => m.day === today).map((m) => m.id))).size;
   const cell = (label, value, tab) => `
-    <${tab ? `a href="#ranking" data-goto-tab="${tab}"` : 'div'} class="sunken block px-2.5 py-2 !no-underline">
+    <${tab ? `a href="#ranking" data-sort="${tab}"` : 'div'} class="sunken block px-2.5 py-2 !no-underline">
       <span class="caps block !text-[10px] muted">${label}</span>
       <span class="accent block text-[22px] font-bold leading-7 tabular-nums" ${value != null ? `data-count="${Math.round(value)}"` : ''}>${fmt(value)}</span>
     </${tab ? 'a' : 'div'}>`;
@@ -94,7 +95,7 @@ function summary() {
       ${cell('Matchs du jour', todayMatches)}
       ${cell('ELO moyen', avg('elo'), 'elo')}
       ${cell('Premier moyen', avg('premier'), 'premier')}
-    </div>`, 'pop no-resize');
+    </div>`, 'no-resize');
 }
 
 const AWARD_ICON = { day: 'crown', week: 'star', month: 'trophy' };
@@ -114,7 +115,7 @@ function awards() {
       ${avatar(p, 36)}
       <div class="min-w-0 flex-1">
         <p class="caps m-0 !text-[10px] muted">${title}</p>
-        <p class="pop m-0 truncate text-[16px] font-bold">${esc(p.name)}</p>
+        <p class="m-0 truncate text-[16px] font-bold">${esc(p.name)}</p>
         <p class="m-0 truncate text-[12px] muted">${parts.join(' · ')}</p>
       </div>
       <div class="text-right">
@@ -130,61 +131,55 @@ function awards() {
 }
 
 function rankingRows() {
-  const { tab, period, query } = state;
-  const { today } = state.model;
-  const t = TABS[tab];
+  const { sort, period, query } = state;
   const q = query.trim().toLowerCase();
-  const all = state.model.players;
-  const ranked = all.filter((p) => p.cur[tab] != null)
-    .sort((a, b) => b.cur[tab] - a.cur[tab] || (b.cur.premier ?? 0) - (a.cur.premier ?? 0));
-  const missing = all.filter((p) => p.cur[tab] == null);
-  const shown = ranked.map((p, i) => ({ p, i }))
+  const sorted = [...state.model.players].sort((a, b) => {
+    const va = a.cur[sort], vb = b.cur[sort];
+    if (va == null && vb == null) return a.name.localeCompare(b.name);
+    if (va == null) return 1;
+    if (vb == null) return -1;
+    return vb - va || (b.cur.premier ?? 0) - (a.cur.premier ?? 0);
+  });
+  const shown = sorted.map((p, i) => ({ p, i }))
     .filter(({ p }) => !q || `${p.name} ${p.faceit?.nickname ?? ''} ${p.steamName ?? ''}`.toLowerCase().includes(q));
 
+  const cell = (p, key) => {
+    const v = p.cur[key];
+    if (v == null) return '<span class="muted">—</span>';
+    let html;
+    if (key === 'elo') html = `<span class="inline-flex items-center gap-1">${faceitBadge(p.faceit.level, 18)}<b class="tabular-nums">${fmt(v)}</b></span>`;
+    else if (key === 'premier') html = premierBadge(v, premierColor(v));
+    else html = mmBadge(v, mmName(v), 20);
+    if (key !== sort) return html;
+    const d = p.delta[period][key];
+    if (!d) return html;
+    return `${html}<br><span class="text-[11px]">${delta(d, key === 'mm' ? (Math.abs(d) > 1 ? 'rangs' : 'rang') : '')}</span>`;
+  };
+
+  const head = Object.entries(COLUMNS).map(([k, c]) =>
+    `<a href="#ranking" data-sort="${k}" class="text-right !no-underline ${k === sort ? 'accent' : 'muted'}">${c.label}${k === sort ? ' ▼' : ''}</a>`).join('');
+
   const rows = shown.map(({ p, i }) => {
-    const games = p.matches.filter((m) => m.source === t.source && m.day > addDays(today, -7)).length;
-    let value, sub, unit = '';
-    if (tab === 'elo') {
-      value = `${faceitBadge(p.faceit.level, 26)}<span class="w-12 text-right text-[15px] font-bold tabular-nums" data-count="${p.cur.elo}">${fmt(p.cur.elo)}</span>`;
-      sub = `Niveau ${p.faceit.level ?? '—'}`;
-    } else if (tab === 'premier') {
-      value = premierBadge(p.cur.premier, premierColor(p.cur.premier), 'min-w-[60px] text-right');
-      sub = 'Rating Premier';
-    } else {
-      value = mmBadge(p.cur.mm, mmShort(p.cur.mm), mmName(p.cur.mm), mmColor(p.cur.mm), 'min-w-[46px] text-center', 24);
-      sub = esc(p.leetify.mmBest.map);
-      unit = Math.abs(p.delta[period].mm ?? 0) > 1 ? 'rangs' : 'rang';
-    }
-    const subGames = games ? ` · ${games} match${games > 1 ? 's' : ''}` : '';
-    return `<a class="lv-row fade-in" href="${playerLink(p)}">
-      <span class="w-5 shrink-0 text-center text-[13px] tabular-nums ${i < 3 ? 'accent font-bold' : 'muted'}">${i + 1}</span>
-      ${avatar(p, 32)}
-      <div class="min-w-0 flex-1">
-        <p class="m-0 truncate text-[15px]">${esc(p.name)}</p>
-        <p class="m-0 truncate text-[12px] muted">${sub}${subGames}</p>
-      </div>
-      <div class="flex flex-col items-end gap-0.5">
-        <div class="flex items-center gap-1.5">${value}</div>
-        <span class="text-[12px]">${delta(p.delta[period][tab], tab === 'mm' ? unit : '')}</span>
-      </div>
+    const ranked = p.cur[sort] != null;
+    return `<a class="lv-row lv-grid" href="${playerLink(p)}">
+      <span class="text-[12px] tabular-nums ${ranked && i < 3 ? 'accent font-bold' : 'muted'}">${ranked ? i + 1 : '–'}</span>
+      <span class="min-w-0 truncate">${esc(p.name)}</span>
+      <span class="text-right">${cell(p, 'elo')}</span>
+      <span class="text-right">${cell(p, 'premier')}</span>
+      <span class="text-right">${cell(p, 'mm')}</span>
     </a>`;
   }).join('');
 
-  const empty = !shown.length ? `<div class="lv-row muted italic">${q ? 'Aucun joueur trouvé' : 'Aucune donnée pour ce classement'}</div>` : '';
-  const missingNote = missing.length && !q
-    ? `<p class="mx-0 mb-0 mt-2 text-[12px] muted">Sans ${tab === 'elo' ? 'compte FACEIT' : tab === 'premier' ? 'rating Premier' : 'rang compétitif'} : ${missing.map((p) => esc(p.name)).join(', ')}.</p>`
-    : '';
+  const empty = !shown.length ? `<div class="lv-row muted italic">${q ? 'Aucun joueur trouvé' : 'Aucun joueur'}</div>` : '';
   return `<div class="sunken">
-      <div class="lv-head caps !text-[10px] muted"><span class="w-5 text-center">#</span><span class="flex-1">Joueur</span><span>${tab === 'elo' ? 'Niv. · ELO' : tab === 'premier' ? 'Rating' : 'Rang'}</span></div>
+      <div class="lv-head lv-grid caps !text-[10px]"><span class="muted">#</span><span class="muted">Joueur</span>${head}</div>
       ${rows}${empty}
-    </div>${missingNote}`;
+    </div>`;
 }
 
 function ranking() {
-  const { tab, period } = state;
-  const notes = [period === 7 ? 'Évolution sur 7 jours' : 'Évolution depuis hier soir', 'matchs joués sur 7 jours'];
-  if (tab === 'mm') notes.push('meilleur rang toutes cartes');
-  return win(`Classement ${TABS[tab].label}`, `
+  const notes = [state.period === 7 ? 'Évolution sur 7 jours' : 'Évolution depuis hier soir', 'clique sur une colonne pour trier', 'MM = meilleur rang toutes cartes'];
+  return win('Classement', `
     <p class="mx-0 mb-2 mt-0 text-[12px] muted">${notes.join(' · ')}.</p>
     <div id="rows">${rankingRows()}</div>`, '', 'ranking');
 }
@@ -214,7 +209,7 @@ function funStats() {
     </div>
     <div class="fold ${state.funOpen ? 'open' : ''}" id="fold-fun">
       <div><div class="grid grid-cols-2 gap-2 pt-2.5">${items.join('')}</div></div>
-    </div>`);
+    </div>`, '', 'fun');
 }
 
 function footer() {
@@ -228,15 +223,17 @@ function homeContent() {
   return awards() + ranking() + funStats() + footer();
 }
 
-function tabsNav() {
-  return `<nav class="tabs" role="tablist">
-    ${Object.entries(TABS).map(([k, v]) => `<li role="tab" aria-selected="${k === state.tab}"><a href="#ranking" data-tab="${k}">${v.label}</a></li>`).join('')}
+function navBar() {
+  return `<nav class="tabs">
+    <li><a href="#ranking">Classement</a></li>
+    <li><a href="#awards">Distinctions</a></li>
+    <li><a href="#fun">En bref</a></li>
   </nav>`;
 }
 
 function renderHome() {
   document.title = state.latest.group ?? 'Traphouse';
-  app.innerHTML = `<div class="app">${tabsNav()}${summary()}<div id="content">${homeContent()}</div></div>`;
+  app.innerHTML = `<div class="app">${navBar()}${summary()}<div id="content">${homeContent()}</div></div>`;
 
   const input = document.getElementById('search');
   input.addEventListener('input', () => {
@@ -244,13 +241,11 @@ function renderHome() {
     document.getElementById('summary-cells').classList.toggle('hidden', !!input.value.trim());
     document.getElementById('content').innerHTML = homeContent();
   });
-  countUp(app);
 }
 
-function selectTab(tab) {
-  state.tab = tab;
-  store.set('tab', tab);
-  document.querySelectorAll('nav.tabs li').forEach((li) => li.setAttribute('aria-selected', li.querySelector('a').dataset.tab === tab));
+function sortBy(key) {
+  state.sort = key;
+  store.set('sort', key);
   if (state.query.trim()) document.getElementById('content').innerHTML = homeContent();
   else rerenderRanking();
 }
@@ -260,15 +255,7 @@ function rerenderRanking() {
   if (!section) { document.getElementById('content').innerHTML = homeContent(); return; }
   const holder = document.createElement('div');
   holder.innerHTML = ranking();
-  const fresh = holder.firstElementChild;
-  section.replaceWith(fresh);
-  countUp(fresh);
-}
-
-function scrollToId(id) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  scrollTo({ top: el.getBoundingClientRect().top + scrollY - 48, behavior: reducedMotion() ? 'auto' : 'smooth' });
+  section.replaceWith(holder.firstElementChild);
 }
 
 // Page joueur
@@ -282,8 +269,8 @@ function playerPage(p) {
   const rating = avgRating(m30);
   const metric = state.playerMetric ?? (p.series?.elo?.some((v) => v != null) ? 'elo' : 'premier');
 
-  const cell = (label, value, sub) => `
-    <div class="sunken min-w-0 px-2.5 py-2">
+  const cell = (label, value, sub, wide = false) => `
+    <div class="sunken min-w-0 px-2.5 py-2 ${wide ? 'col-span-2 sm:col-span-1' : ''}">
       <span class="caps block !text-[10px] muted">${label}</span>
       <div class="flex items-center gap-1.5 text-[20px] font-bold leading-7 tabular-nums">${value}</div>
       <span class="block truncate text-[12px] muted">${sub}</span>
@@ -293,14 +280,17 @@ function playerPage(p) {
       ? cell('FACEIT', `${faceitBadge(p.faceit.level, 28)}<span class="accent" data-count="${p.faceit.elo}">${fmt(p.faceit.elo)}</span>`, `${delta(p.delta[7].elo)} sur 7 j`)
       : cell('FACEIT', '<span class="muted">—</span>', 'Pas de compte'),
     p.cur.premier != null
-      ? cell('Premier', premierBadge(p.cur.premier, premierColor(p.cur.premier), '!text-[18px] !leading-[24px]'), `${delta(p.delta[7].premier)} sur 7 j`)
+      ? cell('Premier', premierBadge(p.cur.premier, premierColor(p.cur.premier), 'big'), `${delta(p.delta[7].premier)} sur 7 j`)
       : cell('Premier', '<span class="muted">—</span>', p.leetify ? 'Pas encore classé' : 'Pas de Leetify'),
     p.cur.mm != null
-      ? cell('Meilleur rang', mmBadge(p.cur.mm, mmShort(p.cur.mm), mmName(p.cur.mm), mmColor(p.cur.mm), '!text-[18px] !leading-[24px]', 28), `${mmName(p.cur.mm)} · ${esc(p.leetify.mmBest.map)}`)
-      : cell('Meilleur rang', '<span class="muted">—</span>', 'Aucun rang compétitif'),
+      ? cell('Meilleur rang MM', mmBadge(p.cur.mm, mmName(p.cur.mm), 30), `${mmName(p.cur.mm)} · ${esc(p.leetify.mmBest.map)}`)
+      : cell('Meilleur rang MM', '<span class="muted">—</span>', 'Aucun rang compétitif'),
+    p.leetify?.wingman
+      ? cell('Wingman', wingmanBadge(p.leetify.wingman, mmName(p.leetify.wingman), 30), mmName(p.leetify.wingman))
+      : cell('Wingman', '<span class="muted">—</span>', 'Pas de rang Wingman'),
     rec.n
-      ? cell('Victoires 30 j', `<span class="accent">${Math.round((rec.w / Math.max(1, rec.w + rec.l)) * 100)} %</span>`, `${rec.w} V · ${rec.l} D`)
-      : cell('Victoires 30 j', '<span class="muted">—</span>', 'Aucun match récent'),
+      ? cell('Victoires 30 j', `<span class="accent">${Math.round((rec.w / Math.max(1, rec.w + rec.l)) * 100)} %</span>`, `${rec.w} V · ${rec.l} D`, true)
+      : cell('Victoires 30 j', '<span class="muted">—</span>', 'Aucun match récent', true),
   ].join('');
 
   const links = [
@@ -311,14 +301,14 @@ function playerPage(p) {
 
   const header = win(p.name, `
     <div class="flex items-center gap-3">
-      <span class="pop">${avatar(p, 64)}</span>
+      ${avatar(p, 64)}
       <div class="min-w-0">
         <h1 class="m-0 truncate text-[22px]">${esc(p.name)}</h1>
         <p class="m-0 truncate text-[13px] muted">${[p.faceit?.nickname, p.steamName].filter(Boolean).map(esc).join(' · ') || 'Steam ' + esc(p.steam64)}</p>
         ${DEMO ? '' : `<p class="m-0 mt-1 flex gap-3 text-[13px]">${links.map(([l, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener">${l}</a>`).join('')}</p>`}
       </div>
     </div>
-    <div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4">${cells}</div>`, 'no-resize');
+    <div class="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-5">${cells}</div>`, 'no-resize');
 
   const chartMetrics = [['elo', 'ELO FACEIT'], ['premier', 'Premier']].filter(([k]) => p.series?.[k]?.some((v) => v != null));
   const chart = chartMetrics.length
@@ -341,7 +331,7 @@ function playerPage(p) {
     ? [['Aim', r.aim], ['Positionnement', r.positioning], ['Utilitaires', r.utility]].filter(([, v]) => typeof v === 'number').map(([k, v]) => `
       <div class="py-1">
         <div class="flex justify-between text-[13px]"><span>${k}</span><span class="muted tabular-nums">${Math.round(v)} / 100</span></div>
-        <progress class="meter" max="100" value="0" data-to="${Math.max(0, Math.min(100, Math.round(v)))}"></progress>
+        <progress class="meter" max="100" value="${Math.max(0, Math.min(100, Math.round(v)))}"></progress>
       </div>`).join('')
     : '';
 
@@ -353,7 +343,7 @@ function playerPage(p) {
         <button class="small" data-fold="maps" aria-expanded="false">Afficher</button>
       </div>
       <div class="fold" id="fold-maps"><div><div class="sunken mt-2.5">
-        ${comp.map((c) => `<div class="lv-row"><span class="flex-1">${esc(c.map)}</span><span class="text-[12px] muted">${mmName(c.rank)}</span>${mmBadge(c.rank, mmShort(c.rank), mmName(c.rank), mmColor(c.rank), 'min-w-[46px] text-center', 24)}</div>`).join('')}
+        ${comp.map((c) => `<div class="lv-row"><span class="flex-1">${esc(c.map)}</span><span class="text-[12px] muted">${mmName(c.rank)}</span>${mmBadge(c.rank, mmName(c.rank), 24)}</div>`).join('')}
       </div></div></div>`, 'no-resize')
     : '';
 
@@ -370,6 +360,7 @@ function playerPage(p) {
         <p class="m-0 text-[15px] font-bold">${m.score ? `${m.score[0]} – ${m.score[1]}` : ''}</p>
         <p class="m-0 text-[12px] muted">${typeof m.rating === 'number' ? leetifyRating(m.rating) : ''}</p>
       </div>`;
+    if (m.details) return `<a class="lv-row" href="#/m/${encodeURIComponent(m.leetifyId)}/${encodeURIComponent(p.id)}">${row}<span class="muted text-[12px]">›</span></a>`;
     return m.url ? `<a class="lv-row" href="${esc(m.url)}" target="_blank" rel="noopener">${row}</a>` : `<div class="lv-row">${row}</div>`;
   }).join('');
 
@@ -378,7 +369,7 @@ function playerPage(p) {
   if (!p.leetify) notes.push('Pas de profil Leetify trouvé pour ce Steam ID.');
   if (p.errors?.length) notes.push(`Dernière mise à jour incomplète : ${p.errors.map(esc).join(' ; ')}.`);
 
-  return `<div class="app fade-in">
+  return `<div class="app">
     <nav class="tabs" style="grid-template-columns:auto 1fr">
       <li><a href="#/" data-back>‹ Classement</a></li>
       <li class="min-w-0"><span class="block truncate px-3 py-2 leading-[21px] font-bold">${esc(p.name)}</span></li>
@@ -390,7 +381,7 @@ function playerPage(p) {
     ${compWin}
     ${win('Derniers matchs', `
       <div class="sunken">${recent || '<div class="lv-row muted italic">Aucun match récent</div>'}</div>
-      ${recent ? '<p class="mx-0 mb-0 mt-2 text-[12px] muted">Score de l’équipe du joueur en premier, rating Leetify en dessous.</p>' : ''}`, '', 'matches')}
+      ${recent ? '<p class="mx-0 mb-0 mt-2 text-[12px] muted">Score de l’équipe du joueur en premier, rating Leetify en dessous. Touche un match marqué › pour voir le tableau des scores.</p>' : ''}`, '', 'matches')}
     ${notes.length ? `<div class="sunken flex items-start gap-2 px-2.5 py-2 text-[13px]"><span class="accent">${icon('warning')}</span><span>${notes.join('<br>')}</span></div>` : ''}
   </div>`;
 }
@@ -402,8 +393,105 @@ function renderPlayer(id) {
   app.innerHTML = playerPage(p);
   scrollTo(0, 0);
   bindChart(app, fmt);
-  countUp(app);
-  fillMeters(app);
+}
+
+// Détails d'un match : le tableau des scores complet récupéré chez Leetify.
+
+let demoMatches = null;
+async function loadMatch(id) {
+  if (DEMO) {
+    demoMatches ??= await fetch('demo/matches.json').then((r) => r.json()).catch(() => ({}));
+    return demoMatches[id] ?? null;
+  }
+  const res = await fetch(`data/matches/${encodeURIComponent(id)}.json`, { cache: 'no-cache' }).catch(() => null);
+  return res?.ok ? res.json() : null;
+}
+
+const pct = (x) => (typeof x === 'number' ? `${Math.round(x <= 1 ? x * 100 : x)} %` : '—');
+const num = (x, digits = 0) => (typeof x === 'number' ? x.toFixed(digits).replace('.', ',') : '—');
+
+function scoreboard(rows, title, score, won, tracked, focusId) {
+  const lines = rows.sort((a, b) => (b.rating ?? -9) - (a.rating ?? -9)).map((r) => {
+    const me = r.steam64 === focusId;
+    const ours = tracked.get(r.steam64);
+    const name = ours ? `<a href="#/p/${encodeURIComponent(r.steam64)}" class="${me ? 'accent font-bold' : 'accent'}">${esc(ours.name)}</a>` : `<span>${esc(r.name)}</span>`;
+    return `<div class="lv-row mt-grid ${me ? 'bg-[color-mix(in_srgb,var(--accent)_14%,transparent)]' : ''}">
+      <span class="min-w-0 truncate">${name}</span>
+      <span class="tabular-nums text-right">${r.k ?? '—'}</span>
+      <span class="tabular-nums text-right">${r.d ?? '—'}</span>
+      <span class="tabular-nums text-right">${r.a ?? '—'}</span>
+      <span class="tabular-nums text-right">${num(r.adr)}</span>
+      <span class="tabular-nums text-right">${pct(r.hs)}</span>
+      <span class="tabular-nums text-right ${typeof r.rating === 'number' ? (r.rating >= 0 ? 'up' : 'down') : 'muted'}">${leetifyRating(r.rating)}</span>
+    </div>`;
+  }).join('');
+  return win(title, `
+    <div class="sunken">
+      <div class="lv-head mt-grid caps !text-[10px] muted"><span>Joueur</span><span class="text-right">K</span><span class="text-right">D</span><span class="text-right">A</span><span class="text-right">ADR</span><span class="text-right">HS</span><span class="text-right">Rating</span></div>
+      ${lines}
+    </div>
+    <p class="mx-0 mb-0 mt-2 text-[12px] ${won ? 'up' : 'down'}">${score} rounds · ${won ? 'Victoire' : 'Défaite'}</p>`, 'no-resize');
+}
+
+async function renderMatch(id, focusId) {
+  const p = state.model.players.find((x) => x.id === focusId);
+  const summary = p?.matches.find((m) => m.leetifyId === id);
+  const back = `<nav class="tabs" style="grid-template-columns:auto 1fr">
+      <li><a href="#/p/${encodeURIComponent(focusId)}" data-back>‹ ${esc(p?.name ?? 'Retour')}</a></li>
+      <li class="min-w-0"><span class="block truncate px-3 py-2 leading-[21px] font-bold">${esc(summary?.map ?? 'Match')}</span></li>
+    </nav>`;
+  app.innerHTML = `<div class="app">${back}${win('Chargement…', '<p class="m-0 text-[13px]">Récupération du tableau des scores…</p>', 'no-resize')}</div>`;
+  scrollTo(0, 0);
+
+  const d = await loadMatch(id);
+  if (current !== 'match') return;
+  if (!d) {
+    app.innerHTML = `<div class="app">${back}${win('Match', '<p class="m-0">Les détails de ce match ne sont pas encore disponibles. Ils arrivent au prochain passage du workflow.</p>', 'no-resize')}</div>`;
+    return;
+  }
+
+  const tracked = new Map(state.model.players.map((x) => [x.id, x]));
+  const me = d.players.find((r) => r.steam64 === focusId);
+  const myTeam = me?.team ?? d.teams[0]?.team;
+  const ours = d.teams.find((t) => t.team === myTeam) ?? d.teams[0];
+  const theirs = d.teams.find((t) => t !== ours) ?? d.teams[1];
+  const won = (ours?.score ?? 0) > (theirs?.score ?? 0);
+  const src = summary?.source ?? 'other';
+  const friends = d.players.filter((r) => r.steam64 !== focusId && tracked.has(r.steam64)).map((r) => tracked.get(r.steam64).name);
+
+  const header = win(`${d.map} · ${SOURCE_LABEL[src] ?? 'Match'}`, `
+    <div class="flex items-center justify-between gap-3">
+      <div class="min-w-0">
+        <h1 class="m-0 text-[22px]">${esc(d.map)}</h1>
+        <p class="m-0 text-[13px] muted">${when(d.finishedAt, state.model.tz, state.now)}${friends.length ? ` · avec ${friends.map(esc).join(', ')}` : ''}</p>
+      </div>
+      <div class="sunken px-3 py-1 text-center">
+        <span class="block text-[24px] font-bold tabular-nums ${won ? 'up' : 'down'}">${ours?.score ?? '–'} – ${theirs?.score ?? '–'}</span>
+        <span class="caps block !text-[9px] muted">${won ? 'Victoire' : 'Défaite'}</span>
+      </div>
+    </div>
+    ${d.bannedPlayer ? '<p class="mx-0 mb-0 mt-2 text-[12px] down">Un joueur de ce match a été banni depuis.</p>' : ''}`, 'no-resize');
+
+  const mine = me ? win(`Le match de ${p?.name ?? me.name}`, `<div class="sunken">${[
+    ['Kills / morts', `${me.k} / ${me.d} (${num(me.d ? me.k / me.d : me.k, 2)})`],
+    ['Headshots', `${me.hsKills ?? '—'} kills · ${pct(me.hs)} des tirs`],
+    ['Multi-kills', `${me.k3 ?? 0} × 3K · ${me.k4 ?? 0} × 4K · ${me.k5 ?? 0} × ace`],
+    ['MVP', me.mvps ?? '—'],
+    ['Précision (ennemi visible)', pct(me.acc)],
+    ['Preaim', typeof me.preaim === 'number' ? `${num(me.preaim, 1)}°` : '—'],
+    ['Temps de réaction', typeof me.reaction === 'number' ? `${Math.round(me.reaction < 10 ? me.reaction * 1000 : me.reaction)} ms` : '—'],
+    ['Ennemis flashés', `${me.flashed ?? '—'}${me.flashKills ? ` · ${me.flashKills} kills derrière` : ''}`],
+    ['Dégâts HE par grenade', num(me.he, 1)],
+    ['Trades réussis', me.trades ?? '—'],
+  ].map(([k, v]) => `<div class="lv-row"><span class="flex-1">${k}</span><span class="font-bold accent tabular-nums text-right">${v}</span></div>`).join('')}</div>`, 'no-resize') : '';
+
+  const teamOf = (t) => d.players.filter((r) => r.team === t?.team);
+  app.innerHTML = `<div class="app">${back}${header}
+    ${scoreboard(teamOf(ours), me ? `Équipe de ${p?.name ?? me.name}` : 'Équipe 1', `${ours?.score ?? '–'}`, won, tracked, focusId)}
+    ${scoreboard(teamOf(theirs), 'Adversaires', `${theirs?.score ?? '–'}`, !won, tracked, focusId)}
+    ${mine}
+    <p class="mx-0 mt-2 text-center text-[12px] muted">Tableau des scores fourni par Leetify. Rating Leetify ×100, ADR = dégâts moyens par round.</p>
+  </div>`;
 }
 
 // Navigation et événements
@@ -412,9 +500,13 @@ let current = null;
 
 function route() {
   const m = location.hash.match(/^#\/p\/(.+)$/);
-  if (current === 'home' && m) state.homeScroll = scrollY;
+  const mt = location.hash.match(/^#\/m\/([^/]+)\/(.+)$/);
+  if (current === 'home' && (m || mt)) state.homeScroll = scrollY;
   if (!state.model) return renderEmpty();
-  if (m) {
+  if (mt) {
+    current = 'match';
+    renderMatch(decodeURIComponent(mt[1]), decodeURIComponent(mt[2]));
+  } else if (m) {
     current = 'player';
     state.playerMetric = null;
     renderPlayer(decodeURIComponent(m[1]));
@@ -435,24 +527,16 @@ function renderEmpty() {
 
 function renderLoading() {
   app.innerHTML = `<div class="app">${win('Connexion…', `
-    <p class="m-0 text-[13px]">Récupération des classements<span class="blink">_</span></p>
-    <progress class="meter" max="100" value="0" data-to="100"></progress>`, 'no-resize')}</div>`;
-  fillMeters(app);
+    <p class="m-0 text-[13px]">Récupération des classements…</p>
+    <progress class="meter" max="100"></progress>`, 'no-resize')}</div>`;
 }
 
 app.addEventListener('click', (e) => {
-  const tab = e.target.closest('[data-tab]');
-  if (tab) {
+  const sortLink = e.target.closest('[data-sort]');
+  if (sortLink) {
     e.preventDefault();
-    selectTab(tab.dataset.tab);
-    return;
-  }
-
-  const goto = e.target.closest('[data-goto-tab]');
-  if (goto) {
-    e.preventDefault();
-    selectTab(goto.dataset.gotoTab);
-    scrollToId('ranking');
+    sortBy(sortLink.dataset.sort);
+    if (!sortLink.closest('#ranking')) document.getElementById('ranking')?.scrollIntoView();
     return;
   }
 
@@ -479,8 +563,9 @@ app.addEventListener('click', (e) => {
   const back = e.target.closest('[data-back]');
   if (back) {
     e.preventDefault();
-    if (state.cameFromHome) history.back();
-    else location.hash = '#/';
+    // Retour comme dans un navigateur si on vient d'une autre page du site, sinon vers le lien prévu.
+    if (state.navigated) history.back();
+    else location.hash = back.getAttribute('href');
   }
 });
 
@@ -494,10 +579,10 @@ app.addEventListener('change', (e) => {
 });
 
 addEventListener('hashchange', () => {
-  state.cameFromHome = current === 'home';
+  state.navigated = true;
   route();
 });
 
 renderLoading();
-await Promise.all([load(), loadRankImages()]);
+await load();
 route();

@@ -1,5 +1,6 @@
 // Appelé par le workflow : lit players.json, interroge FACEIT / Leetify / Steam et écrit data/.
 // Une source qui échoue ne casse rien : on garde les dernières valeurs connues du joueur.
+import { mkdir, readdir, rm, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { mergeMatches, readJson, writeAll } from './lib/store.mjs';
 
@@ -120,6 +121,7 @@ async function fetchLeetify(player, key) {
 
   const matches = (p.recent_matches ?? []).map((m) => ({
     id: `leetify:${m.id}`,
+    leetifyId: m.id,
     source: leetifySource(m),
     at: new Date(m.finished_at).toISOString(),
     map: mapLabel(m.map_name),
@@ -157,7 +159,7 @@ function combineMatches(faceitMatches, leetifyMatches) {
     const twin = leetifyFaceit.find((lm) => !used.has(lm.id) && Math.abs(new Date(lm.at).getTime() - t) < 15 * 60e3);
     if (!twin) return fm;
     used.add(twin.id);
-    return { ...fm, map: twin.map, score: twin.score, rating: twin.rating, result: fm.result ?? twin.result };
+    return { ...fm, leetifyId: twin.leetifyId, map: twin.map, score: twin.score, rating: twin.rating, result: fm.result ?? twin.result };
   });
   const others = leetifyMatches.filter((m) => m.source !== 'faceit' || (!faceitMatches.length && !used.has(m.id)));
   return [...enriched, ...others];
@@ -175,6 +177,82 @@ async function fetchSteam(ids) {
     for (const s of res?.response?.players ?? []) out.set(s.steamid, { avatar: s.avatarfull, name: s.personaname });
   }
   return out;
+}
+
+// Détails des matchs (tableau des scores complet) : récupérés une seule fois par match, dans data/matches/.
+const MATCHES = join(DATA, 'matches');
+const MAX_DETAILS = 40;
+
+function trimDetails(d) {
+  return {
+    id: d.id,
+    finishedAt: d.finished_at,
+    dataSource: d.data_source,
+    map: mapLabel(d.map_name),
+    bannedPlayer: !!d.has_banned_player,
+    teams: (d.team_scores ?? []).map((t) => ({ team: t.team_number, score: t.score })),
+    players: (d.stats ?? []).map((p) => ({
+      steam64: p.steam64_id,
+      name: p.name,
+      team: p.initial_team_number,
+      k: p.total_kills,
+      d: p.total_deaths,
+      a: p.total_assists,
+      adr: p.dpr,
+      hs: p.accuracy_head,
+      hsKills: p.total_hs_kills,
+      rating: p.leetify_rating,
+      mvps: p.mvps,
+      k3: p.multi3k,
+      k4: p.multi4k,
+      k5: p.multi5k,
+      acc: p.accuracy_enemy_spotted,
+      preaim: p.preaim,
+      reaction: p.reaction_time,
+      flashed: p.flashbang_hit_foe,
+      flashKills: p.flashbang_leading_to_kill,
+      he: p.he_foes_damage_avg,
+      trades: p.trade_kills_succeed,
+      rounds: p.rounds_count,
+    })),
+  };
+}
+
+async function fetchDetails(players, key, leetifyDown) {
+  await mkdir(MATCHES, { recursive: true });
+  const have = new Set((await readdir(MATCHES)).map((f) => f.replace(/\.json$/, '')));
+  const wanted = new Set(players.flatMap((p) => p.matches.map((m) => m.leetifyId).filter(Boolean)));
+  const headers = key ? { Authorization: `Bearer ${key}` } : {};
+
+  let fetched = 0;
+  // Les plus récents d'abord, pour que les derniers matchs soient cliquables rapidement.
+  const todo = players.flatMap((p) => p.matches).filter((m) => m.leetifyId && !have.has(m.leetifyId))
+    .sort((a, b) => b.at.localeCompare(a.at))
+    .map((m) => m.leetifyId)
+    .filter((id, i, all) => all.indexOf(id) === i);
+
+  for (const id of leetifyDown ? [] : todo.slice(0, MAX_DETAILS)) {
+    try {
+      const d = await getJson(`https://api-public.cs-prod.leetify.com/v2/matches/${id}`, { headers, gap: 1200 });
+      if (!d) continue;
+      await writeFile(join(MATCHES, `${id}.json`), JSON.stringify(trimDetails(d)) + '\n');
+      have.add(id);
+      fetched++;
+    } catch (e) {
+      console.log(`Détails ${id} : ${e.message}`);
+      if (e.status === 429) break;
+    }
+  }
+
+  // Nettoyage : on ne garde que les matchs encore affichés (fenêtre de 45 jours).
+  for (const id of have) {
+    if (!wanted.has(id)) {
+      await rm(join(MATCHES, `${id}.json`), { force: true });
+      have.delete(id);
+    }
+  }
+  for (const p of players) for (const m of p.matches) m.details = !!(m.leetifyId && have.has(m.leetifyId));
+  console.log(`Détails de matchs : ${fetched} nouveaux, ${have.size} en tout`);
 }
 
 async function main() {
@@ -217,7 +295,10 @@ async function main() {
   }
 
   const players = [];
-  for (const cfg of config.players) {
+  // Une entrée peut être juste un Steam ID ("7656…") ou un objet { steam64, name?, faceit? }.
+  const entries = config.players.map((e) => (typeof e === 'string' || typeof e === 'number' ? { steam64: String(e) } : e));
+
+  for (const cfg of entries) {
     const id = String(cfg.steam64);
     const prev = prevById.get(id) ?? {};
     const errors = [];
@@ -264,7 +345,8 @@ async function main() {
 
     players.push({
       id,
-      name: cfg.name,
+      // Sans nom dans players.json : pseudo FACEIT, puis nom Leetify, puis pseudo Steam.
+      name: cfg.name || faceit?.nickname || leetify?.name || s?.name || prev.name || id,
       steam64: id,
       avatar: faceit?.avatar || s?.avatar || prev.avatar || null,
       steamName: s?.name ?? prev.steamName ?? null,
@@ -273,10 +355,12 @@ async function main() {
       matches: mergeMatches(prevMatches, fresh, now),
       errors,
     });
-    console.log(`${cfg.name.padEnd(16)} ${errors.length ? errors.join(' | ') : 'ok'}`);
+    console.log(`${(cfg.name || id).padEnd(18)} ${errors.length ? errors.join(' | ') : 'ok'}`);
   }
 
   if (leetifyDown) sources.leetify.error = 'Limite de requêtes atteinte (429)';
+
+  await fetchDetails(players, leetifyKey, leetifyDown);
 
   await writeAll(DATA, {
     generatedAt: now.toISOString(),

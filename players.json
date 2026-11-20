@@ -1,10 +1,10 @@
 {
-  "group": "traphouse",
+  "group": "Traphouse",
   "timezone": "Europe/Zurich",
   "players": [
-    { "name": "Max", "steam64": "76561198000000001", "faceit": "MaxLeGrand" },
-    { "name": "Léa", "steam64": "76561198000000002" },
-    { "name": "Tom", "steam64": "76561198000000003" },
-    { "name": "Nico", "steam64": "76561198000000004", "faceit": false }
+    "76561198000000001",
+    "76561198000000002",
+    { "steam64": "76561198000000003", "name": "Tom" },
+    { "steam64": "76561198000000004", "faceit": false }
   ]
 }

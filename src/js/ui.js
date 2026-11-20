@@ -3,8 +3,6 @@ import { PREMIER_HEX } from './ranks.js';
 export const esc = (s) =>
   String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 
-export const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
-
 const nf = new Intl.NumberFormat('fr-FR');
 export const fmt = (n) => (n == null ? '—' : nf.format(Math.round(n)));
 export const signed = (n) => (n > 0 ? '+' : n < 0 ? '−' : '±') + nf.format(Math.abs(Math.round(n)));
@@ -62,65 +60,19 @@ export function when(iso, tz, now = new Date()) {
   return new Intl.DateTimeFormat('fr-FR', { timeZone: tz, weekday: 'short', day: 'numeric', month: 'short' }).format(d) + ` ${time}`;
 }
 
-// Les chiffres défilent jusqu'à leur valeur (data-count="1234").
-export function countUp(root) {
-  if (reducedMotion()) return;
-  const items = [...root.querySelectorAll('[data-count]')].map((el) => ({ el, to: Number(el.dataset.count), text: el.textContent }));
-  if (!items.length) return;
-  const start = performance.now();
-  const tick = (t) => {
-    const k = Math.min(1, (t - start) / 700);
-    const e = 1 - Math.pow(1 - k, 3);
-    for (const { el, to, text } of items) {
-      el.textContent = k === 1 ? text : el.dataset.signed ? signed(to * e) : fmt(to * e);
-    }
-    if (k < 1) requestAnimationFrame(tick);
-  };
-  requestAnimationFrame(tick);
-}
-
-// Les barres segmentées se remplissent comme l'écran de chargement de Steam.
-export function fillMeters(root) {
-  for (const el of root.querySelectorAll('progress[data-to]')) {
-    const to = Number(el.dataset.to);
-    if (reducedMotion()) { el.value = to; continue; }
-    const start = performance.now();
-    const step = (t) => {
-      const k = Math.min(1, (t - start) / 800);
-      el.value = Math.round(to * k / 4) * 4;
-      if (k < 1) requestAnimationFrame(step);
-      else el.value = to;
-    };
-    requestAnimationFrame(step);
-  }
-}
-
-// Emblèmes : niveaux FACEIT fournis dans img/faceit, Premier / MM seulement s'ils ont été déposés
-// dans src/img/ranks (sinon on garde la petite case colorée).
-const rankFiles = new Map();
-export async function loadRankImages() {
-  try {
-    const res = await fetch('img/ranks/index.json', { cache: 'no-cache' });
-    for (const f of await res.json()) rankFiles.set(f.replace(/\.\w+$/, ''), f);
-  } catch {}
-}
-
+// Emblèmes : niveaux FACEIT dans img/faceit, rangs compétitifs et Wingman dans img/ranks (extraits du jeu).
 export function faceitBadge(level, size = 24) {
   if (!level) return tag('–', 'gray');
   return `<img class="rank-img" src="img/faceit/${level}.png" width="${size}" height="${size}" alt="Niveau ${level}" title="Niveau FACEIT ${level}">`;
 }
 
-const PREMIER_TIER = { gray: 1, teal: 2, blue: 3, indigo: 4, pink: 5, red: 6, yellow: 7 };
+// Bandeau Premier du jeu (gris), teinté à la couleur du palier, avec le rating exact par-dessus.
 export function premierBadge(rating, c, extra = '') {
-  const file = rankFiles.get(`premier-${PREMIER_TIER[c]}`);
-  const text = `<span data-count="${rating}">${fmt(rating)}</span>`;
-  const hex = PREMIER_HEX[c];
-  if (!file) return `<span class="tag ${extra}" style="color:${hex}">${text}</span>`;
-  return `<span class="premier-badge" style="background-image:url('img/ranks/${file}');color:${hex}">${text}</span>`;
+  return `<span class="premier ${extra}" style="--p:${PREMIER_HEX[c]}" title="Premier ${fmt(rating)}"><b>${fmt(rating)}</b></span>`;
 }
 
-export function mmBadge(rank, short, name, c, extra = '', height = 22) {
-  const file = rankFiles.get(`mm-${rank}`);
-  if (!file) return tag(short, c, extra);
-  return `<img class="rank-img" src="img/ranks/${file}" height="${height}" style="width:auto" alt="${esc(name)}" title="${esc(name)}">`;
-}
+const rankImg = (kind, rank, name, height) =>
+  `<img class="rank-img" src="img/ranks/${kind}-${rank}.png" height="${height}" style="height:${height}px;width:auto" alt="${esc(name)}" title="${esc(name)}">`;
+
+export const mmBadge = (rank, name, height = 22) => rankImg('mm', rank, name, height);
+export const wingmanBadge = (rank, name, height = 22) => rankImg('wingman', rank, name, height);
