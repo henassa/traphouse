@@ -1,13 +1,34 @@
 {
  "date": "2026-11-20",
- "updatedAt": "2026-11-20T08:40:35.946Z",
+ "updatedAt": "2026-11-20T15:07:14.969Z",
  "players": {
-  "76561198123365503": {
-   "elo": 2514,
-   "level": 10,
-   "premier": 26543,
-   "mm": 18,
-   "mmMap": "Vertigo"
+  "76561198000000001": {
+   "elo": null,
+   "level": null,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561198000000002": {
+   "elo": null,
+   "level": null,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561198000000003": {
+   "elo": null,
+   "level": null,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561198000000004": {
+   "elo": null,
+   "level": null,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
   }
  }
 }
