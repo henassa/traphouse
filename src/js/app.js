@@ -203,17 +203,9 @@ function homeContent() {
   return ranking() + awards() + funStats() + footer();
 }
 
-function navBar() {
-  return `<nav class="tabs">
-    <li><a href="#ranking">Classement</a></li>
-    <li><a href="#awards">Distinctions</a></li>
-    <li><a href="#fun">Stats</a></li>
-  </nav>`;
-}
-
 function renderHome() {
   document.title = state.latest.group ?? 'Traphouse';
-  app.innerHTML = `<div class="app">${navBar()}${summary()}<div id="content">${homeContent()}</div></div>`;
+  app.innerHTML = `<div class="app">${summary()}<div id="content">${homeContent()}</div></div>`;
 }
 
 function sortBy(key) {

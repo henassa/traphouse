@@ -8,7 +8,11 @@ const ROOT = new URL('..', import.meta.url).pathname;
 const DATA = join(ROOT, 'data');
 
 const FACEIT_KEY = process.env.FACEIT_API_KEY;
-const LEETIFY_KEY = process.env.LEETIFY_API_KEY;
+// Copier-coller depuis le site ajoute parfois des espaces, des guillemets ou un "Bearer " en trop.
+const LEETIFY_KEY = (process.env.LEETIFY_API_KEY ?? '').trim().replace(/^["']|["']$/g, '').replace(/^Bearer\s+/i, '') || null;
+// La doc accepte la clé dans "Authorization: Bearer <clé>" ou dans "_leetify_key: <clé>" : on garde celui qui marche.
+let leetifyHeaderMode = 'bearer';
+const leetifyHeaders = (key) => (!key ? {} : leetifyHeaderMode === 'raw' ? { _leetify_key: key } : { Authorization: `Bearer ${key}` });
 const STEAM_KEY = process.env.STEAM_API_KEY;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -107,7 +111,7 @@ function leetifySource(m) {
 }
 
 async function fetchLeetify(player, key) {
-  const headers = key ? { Authorization: `Bearer ${key}` } : {};
+  const headers = leetifyHeaders(key);
   const p = await getJson(
     `https://api-public.cs-prod.leetify.com/v3/profile?steam64_id=${player.steam64}`,
     { headers, gap: 1200 },
@@ -222,7 +226,7 @@ async function fetchDetails(players, key, leetifyDown) {
   await mkdir(MATCHES, { recursive: true });
   const have = new Set((await readdir(MATCHES)).map((f) => f.replace(/\.json$/, '')));
   const wanted = new Set(players.flatMap((p) => p.matches.map((m) => m.leetifyId).filter(Boolean)));
-  const headers = key ? { Authorization: `Bearer ${key}` } : {};
+  const headers = leetifyHeaders(key);
 
   let fetched = 0;
   // Les plus récents d'abord, pour que les derniers matchs soient cliquables rapidement.
@@ -270,14 +274,21 @@ async function main() {
   let leetifyDown = false;
   let leetifyKey = LEETIFY_KEY;
 
-  // Endpoint de vérification documenté par Leetify : une clé refusée ne doit pas bloquer la collecte.
+  // Vérification documentée par Leetify (/api-key/validate) : on essaie les deux en-têtes acceptés.
   if (leetifyKey) {
-    const res = await fetch('https://api-public.cs-prod.leetify.com/api-key/validate', {
-      headers: { Authorization: `Bearer ${leetifyKey}` },
-      signal: AbortSignal.timeout(15000),
-    }).catch(() => null);
-    if (res?.status === 401) {
-      console.warn('Clé Leetify refusée : on continue sans clé (limites plus basses).');
+    const check = async (headers) => {
+      const res = await fetch('https://api-public.cs-prod.leetify.com/api-key/validate', { headers, signal: AbortSignal.timeout(15000) }).catch(() => null);
+      return res?.status ?? 'réseau';
+    };
+    const bearer = await check({ Authorization: `Bearer ${leetifyKey}` });
+    let raw = null;
+    if (bearer !== 200) {
+      raw = await check({ _leetify_key: leetifyKey });
+      if (raw === 200) leetifyHeaderMode = 'raw';
+    }
+    console.log(`Clé Leetify (${leetifyKey.length} caractères) : Bearer → ${bearer}${raw != null ? `, _leetify_key → ${raw}` : ''}`);
+    if (bearer === 401 && raw === 401) {
+      console.warn('Clé Leetify refusée par les deux en-têtes : on continue sans clé (limites plus basses).');
       sources.leetify.error = 'Clé refusée, collecte sans clé';
       leetifyKey = null;
     }

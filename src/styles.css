@@ -26,6 +26,7 @@
   --up: #a6d96a;
   --down: #ff8a66;
 
+  --title-icon: url("vgui/greensteam/steamico.png");
   --rank-gray: #c8ccc4;
   --rank-teal: #7fe0e8;
   --rank-blue: #8ab8ff;
@@ -51,6 +52,7 @@
     --accent-hover: #ffd27a;
     --muted: #8f8f8f;
     --link: #e03644;
+    --title-icon: url("vgui/blacksteam/steamico.png");
   }
 }
 
@@ -77,6 +79,8 @@
   }
 
   .window, .box { margin: 0 0 10px; max-width: none; scroll-margin-top: 48px; }
+  /* Barre de titre : on garde l'icône Steam, sans les boutons réduire / fermer qui ne font rien. */
+  .window:not(.headless)::before { background-image: var(--title-icon); background-position: top left; }
   /* La poignée de redimensionnement de vgui.css ne sert à rien ici et prend de la place. */
   .window::after { display: none !important; }
 
