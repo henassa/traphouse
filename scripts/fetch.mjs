@@ -169,6 +169,15 @@ function combineMatches(faceitMatches, leetifyMatches) {
   return [...enriched, ...others];
 }
 
+// Photo de profil Steam sans clé : le profil public existe aussi en XML.
+async function fetchSteamAvatar(steam64) {
+  const res = await fetch(`https://steamcommunity.com/profiles/${steam64}/?xml=1`, { signal: AbortSignal.timeout(10000) });
+  if (!res.ok) return null;
+  const xml = await res.text();
+  const pick = (tag) => xml.match(new RegExp(`<${tag}><!\\[CDATA\\[([^\\]]*)\\]\\]></${tag}>`))?.[1] ?? null;
+  return { avatar: pick('avatarFull'), name: pick('steamID') };
+}
+
 // Steam (optionnel) : avatar et pseudo Steam, une seule requête pour 100 joueurs.
 
 async function fetchSteam(ids) {
@@ -227,7 +236,6 @@ function trimDetails(d) {
 async function fetchDetails(players, key, leetifyDown) {
   await mkdir(MATCHES, { recursive: true });
   const have = new Set((await readdir(MATCHES)).map((f) => f.replace(/\.json$/, '')));
-  const wanted = new Set(players.flatMap((p) => p.matches.map((m) => m.leetifyId).filter(Boolean)));
   const headers = leetifyHeaders(key);
 
   let fetched = 0;
@@ -250,26 +258,15 @@ async function fetchDetails(players, key, leetifyDown) {
     }
   }
 
-  // Nettoyage : on ne garde que les matchs encore affichés (fenêtre de 45 jours).
-  for (const id of have) {
-    if (!wanted.has(id)) {
-      await rm(join(MATCHES, `${id}.json`), { force: true });
-      have.delete(id);
-    }
-  }
+  // Les tableaux des scores sont gardés : ils servent au K/D et au HLTV « total » (depuis le début du suivi).
   for (const p of players) for (const m of p.matches) m.details = !!(m.leetifyId && have.has(m.leetifyId));
 
-  // K/D et rating HLTV 1.0 sur les 30 derniers jours, à partir des tableaux des scores.
-  const cutoff = Date.now() - 30 * 864e5;
-  const cache = new Map();
+  const all = [];
+  for (const id of have) all.push(await readJson(join(MATCHES, `${id}.json`)));
+  const weekAgo = Date.now() - 7 * 864e5;
+  const week = all.filter((d) => d && new Date(d.finishedAt).getTime() >= weekAgo);
   for (const p of players) {
-    const ids = p.matches.filter((m) => m.details && new Date(m.at).getTime() >= cutoff).map((m) => m.leetifyId);
-    const list = [];
-    for (const id of ids) {
-      if (!cache.has(id)) cache.set(id, await readJson(join(MATCHES, `${id}.json`)));
-      list.push(cache.get(id));
-    }
-    p.perf = perfOf(list, p.steam64);
+    p.perf = { all: perfOf(all, p.steam64), week: perfOf(week, p.steam64) };
   }
   console.log(`Détails de matchs : ${fetched} nouveaux, ${have.size} en tout`);
 }
@@ -367,15 +364,24 @@ async function main() {
       faceitMatches ?? prevMatches.filter((m) => m.source === 'faceit'),
       leetifyMatches ?? [],
     );
-    const s = steam.get(id);
+    let s = steam.get(id);
+    let steamCheckedAt = prev.steamCheckedAt ?? null;
+    if (!s && (!steamCheckedAt || now - new Date(steamCheckedAt) > 864e5)) {
+      s = await fetchSteamAvatar(id).catch(() => null);
+      steamCheckedAt = now.toISOString();
+      await sleep(300);
+    }
 
     players.push({
       id,
       // Sans nom dans players.json : pseudo FACEIT, puis nom Leetify, puis pseudo Steam.
       name: cfg.name || faceit?.nickname || leetify?.name || s?.name || prev.name || id,
       steam64: id,
-      avatar: faceit?.avatar || s?.avatar || prev.avatar || null,
-      steamName: s?.name ?? prev.steamName ?? null,
+      // La photo Steam d'abord, celle de FACEIT si Steam n'en donne pas.
+      avatar: s?.avatar || prev.steamAvatar || faceit?.avatar || prev.avatar || null,
+      steamAvatar: s?.avatar || prev.steamAvatar || null,
+      steamCheckedAt,
+      steamName: s?.name || prev.steamName || null,
       faceit,
       leetify,
       matches: mergeMatches(prevMatches, fresh, now),

@@ -40,8 +40,11 @@ export function buildModel(latest, series, now = new Date()) {
       mm: p.leetify?.mmBest?.rank ?? null,
       wingman: p.leetify?.wingman || null,
       leetify: typeof p.leetify?.leetify === 'number' ? p.leetify.leetify : null,
-      kd: p.perf?.kd ?? null,
-      hltv: p.perf?.hltv ?? null,
+      aim: typeof p.leetify?.rating?.aim === 'number' ? p.leetify.rating.aim : null,
+      kd: p.perf?.all?.kd ?? null,
+      kd7: p.perf?.week?.kd ?? null,
+      hltv: p.perf?.all?.hltv ?? null,
+      hltv7: p.perf?.week?.hltv ?? null,
     };
     const base = (days) =>
       Object.fromEntries(METRICS.map((m) => [m, valueAt(dates, s?.[m], addDays(today, -days), today)]));

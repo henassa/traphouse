@@ -7,15 +7,18 @@ const DEMO = new URLSearchParams(location.search).has('demo');
 const BASE = DEMO ? 'demo/' : 'data/';
 const app = document.getElementById('app');
 
-// Colonnes du classement, triables en cliquant sur l'en-tête comme dans le navigateur de serveurs.
+// Colonnes du classement : largeur fixe pour que rien ne bouge quand on trie.
 const COLUMNS = {
-  elo: 'FACEIT',
-  premier: 'Premier',
-  mm: 'MM',
-  wingman: 'Wingman',
-  leetify: 'Leetify',
-  kd: 'K/D',
-  hltv: 'HLTV 1.0',
+  elo: { label: 'FACEIT', width: 96 },
+  premier: { label: 'Premier', width: 92 },
+  mm: { label: 'MM', width: 76 },
+  wingman: { label: 'Wingman', width: 84 },
+  leetify: { label: 'Leetify', width: 72 },
+  aim: { label: 'Aim', width: 52 },
+  kd: { label: 'K/D', width: 56 },
+  kd7: { label: 'K/D 7 j', width: 66 },
+  hltv: { label: 'HLTV', width: 58 },
+  hltv7: { label: 'HLTV 7 j', width: 72 },
 };
 
 const store = {
@@ -27,8 +30,9 @@ const state = {
   model: null,
   latest: null,
   now: new Date(),
-  sort: store.get('sort', 'elo'),
-  period: store.get('period', 1),
+  sort: store.get('sortKey', 'elo'),
+  sortDir: store.get('sortDir', 'desc'),
+  period: 1,
   query: '',
   funOpen: store.get('funOpen', true),
   homeScroll: 0,
@@ -75,70 +79,68 @@ function staleBanner() {
 }
 
 function rankingRows() {
-  const { sort, period, query } = state;
+  const { sort, sortDir, query } = state;
   const q = query.trim().toLowerCase();
+  const dir = sortDir === 'asc' ? 1 : -1;
+  // Les joueurs sans valeur restent en bas, quel que soit le sens du tri.
   const sorted = [...state.model.players].sort((a, b) => {
     const va = a.cur[sort], vb = b.cur[sort];
     if (va == null && vb == null) return a.name.localeCompare(b.name);
     if (va == null) return 1;
     if (vb == null) return -1;
-    return vb - va || (b.cur.elo ?? 0) - (a.cur.elo ?? 0);
+    return (va - vb) * dir || (b.cur.elo ?? 0) - (a.cur.elo ?? 0);
   });
   const shown = sorted.map((p, i) => ({ p, i }))
     .filter(({ p }) => !q || `${p.name} ${p.faceit?.nickname ?? ''} ${p.steamName ?? ''}`.toLowerCase().includes(q));
 
   const dash = '<span class="muted">—</span>';
+  const two = (v) => v.toFixed(2).replace('.', ',');
+  const small = (d, unit = '') => (d ? `<br><span class="text-[11px]">${delta(d, unit)}</span>` : '');
   const cell = (p, key) => {
     const v = p.cur[key];
     if (v == null) return dash;
-    let html;
-    if (key === 'elo') html = `<span class="inline-flex items-center gap-1">${faceitBadge(p.faceit.level, 18)}<b>${fmt(v)}</b></span>`;
-    else if (key === 'premier') html = premierBadge(v, premierColor(v));
-    else if (key === 'mm') html = mmBadge(v, `${mmName(v)} · ${p.leetify.mmBest.map}`, 20);
-    else if (key === 'wingman') html = wingmanBadge(v, mmName(v), 20);
-    else if (key === 'leetify') html = `<b class="${v >= 0 ? 'up' : 'down'}">${v > 0 ? '+' : ''}${v.toFixed(2).replace('.', ',')}</b>`;
-    else html = `<b class="${key === 'hltv' ? (v >= 1 ? 'up' : 'down') : v >= 1 ? 'up' : 'down'}">${v.toFixed(2).replace('.', ',')}</b>`;
-    const d = key === sort ? p.delta[period]?.[key] : null;
-    if (!d) return html;
-    return `${html}<br><span class="text-[11px]">${delta(d, key === 'mm' ? (Math.abs(d) > 1 ? 'rangs' : 'rang') : '')}</span>`;
+    switch (key) {
+      case 'elo': return `<span class="inline-flex items-center gap-1">${faceitBadge(p.faceit.level, 20)}<b>${fmt(v)}</b></span>${small(p.delta[1].elo)}`;
+      case 'premier': return `${premierBadge(v, premierColor(v))}${small(p.delta[1].premier)}`;
+      case 'mm': return mmBadge(v, `${mmName(v)} · ${p.leetify.mmBest.map}`, 24);
+      case 'wingman': return wingmanBadge(v, mmName(v), 24);
+      case 'leetify': return `<b class="${v >= 0 ? 'up' : 'down'}">${v > 0 ? '+' : ''}${two(v)}</b>`;
+      case 'aim': return `<b>${Math.round(v)}</b>`;
+      default: return `<b class="${v >= 1 ? 'up' : 'down'}">${two(v)}</b>`;
+    }
   };
 
-  const head = Object.entries(COLUMNS).map(([k, label]) =>
-    `<th><a href="#" data-sort="${k}" class="${k === sort ? 'accent' : ''}">${label}${k === sort ? ' ▼' : ''}</a></th>`).join('');
+  const arrow = (k) => `<span class="arrow">${k === sort ? (sortDir === 'asc' ? '▲' : '▼') : ''}</span>`;
+  const head = Object.entries(COLUMNS).map(([k, c]) =>
+    `<th><a href="#" data-sort="${k}" class="${k === sort ? 'accent' : ''}">${c.label}${arrow(k)}</a></th>`).join('');
+  const cols = `<col style="width:30px"><col style="width:150px">${Object.values(COLUMNS).map((c) => `<col style="width:${c.width}px">`).join('')}`;
+  const total = 180 + Object.values(COLUMNS).reduce((n, c) => n + c.width, 0);
 
   const rows = shown.map(({ p, i }) => {
     const ranked = p.cur[sort] != null;
     return `<tr data-href="${playerLink(p)}">
       <td class="rank ${ranked && i < 3 ? 'accent font-bold' : 'muted'}">${ranked ? i + 1 : '–'}</td>
-      <td class="who"><a href="${playerLink(p)}">${avatar(p, 26)}<span>${esc(p.name)}</span></a></td>
+      <td class="who"><a href="${playerLink(p)}">${avatar(p, 32)}<span>${esc(p.name)}</span></a></td>
       ${Object.keys(COLUMNS).map((k) => `<td>${cell(p, k)}</td>`).join('')}
     </tr>`;
   }).join('');
 
   return `<div class="sunken ranking-scroll">
-      <table class="ranking">
+      <table class="ranking" style="width:${total}px">
+        <colgroup>${cols}</colgroup>
         <thead><tr><th class="rank">#</th><th class="who">Joueur</th>${head}</tr></thead>
-        <tbody>${rows || `<tr><td colspan="9" class="muted italic">${q ? 'Aucun joueur trouvé' : 'Aucun joueur'}</td></tr>`}</tbody>
+        <tbody>${rows || `<tr><td colspan="${2 + Object.keys(COLUMNS).length}" class="muted italic">${q ? 'Aucun joueur trouvé' : 'Aucun joueur'}</td></tr>`}</tbody>
       </table>
     </div>`;
 }
 
 function ranking() {
-  const { latest } = state;
-  return win(latest.group ?? 'Traphouse', `
-    <div class="mb-2 flex items-center gap-3">
-      <input id="search" class="search" type="search" placeholder="Rechercher un joueur…" autocomplete="off" value="${esc(state.query)}">
-      <label class="check text-[13px]"><input type="checkbox" data-toggle="period" ${state.period === 7 ? 'checked' : ''}>Sur 7 jours</label>
-    </div>
-    ${staleBanner()}
-    <div id="rows" class="${staleBanner() ? 'mt-2' : ''}">${rankingRows()}</div>
-    <p id="ranking-note" class="mx-0 mb-0 mt-2 text-[12px] muted">${rankingNote()}</p>`,
+  return win('Traphouse', `
+    <input id="search" class="search mb-2" type="search" placeholder="Rechercher un joueur…" autocomplete="off" value="${esc(state.query)}">
+    ${staleBanner() ? `<div class="mb-2">${staleBanner()}</div>` : ''}
+    <div id="rows">${rankingRows()}</div>
+    <p class="mx-0 mb-0 mt-2 text-[12px] muted">Mis à jour ${ago(state.latest.generatedAt, state.now)}. Clique sur une colonne pour trier, une deuxième fois pour inverser. Évolution FACEIT et Premier depuis hier soir. MM = meilleur rang toutes cartes. K/D et HLTV 1.0 calculés sur les tableaux des scores Leetify : « total » depuis le début du suivi, « 7 j » sur la dernière semaine.</p>`,
   'no-resize', 'ranking');
-}
-
-function rankingNote() {
-  return `Mis à jour ${ago(state.latest.generatedAt, state.now)}. Clique sur une colonne pour trier, fais glisser le tableau pour voir les autres colonnes. `
-    + `Évolution ${state.period === 7 ? 'sur 7 jours' : 'depuis hier soir'}. MM = meilleur rang toutes cartes. K/D et HLTV 1.0 calculés sur les matchs des 30 derniers jours.`;
 }
 
 function footer() {
@@ -152,13 +154,16 @@ function homeContent() {
 }
 
 function renderHome() {
-  document.title = state.latest.group ?? 'Traphouse';
+  document.title = 'TRAPHOUSE';
   app.innerHTML = `<div class="app"><div id="content">${homeContent()}</div></div>`;
 }
 
 function sortBy(key) {
+  // Deuxième clic sur la même colonne : on inverse le sens.
+  state.sortDir = state.sort === key && state.sortDir === 'desc' ? 'asc' : 'desc';
   state.sort = key;
-  store.set('sort', key);
+  store.set('sortKey', state.sort);
+  store.set('sortDir', state.sortDir);
   rerenderRows();
 }
 
@@ -299,7 +304,7 @@ function playerPage(p) {
 function renderPlayer(id) {
   const p = state.model.players.find((x) => x.id === id);
   if (!p) { location.hash = '#/'; return; }
-  document.title = `${p.name} · ${state.latest.group ?? 'Traphouse'}`;
+  document.title = 'TRAPHOUSE';
   app.innerHTML = playerPage(p);
   scrollTo(0, 0);
   bindChart(app, fmt);
@@ -482,16 +487,6 @@ app.addEventListener('click', (e) => {
     // Retour comme dans un navigateur si on vient d'une autre page du site, sinon vers le lien prévu.
     if (state.navigated) history.back();
     else location.hash = back.getAttribute('href');
-  }
-});
-
-app.addEventListener('change', (e) => {
-  if (e.target.matches('[data-toggle="period"]')) {
-    state.period = e.target.checked ? 7 : 1;
-    store.set('period', state.period);
-    rerenderRows();
-    const note = document.getElementById('ranking-note');
-    if (note) note.textContent = rankingNote();
   }
 });
 

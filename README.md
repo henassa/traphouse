@@ -1,6 +1,6 @@
 # Traphouse
 
-Classement CS2 de notre groupe : photo de profil, ELO FACEIT, Premier, meilleur rang MM, rang Wingman, rating Leetify, K/D et rating HLTV 1.0, triables par colonne. Un clic sur un joueur ouvre sa page et ses derniers matchs, un clic sur un match ouvre son tableau des scores.
+Classement CS2 de notre groupe : photo de profil Steam, ELO FACEIT, Premier, meilleur rang MM, rang Wingman, rating Leetify, Aim, K/D et rating HLTV 1.0 (total et 7 derniers jours), triables dans les deux sens. Un clic sur un joueur ouvre sa page et ses derniers matchs, un clic sur un match ouvre son tableau des scores.
 
 Le site est 100 % statique (GitHub Pages). Toutes les heures, un workflow GitHub Actions interroge les API avec les clés rangées dans les Secrets, puis écrit des JSON dans `data/`. Le navigateur ne voit jamais une clé.
 
@@ -85,7 +85,7 @@ Le commit relance le workflow : le joueur apparaît en 2 à 3 minutes. Pour reti
 
 ## Calculs
 
-- **K/D et rating HLTV 1.0** : sur les matchs des 30 derniers jours qui ont un tableau des scores Leetify. Le 1.0 suit la formule publique d'HLTV (kills, survie et multi-kills par round). Le 2.0 n'est pas possible : HLTV n'a pas publié sa formule, et elle utilise le KAST et un score d'impact que Leetify ne donne pas.
+- **K/D et rating HLTV 1.0** : calculés sur les tableaux des scores Leetify, gardés dans `data/matches/`. « Total » = depuis le début du suivi (le premier passage récupère les ~50 derniers matchs de chacun), « 7 j » = la dernière semaine. Le 1.0 suit la formule publique d'HLTV (kills, survie et multi-kills par round). Le 2.0 n'est pas possible : HLTV n'a pas publié sa formule, et elle utilise le KAST et un score d'impact que Leetify ne donne pas.
 
 - **Distinctions** : `ELO gagné + gain Premier ÷ 10 + 15 × victoires − 10 × défaites`, sur aujourd'hui / 7 jours / 30 jours, avec au moins un match joué. Égalité départagée au nombre de victoires.
 - **Variation** : valeur actuelle moins la dernière valeur connue la veille au soir (ou il y a 7 jours).

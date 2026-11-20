@@ -163,7 +163,9 @@ for (const p of players) {
   }
 }
 
-for (const p of players) p.perf = perfOf(Object.values(details), p.steam64);
+const allDetails = Object.values(details);
+const weekDetails = allDetails.filter((x) => now - new Date(x.finishedAt) < 7 * 864e5);
+for (const p of players) p.perf = { all: perfOf(allDetails, p.steam64), week: perfOf(weekDetails, p.steam64) };
 
 await writeAll(OUT, {
   generatedAt: new Date(now.getTime() - 14 * 60e3).toISOString(),
