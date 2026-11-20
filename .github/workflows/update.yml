@@ -43,6 +43,7 @@ jobs:
           STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
           HENRIK_API_KEY: ${{ secrets.HENRIK_API_KEY }}
           RIOT_API_KEY: ${{ secrets.RIOT_API_KEY }}
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
         run: node scripts/fetch.mjs
 
       - run: npm run build

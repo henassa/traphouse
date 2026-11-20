@@ -5,6 +5,7 @@ import { join } from 'node:path';
 import { addDays, dayKey, mergeMatches, perfOf, readJson, snapshotOf } from './lib/store.mjs';
 import { downloadTiers, fetchValorant } from './valorant.mjs';
 import { fetchLol } from './lol.mjs';
+import { notifyDiscord } from './discord.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const DATA = join(ROOT, 'data');
@@ -514,6 +515,10 @@ async function main() {
   await writeFile(join(DATA, 'latest.json'), JSON.stringify(latest));
   await writeFile(join(DATA, 'series.json'), JSON.stringify(series));
   await writeFile(join(DATA, 'matches.json'), JSON.stringify(bundle));
+
+  // Webhook Discord (secret DISCORD_WEBHOOK_URL, facultatif) : annonce les joueurs qui gagnent des places.
+  const site = process.env.PAGES_URL ? process.env.PAGES_URL.replace(/\/?$/, '/') : null;
+  await notifyDiscord((process.env.DISCORD_WEBHOOK_URL ?? '').trim() || null, previous, latest, site);
 }
 
 main().catch((e) => {
