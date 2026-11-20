@@ -77,6 +77,8 @@
   }
 
   .window, .box { margin: 0 0 10px; max-width: none; scroll-margin-top: 48px; }
+  /* La poignée de redimensionnement de vgui.css ne sert à rien ici et prend de la place. */
+  .window::after { display: none !important; }
 
   .sunken { background: var(--primary-dark); border: 1px solid; border-color: var(--shade-dark) var(--shade-light) var(--shade-light) var(--shade-dark); }
 
@@ -89,6 +91,9 @@
   .lv-row { display: flex; align-items: center; gap: 10px; padding: 6px 8px; color: var(--text); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--shade-dark) 60%, transparent); }
   .lv-row:last-child { border-bottom: 0; }
   .mt-grid { display: grid; grid-template-columns: minmax(0, 1fr) 22px 22px 22px 32px 36px 44px; align-items: center; gap: 5px; font-size: 13px; }
+  .aw-grid { display: grid; grid-template-columns: 84px minmax(0, 1fr) 96px; align-items: center; gap: 8px; }
+  .st-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr) 92px; align-items: center; gap: 8px; font-size: 13px; white-space: nowrap; }
+  .st-grid > * { overflow: hidden; text-overflow: ellipsis; }
   .lv-grid { display: grid; grid-template-columns: 20px minmax(0, 1fr) 80px 64px 52px; align-items: center; gap: 6px; }
   a.lv-row:hover, a.lv-row:focus-visible, a.lv-row:active { background: var(--accent-dark); color: #fff; text-decoration: none; outline: none; }
   a.lv-row:hover .muted, a.lv-row:active .muted { color: #f1ecd0; }

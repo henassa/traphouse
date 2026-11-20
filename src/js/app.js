@@ -78,55 +78,41 @@ function summary() {
     return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null;
   };
   const todayMatches = new Set(players.flatMap((p) => p.matches.filter((m) => m.day === today).map((m) => m.id))).size;
-  const cell = (label, value, tab) => `
-    <${tab ? `a href="#ranking" data-sort="${tab}"` : 'div'} class="sunken block px-2.5 py-2 !no-underline">
-      <span class="caps block !text-[10px] muted">${label}</span>
-      <span class="accent block text-[22px] font-bold leading-7 tabular-nums" ${value != null ? `data-count="${Math.round(value)}"` : ''}>${fmt(value)}</span>
-    </${tab ? 'a' : 'div'}>`;
+  const stat = (label, value) => `<span class="whitespace-nowrap"><span class="muted">${label}</span> <b class="accent tabular-nums">${fmt(value)}</b></span>`;
   return win(latest.group ?? 'Traphouse', `
-    <p class="m-0 text-[13px] muted">Mis à jour ${ago(latest.generatedAt, state.now)} · ${players.length} joueurs suivis</p>
-    <div class="mt-2.5 flex items-center gap-3">
-      <input id="search" class="search" type="search" placeholder="Rechercher un joueur…" autocomplete="off" value="${esc(state.query)}">
-      <label class="check text-[13px]"><input type="checkbox" data-toggle="period" ${state.period === 7 ? 'checked' : ''}>Sur 7 jours</label>
+    <p class="m-0 text-[13px] muted">Mis à jour ${ago(latest.generatedAt, state.now)}</p>
+    <div class="sunken mt-2 flex flex-wrap gap-x-4 gap-y-1 px-2.5 py-1.5 text-[13px]">
+      ${stat('Joueurs', players.length)}
+      ${stat('Matchs aujourd’hui', todayMatches)}
+      ${stat('ELO moyen', avg('elo'))}
+      ${stat('Premier moyen', avg('premier'))}
     </div>
-    ${staleBanner()}
-    <div id="summary-cells" class="mt-2.5 grid grid-cols-2 gap-2 sm:grid-cols-4 ${state.query ? 'hidden' : ''}">
-      ${cell('Joueurs', players.length)}
-      ${cell('Matchs du jour', todayMatches)}
-      ${cell('ELO moyen', avg('elo'), 'elo')}
-      ${cell('Premier moyen', avg('premier'), 'premier')}
-    </div>`, 'no-resize');
+    ${staleBanner()}`, 'no-resize');
 }
 
-const AWARD_ICON = { day: 'crown', week: 'star', month: 'trophy' };
+const AWARD_LABEL = { day: 'Aujourd’hui', week: '7 jours', month: '30 jours' };
 
 function awards() {
-  const rows = state.model.awards.map(({ key, title, winner }) => {
+  const rows = state.model.awards.map(({ key, winner }) => {
     if (!winner) {
-      return `<div class="lv-row"><span class="accent">${icon(AWARD_ICON[key], 'size-5')}</span>
-        <div class="flex-1"><p class="caps m-0 !text-[10px] muted">${title}</p><p class="m-0 muted italic">Personne n’a joué</p></div></div>`;
+      return `<div class="lv-row aw-grid"><span class="muted">${AWARD_LABEL[key]}</span><span class="muted italic">personne n’a joué</span><span></span></div>`;
     }
     const { player: p, score, elo, premier, w, l } = winner;
     const parts = [`${w} V · ${l} D`];
     if (elo) parts.push(`${signed(elo)} ELO`);
     if (premier) parts.push(`${signed(premier)} Premier`);
-    return `<a class="lv-row" href="${playerLink(p)}">
-      <span class="accent">${icon(AWARD_ICON[key], 'size-5')}</span>
-      ${avatar(p, 36)}
-      <div class="min-w-0 flex-1">
-        <p class="caps m-0 !text-[10px] muted">${title}</p>
-        <p class="m-0 truncate text-[16px] font-bold">${esc(p.name)}</p>
-        <p class="m-0 truncate text-[12px] muted">${parts.join(' · ')}</p>
-      </div>
-      <div class="text-right">
-        <p class="m-0 text-[18px] font-bold tabular-nums ${score >= 0 ? 'up' : 'down'}" data-count="${score}" data-signed="1">${signed(score)}</p>
-        <p class="m-0 text-[11px] muted">pts</p>
-      </div>
+    return `<a class="lv-row aw-grid" href="${playerLink(p)}">
+      <span class="muted">${AWARD_LABEL[key]}</span>
+      <span class="min-w-0"><b class="block truncate">${esc(p.name)}</b><span class="block truncate text-[12px] muted">${parts.join(' · ')}</span></span>
+      <b class="tabular-nums text-right ${score >= 0 ? 'up' : 'down'}">${signed(score)} pts</b>
     </a>`;
   }).join('');
   return win('Distinctions', `
-    <div class="sunken">${rows}</div>
-    <p class="mx-0 mb-0 mt-2 text-[12px] muted">Score = ELO gagné + gain Premier ÷ 10 + 15 par victoire − 10 par défaite sur la période, au moins un match joué.</p>`,
+    <div class="sunken">
+      <div class="lv-head aw-grid caps !text-[10px] muted"><span>Période</span><span>Joueur</span><span class="text-right">Score</span></div>
+      ${rows}
+    </div>
+    <p class="mx-0 mb-0 mt-2 text-[12px] muted">Score = ELO gagné + gain Premier ÷ 10 + 15 par victoire − 10 par défaite, au moins un match joué.</p>`,
   'no-resize', 'awards');
 }
 
@@ -178,38 +164,33 @@ function rankingRows() {
 }
 
 function ranking() {
-  const notes = [state.period === 7 ? 'Évolution sur 7 jours' : 'Évolution depuis hier soir', 'clique sur une colonne pour trier', 'MM = meilleur rang toutes cartes'];
   return win('Classement', `
-    <p class="mx-0 mb-2 mt-0 text-[12px] muted">${notes.join(' · ')}.</p>
-    <div id="rows">${rankingRows()}</div>`, '', 'ranking');
+    <div class="mb-2 flex items-center gap-3">
+      <input id="search" class="search" type="search" placeholder="Rechercher un joueur…" autocomplete="off" value="${esc(state.query)}">
+      <label class="check text-[13px]"><input type="checkbox" data-toggle="period" ${state.period === 7 ? 'checked' : ''}>Sur 7 jours</label>
+    </div>
+    <div id="rows">${rankingRows()}</div>
+    <p class="mx-0 mb-0 mt-2 text-[12px] muted">Clique sur une colonne pour trier. Évolution ${state.period === 7 ? 'sur 7 jours' : 'depuis hier soir'}. MM = meilleur rang toutes cartes.</p>`,
+  'no-resize', 'ranking');
 }
 
 function funStats() {
   const f = state.model.fun;
-  const cell = (label, name, value, p = null, wide = false) => `
-    <${p ? `a href="${playerLink(p)}"` : 'div'} class="lv-row sunken !border-b-0 ${wide ? 'col-span-2' : ''}">
-      <div class="min-w-0">
-        <p class="caps m-0 !text-[10px] muted">${label}</p>
-        <p class="m-0 truncate text-[15px] font-bold ${p ? 'accent' : ''}">${name}</p>
-        <p class="m-0 truncate text-[12px] muted tabular-nums">${value}</p>
-      </div>
-    </${p ? 'a' : 'div'}>`;
-  const none = (label) => cell(label, '—', 'Pas assez de matchs');
-  const items = [
-    f.streak ? cell('Meilleure série', esc(f.streak.player.name), `${f.streak.streak} victoires d’affilée`, f.streak.player) : none('Meilleure série'),
-    f.tryhard ? cell('Plus gros tryhard', esc(f.tryhard.player.name), `${f.tryhard.games} matchs sur 7 j`, f.tryhard.player) : none('Plus gros tryhard'),
-    f.drop ? cell('Pire chute', esc(f.drop.player.name), `${signed(f.drop.drop)} ELO sur 7 j`, f.drop.player) : cell('Pire chute', 'Personne', 'Aucune perte d’ELO'),
-    f.rating ? cell('Meilleur rating', esc(f.rating.player.name), `${leetifyRating(f.rating.rating)} de moyenne`, f.rating.player) : none('Meilleur rating'),
-    f.map ? cell('Map préférée du groupe', esc(f.map.map), `${f.map.n} matchs sur 30 j · ${Math.round((f.map.w / f.map.n) * 100)} % de victoires`, null, true) : '',
-  ];
-  return win('En bref', `
-    <div class="flex items-center justify-between">
-      <span class="text-[12px] muted">Sur les 7 et 30 derniers jours</span>
-      <button class="small" data-fold="fun" aria-expanded="${state.funOpen}">${state.funOpen ? 'Masquer' : 'Afficher'}</button>
-    </div>
-    <div class="fold ${state.funOpen ? 'open' : ''}" id="fold-fun">
-      <div><div class="grid grid-cols-2 gap-2 pt-2.5">${items.join('')}</div></div>
-    </div>`, '', 'fun');
+  const row = (label, p, value, name) => {
+    const who = p ? `<b class="truncate">${esc(p.name)}</b>` : `<b class="truncate">${name ?? '—'}</b>`;
+    const inner = `<span class="muted">${label}</span>${who}<span class="tabular-nums text-right">${value}</span>`;
+    return p ? `<a class="lv-row st-grid" href="${playerLink(p)}">${inner}</a>` : `<div class="lv-row st-grid">${inner}</div>`;
+  };
+  const rows = [
+    row('Plus longue série', f.streak?.player, f.streak ? `${f.streak.streak} victoires` : '—'),
+    row('Le + de matchs', f.tryhard?.player, f.tryhard ? `${f.tryhard.games} matchs` : '—'),
+    row('Plus grosse perte', f.drop?.player, f.drop ? `${signed(f.drop.drop)} ELO` : '—', f.drop ? null : 'personne'),
+    row('Meilleur rating', f.rating?.player, f.rating ? leetifyRating(f.rating.rating) : '—'),
+    row('Map la + jouée', null, f.map ? `${f.map.n} matchs` : '—', f.map ? esc(f.map.map) : '—'),
+  ].join('');
+  return win('Stats', `
+    <div class="sunken">${rows}</div>
+    <p class="mx-0 mb-0 mt-2 text-[12px] muted">Série et map sur 30 jours, le reste sur 7 jours. Rating = moyenne Leetify, 5 matchs minimum.</p>`, 'no-resize', 'fun');
 }
 
 function footer() {
@@ -219,43 +200,32 @@ function footer() {
 }
 
 function homeContent() {
-  if (state.query.trim()) return `<section class="window headless no-resize">${rankingRows()}</section>`;
-  return awards() + ranking() + funStats() + footer();
+  return ranking() + awards() + funStats() + footer();
 }
 
 function navBar() {
   return `<nav class="tabs">
     <li><a href="#ranking">Classement</a></li>
     <li><a href="#awards">Distinctions</a></li>
-    <li><a href="#fun">En bref</a></li>
+    <li><a href="#fun">Stats</a></li>
   </nav>`;
 }
 
 function renderHome() {
   document.title = state.latest.group ?? 'Traphouse';
   app.innerHTML = `<div class="app">${navBar()}${summary()}<div id="content">${homeContent()}</div></div>`;
-
-  const input = document.getElementById('search');
-  input.addEventListener('input', () => {
-    state.query = input.value;
-    document.getElementById('summary-cells').classList.toggle('hidden', !!input.value.trim());
-    document.getElementById('content').innerHTML = homeContent();
-  });
 }
 
 function sortBy(key) {
   state.sort = key;
   store.set('sort', key);
-  if (state.query.trim()) document.getElementById('content').innerHTML = homeContent();
-  else rerenderRanking();
+  rerenderRows();
 }
 
-function rerenderRanking() {
-  const section = document.getElementById('ranking');
-  if (!section) { document.getElementById('content').innerHTML = homeContent(); return; }
-  const holder = document.createElement('div');
-  holder.innerHTML = ranking();
-  section.replaceWith(holder.firstElementChild);
+// On ne redessine que la liste : le champ de recherche garde le focus.
+function rerenderRows() {
+  const rows = document.getElementById('rows');
+  if (rows) rows.innerHTML = rankingRows();
 }
 
 // Page joueur
@@ -573,8 +543,16 @@ app.addEventListener('change', (e) => {
   if (e.target.matches('[data-toggle="period"]')) {
     state.period = e.target.checked ? 7 : 1;
     store.set('period', state.period);
-    if (state.query.trim()) document.getElementById('content').innerHTML = homeContent();
-    else rerenderRanking();
+    rerenderRows();
+    const note = document.querySelector('#ranking > p:last-child');
+    if (note) note.textContent = `Clique sur une colonne pour trier. Évolution ${state.period === 7 ? 'sur 7 jours' : 'depuis hier soir'}. MM = meilleur rang toutes cartes.`;
+  }
+});
+
+app.addEventListener('input', (e) => {
+  if (e.target.id === 'search') {
+    state.query = e.target.value;
+    rerenderRows();
   }
 });
 
