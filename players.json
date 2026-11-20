@@ -31,7 +31,6 @@
     { "steam64": "76561199586455292", "name": "Kyraxaly" },
     { "steam64": "76561198873722778", "name": "Kerazim" },
     { "steam64": "76561198310011467", "name": "Hezus" },
-    { "steam64": "76561198282049491", "name": "Liquidz" },
     { "steam64": "76561198282049491", "name": "kyracujoh" },
     { "steam64": "76561199031928617", "name": "Meyru" },
     { "steam64": "76561199084367900", "name": "Jojo" },
@@ -79,6 +78,29 @@
     { "steam64": "76561199053508275", "name": "Mika" },
     { "steam64": "76561198358392307", "name": "Azertyran" },
     { "steam64": "76561198250368148", "name": "Cactus Chaleur" },
-    { "steam64": "76561198110003516", "name": "Sevigna" }
+    { "steam64": "76561198110003516", "name": "Sevigna" },
+    { "steam64": "76561198422715794", "name": "El Libanito" },
+    { "steam64": "76561198099317289", "name": "SONIC9ful" },
+    { "steam64": "76561198841770010", "name": "xeddo" },
+    { "steam64": "76561198036040935", "name": "6quier" }
+  ],
+  "valorantRegion": "eu",
+  "valorant": [
+    { "riot": "GLACEIR#key", "name": "kyracujoh" },
+    { "riot": "BeamDaddy#R1FT", "name": "LeiCO" },
+    { "riot": "sheepcantdie#7207", "name": "sheepcantdie" },
+    { "riot": "akhy frotteur#KURD", "name": "ranio" },
+    { "riot": "HNG HeZu5#FUC17", "name": "Hezus" },
+    { "riot": "injuxta#084", "name": "injuxta" },
+    { "riot": "Kerazim#EUW", "name": "Kerazim" },
+    { "riot": "nwrt#ouais", "name": "nwrt" },
+    { "riot": "Syndra Sous BBL#85077", "name": "Zweely" },
+    { "riot": "apoïst mentality#KURD", "name": "didou" }
   ]
 }
+
+
+
+
+
+

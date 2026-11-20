@@ -32,7 +32,7 @@ execFileSync('npx', ['@tailwindcss/cli', '-i', 'src/styles.css', '-o', `${out}/a
 
 await cp('src/index.html', `${out}/index.html`);
 await cp('src/js', `${out}/js`, { recursive: true });
-await cp('src/icon.svg', `${out}/icon.svg`);
+for (const f of ['icon-32.png', 'icon-64.png', 'icon-180.png']) await cp(`src/${f}`, `${out}/${f}`);
 await cp('src/img', `${out}/img`, { recursive: true });
 // Liste des emblèmes Premier / MM déposés dans src/img/ranks, pour que le site sache lesquels existent.
 const ranks = (await readdir('src/img/ranks')).filter((f) => /^(premier-[1-7]|mm-([1-9]|1[0-8]))\.(png|webp|svg)$/.test(f));

@@ -3,6 +3,7 @@
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { addDays, dayKey, mergeMatches, perfOf, readJson, snapshotOf } from './lib/store.mjs';
+import { downloadTiers, fetchValorant } from './valorant.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const DATA = join(ROOT, 'data');
@@ -14,6 +15,7 @@ const LEETIFY_KEY = (process.env.LEETIFY_API_KEY ?? '').trim().replace(/^["']|["
 let leetifyHeaderMode = 'bearer';
 const leetifyHeaders = (key) => (!key ? {} : leetifyHeaderMode === 'raw' ? { _leetify_key: key } : { Authorization: `Bearer ${key}` });
 const STEAM_KEY = process.env.STEAM_API_KEY;
+const HENRIK_KEY = (process.env.HENRIK_API_KEY ?? '').trim() || null;
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -481,7 +483,20 @@ async function main() {
   }
 
   const timezone = config.timezone ?? 'Europe/Zurich';
-  const latest = { generatedAt: now.toISOString(), timezone, group: config.group ?? 'Traphouse', sources, players };
+  // Valorant : seulement si une clé HenrikDev est fournie et des Riot ID sont listés.
+  let valorant = previous.valorant ?? null;
+  if (HENRIK_KEY && config.valorant?.length) {
+    valorant = await fetchValorant(config, previous.valorant, HENRIK_KEY, now);
+    try {
+      console.log(`[Valo] emblèmes de rang : ${await downloadTiers(join(DATA, 'valorant-tiers'))} téléchargés`);
+    } catch (e) {
+      console.log(`[Valo] emblèmes de rang non téléchargés (${e.message}), le site essaiera valorant-api.com`);
+    }
+  } else if (config.valorant?.length) {
+    console.log('[Valo] pas de secret HENRIK_API_KEY : tableau Valorant non mis à jour');
+  }
+
+  const latest = { generatedAt: now.toISOString(), timezone, group: config.group ?? 'Traphouse', sources, players, valorant };
   const series = updateSeries(prevSeries, dayKey(now, timezone), players);
 
   // Écrit dans data/, qui n'est pas suivi par git : le workflow publie ces fichiers avec le site.

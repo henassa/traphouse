@@ -18,6 +18,21 @@ const COLUMNS = {
   avg: { label: 'Rating', width: 80 },
 };
 
+const VAL_COLUMNS = {
+  elo: { label: 'Rang', width: 170 },
+  rr: { label: 'RR', width: 56 },
+  peak: { label: 'Pic', width: 150 },
+  kd: { label: 'K/D', width: 60 },
+  hs: { label: 'HS %', width: 64 },
+  acs: { label: 'ACS', width: 60 },
+  winrate: { label: 'Victoires', width: 84 },
+};
+
+// Emblèmes de rang du catalogue public de Riot (servis par valorant-api.com).
+// Emblème publié avec le site par le workflow ; à défaut, la même image chez valorant-api.com.
+const valTierIcon = (tier) => `${BASE}valorant-tiers/${tier}.png`;
+const valTierRemote = (tier) => `https://media.valorant-api.com/competitivetiers/03621f52-342b-cf4e-4f86-9350a49c6d04/${tier}/largeicon.png`;
+
 const store = {
   get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
@@ -30,6 +45,9 @@ const state = {
   // Toujours par ELO FACEIT à l'ouverture, du plus haut au plus bas.
   sort: 'elo',
   sortDir: 'desc',
+  game: location.hash === '#valorant' ? 'val' : 'cs',
+  valSort: 'elo',
+  valSortDir: 'desc',
   period: 1,
   query: '',
   funOpen: store.get('funOpen', true),
@@ -132,23 +150,110 @@ function rankingRows() {
     </div>`;
 }
 
+function valPlayers() {
+  return (state.latest.valorant?.players ?? []).map((p) => ({
+    ...p,
+    avatar: p.card ?? null,
+    cur: {
+      elo: p.mmr?.elo ?? (p.mmr?.tier ? p.mmr.tier * 100 + (p.mmr.rr ?? 0) : null),
+      rr: p.mmr?.tier ? p.mmr.rr ?? null : null,
+      peak: p.mmr?.peakTier || null,
+      kd: p.stats?.kd ?? null,
+      hs: p.stats?.hs ?? null,
+      acs: p.stats?.acs ?? null,
+      winrate: p.stats?.winrate ?? null,
+    },
+  }));
+}
+
+function valRows() {
+  const { valSort: sort, valSortDir: sortDir, query } = state;
+  const q = query.trim().toLowerCase();
+  const dir = sortDir === 'asc' ? 1 : -1;
+  const sorted = valPlayers().sort((a, b) => {
+    const va = a.cur[sort], vb = b.cur[sort];
+    if (va == null && vb == null) return a.name.localeCompare(b.name);
+    if (va == null) return 1;
+    if (vb == null) return -1;
+    return (va - vb) * dir || (b.cur.elo ?? 0) - (a.cur.elo ?? 0);
+  });
+  const shown = sorted.map((p, i) => ({ p, i })).filter(({ p }) => !q || `${p.name} ${p.riotId}`.toLowerCase().includes(q));
+  const dash = '<span class="muted">—</span>';
+  const tier = (id, name) => `<span class="inline-flex items-center gap-1.5"><img class="rank-img" src="${valTierIcon(id)}" alt="" width="26" height="26" style="width:26px;height:26px" data-remote="${valTierRemote(id)}" onerror="if(this.dataset.remote){this.src=this.dataset.remote;this.dataset.remote=''}else{this.remove()}"><b class="truncate">${esc(name ?? '')}</b></span>`;
+  const cell = (p, key) => {
+    const v = p.cur[key];
+    if (v == null) return dash;
+    switch (key) {
+      case 'elo': return p.mmr?.tier ? tier(p.mmr.tier, p.mmr.tierName) : dash;
+      case 'rr': return `<b>${v}</b>${p.mmr?.lastChange ? `<br><span class="text-[11px]">${delta(p.mmr.lastChange)}</span>` : ''}`;
+      case 'peak': return tier(v, p.mmr.peakName);
+      case 'kd': return `<b class="${v >= 1 ? 'up' : 'down'}">${v.toFixed(2).replace('.', ',')}</b>`;
+      case 'hs': return `<b>${String(v).replace('.', ',')} %</b>`;
+      case 'acs': return `<b>${v}</b>`;
+      default: return `<b>${v} %</b>`;
+    }
+  };
+  return tableHtml(VAL_COLUMNS, sort, sortDir, shown, cell, q);
+}
+
+// Tableau commun aux deux jeux : largeurs fixes, # et joueur collés à gauche.
+function tableHtml(columns, sort, sortDir, shown, cell, q) {
+  const arrow = (k) => `<span class="arrow">${k === sort ? (sortDir === 'asc' ? '▲' : '▼') : ''}</span>`;
+  const head = Object.entries(columns).map(([k, c]) =>
+    `<th><a href="#" data-sort="${k}" class="${k === sort ? 'accent' : ''}">${c.label}${arrow(k)}</a></th>`).join('');
+  const cols = `<col style="width:30px"><col style="width:150px">${Object.values(columns).map((c) => `<col style="width:${c.width}px">`).join('')}`;
+  const total = 180 + Object.values(columns).reduce((n, c) => n + c.width, 0);
+  const rows = shown.map(({ p, i }) => {
+    const ranked = p.cur[sort] != null;
+    return `<tr>
+      <td class="rank ${ranked && i < 3 ? 'accent font-bold' : 'muted'}">${ranked ? i + 1 : '–'}</td>
+      <td class="who"><span class="who-in">${avatar(p, 32)}<span>${esc(p.name)}</span></span></td>
+      ${Object.keys(columns).map((k) => `<td>${cell(p, k)}</td>`).join('')}
+    </tr>`;
+  }).join('');
+  return `<div class="sunken ranking-scroll">
+      <table class="ranking" style="width:${total}px">
+        <colgroup>${cols}</colgroup>
+        <thead><tr><th class="rank">#</th><th class="who">Joueur</th>${head}</tr></thead>
+        <tbody>${rows || `<tr><td colspan="${2 + Object.keys(columns).length}" class="muted italic">${q ? 'Aucun joueur trouvé' : 'Aucun joueur'}</td></tr>`}</tbody>
+      </table>
+    </div>`;
+}
+
+const CS_NOTE = 'Évolution FACEIT et Premier depuis hier soir. MM = meilleur rang toutes cartes. Leetify = rating global Leetify, Rating = moyenne des ratings Leetify sur ses derniers matchs, Aim = note de visée Leetify. K/D calculé sur les tableaux des scores Leetify depuis le début du suivi.';
+const VAL_NOTE = 'Rang, RR (avec la variation du dernier match) et pic de rang via HenrikDev. K/D, HS % (headshots sur tirs touchés), ACS et victoires sur les 20 derniers matchs compétitifs.';
+
+function gameTabs() {
+  return `<nav class="tabs" style="grid-template-columns:repeat(2,1fr)">
+    <li aria-selected="${state.game === 'cs'}"><a href="#" data-game="cs">Counter-Strike 2</a></li>
+    <li aria-selected="${state.game === 'val'}"><a href="#valorant" data-game="val">Valorant</a></li>
+  </nav>`;
+}
+
+function currentRows() {
+  return state.game === 'val' ? valRows() : rankingRows();
+}
+
 function ranking() {
+  const val = state.game === 'val';
+  const updated = val ? state.latest.valorant?.generatedAt : state.latest.generatedAt;
+  const missing = val && !state.latest.valorant;
   return win('Traphouse', `
     <input id="search" class="search mb-2" type="search" placeholder="Rechercher un joueur…" autocomplete="off" value="${esc(state.query)}">
-    ${staleBanner() ? `<div class="mb-2">${staleBanner()}</div>` : ''}
-    <div id="rows">${rankingRows()}</div>
-    <p class="mx-0 mb-0 mt-2 text-[12px] muted">Mis à jour ${ago(state.latest.generatedAt, state.now)}. Clique sur une colonne pour trier, une deuxième fois pour inverser. Évolution FACEIT et Premier depuis hier soir. MM = meilleur rang toutes cartes. Leetify = rating global Leetify, Rating = moyenne des ratings Leetify sur ses derniers matchs, Aim = note de visée Leetify. K/D calculé sur les tableaux des scores Leetify depuis le début du suivi.</p>`,
+    ${!val && staleBanner() ? `<div class="mb-2">${staleBanner()}</div>` : ''}
+    <div id="rows">${missing ? '<div class="sunken px-2.5 py-2 text-[13px]">Pas encore de données Valorant : ajoute le secret <code>HENRIK_API_KEY</code> et des Riot ID dans <code>players.json</code>.</div>' : currentRows()}</div>
+    <p class="mx-0 mb-0 mt-2 text-[12px] muted">${updated ? `Mis à jour ${ago(updated, state.now)}. ` : ''}Clique sur une colonne pour trier, une deuxième fois pour inverser. ${val ? VAL_NOTE : CS_NOTE}</p>`,
   'no-resize', 'ranking');
 }
 
 function footer() {
   const { latest } = state;
   const at = new Intl.DateTimeFormat('fr-FR', { dateStyle: 'medium', timeStyle: 'short', timeZone: latest.timezone }).format(new Date(latest.generatedAt));
-  return `<p class="mx-0 mt-4 text-center text-[12px] muted">Données FACEIT et Leetify, mises à jour toutes les heures.<br>Dernière mise à jour : ${at}${DEMO ? ' · données de démonstration' : ''}</p>`;
+  return `<p class="mx-0 mt-4 text-center text-[12px] muted">Données FACEIT, Leetify et HenrikDev, mises à jour toutes les heures.<br>Dernière mise à jour : ${at}${DEMO ? ' · données de démonstration' : ''}</p>`;
 }
 
 function homeContent() {
-  return ranking() + footer();
+  return gameTabs() + ranking() + footer();
 }
 
 function renderHome() {
@@ -158,15 +263,16 @@ function renderHome() {
 
 function sortBy(key) {
   // Deuxième clic sur la même colonne : on inverse le sens.
-  state.sortDir = state.sort === key && state.sortDir === 'desc' ? 'asc' : 'desc';
-  state.sort = key;
+  const [k, d] = state.game === 'val' ? ['valSort', 'valSortDir'] : ['sort', 'sortDir'];
+  state[d] = state[k] === key && state[d] === 'desc' ? 'asc' : 'desc';
+  state[k] = key;
   rerenderRows();
 }
 
 // On ne redessine que la liste : le champ de recherche garde le focus.
 function rerenderRows() {
   const rows = document.getElementById('rows');
-  if (rows) rows.innerHTML = rankingRows();
+  if (rows && !(state.game === 'val' && !state.latest.valorant)) rows.innerHTML = currentRows();
 }
 
 function render() {
@@ -188,6 +294,14 @@ function renderLoading() {
 }
 
 app.addEventListener('click', (e) => {
+  const game = e.target.closest('[data-game]');
+  if (game) {
+    e.preventDefault();
+    state.game = game.dataset.game;
+    history.replaceState(null, '', state.game === 'val' ? '#valorant' : location.pathname + location.search);
+    renderHome();
+    return;
+  }
   const sortLink = e.target.closest('[data-sort]');
   if (sortLink) {
     e.preventDefault();

@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-20T16:18:11.324Z",
+ "generatedAt": "2026-11-20T16:48:30.226Z",
  "timezone": "Europe/Zurich",
  "group": "Traphouse",
  "sources": {
@@ -31,13 +31,13 @@
     "elo": 1840,
     "level": 9,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Max",
     "privacy": "public",
     "premier": 20789,
-    "wingman": 14,
+    "wingman": 16,
     "leetify": 2.75,
     "avgRating": 0.017638461538461537,
     "competitive": [
@@ -63,18 +63,18 @@
      "rank": 18
     },
     "rating": {
-     "aim": 79,
-     "positioning": 72,
-     "utility": 35,
+     "aim": 72,
+     "positioning": 69,
+     "utility": 36,
      "clutch": 0.143,
      "opening": 0.034,
      "ct_leetify": 0.0255,
      "t_leetify": 0.0213
     },
     "winrate": 0.5680000000000001,
-    "totalMatches": 707,
+    "totalMatches": 731,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -249,14 +249,14 @@
    ],
    "perf": {
     "all": {
-     "kd": 1.41,
-     "hltv": 1.15,
+     "kd": 1.43,
+     "hltv": 1.2,
      "matches": 11
     },
     "week": {
-     "kd": 1.38,
-     "hltv": 1.15,
-     "matches": 9
+     "kd": 1.42,
+     "hltv": 1.2,
+     "matches": 8
     }
    },
    "errors": []
@@ -274,7 +274,7 @@
     "elo": 1048,
     "level": 4,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Léa",
@@ -319,17 +319,17 @@
     },
     "rating": {
      "aim": 34,
-     "positioning": 39,
-     "utility": 39,
+     "positioning": 41,
+     "utility": 60,
      "clutch": 0.076,
      "opening": -0.019,
      "ct_leetify": -0.0146,
      "t_leetify": -0.0121
     },
     "winrate": 0.4611362606670114,
-    "totalMatches": 638,
+    "totalMatches": 363,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -761,13 +761,13 @@
    "perf": {
     "all": {
      "kd": 0.55,
-     "hltv": 0.82,
-     "matches": 7
+     "hltv": 0.68,
+     "matches": 16
     },
     "week": {
      "kd": 0.55,
-     "hltv": 0.78,
-     "matches": 6
+     "hltv": 0.67,
+     "matches": 13
     }
    },
    "errors": []
@@ -785,13 +785,13 @@
     "elo": 1257,
     "level": 6,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Tom",
     "privacy": "public",
     "premier": 10864,
-    "wingman": 9,
+    "wingman": 10,
     "leetify": 0.41,
     "avgRating": -0.00418,
     "competitive": [
@@ -822,17 +822,17 @@
     },
     "rating": {
      "aim": 49,
-     "positioning": 52,
-     "utility": 66,
+     "positioning": 61,
+     "utility": 69,
      "clutch": 0.103,
      "opening": 0.003,
      "ct_leetify": 0.0021,
      "t_leetify": 0.0017
     },
     "winrate": 0.5055057483217733,
-    "totalMatches": 650,
+    "totalMatches": 1084,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -2020,14 +2020,14 @@
    ],
    "perf": {
     "all": {
-     "kd": 0.83,
-     "hltv": 0.88,
-     "matches": 18
+     "kd": 0.88,
+     "hltv": 0.91,
+     "matches": 12
     },
     "week": {
-     "kd": 0.83,
-     "hltv": 0.88,
-     "matches": 16
+     "kd": 0.92,
+     "hltv": 0.94,
+     "matches": 10
     }
    },
    "errors": []
@@ -2043,7 +2043,7 @@
     "name": "Nico",
     "privacy": "public",
     "premier": 4359,
-    "wingman": 2,
+    "wingman": 5,
     "leetify": -2.73,
     "avgRating": -0.020694736842105262,
     "competitive": [
@@ -2081,18 +2081,18 @@
      "rank": 10
     },
     "rating": {
-     "aim": 22,
-     "positioning": 25,
-     "utility": 63,
+     "aim": 25,
+     "positioning": 38,
+     "utility": 58,
      "clutch": 0.051,
      "opening": -0.039,
      "ct_leetify": -0.0293,
      "t_leetify": -0.0244
     },
     "winrate": 0.4219708266127583,
-    "totalMatches": 960,
+    "totalMatches": 1160,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -2353,14 +2353,14 @@
    ],
    "perf": {
     "all": {
-     "kd": 0.38,
-     "hltv": 0.55,
-     "matches": 16
+     "kd": 0.36,
+     "hltv": 0.59,
+     "matches": 10
     },
     "week": {
      "kd": 0.35,
-     "hltv": 0.56,
-     "matches": 10
+     "hltv": 0.51,
+     "matches": 7
     }
    },
    "errors": []
@@ -2378,13 +2378,13 @@
     "elo": 618,
     "level": 2,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Hugo",
     "privacy": "public",
     "premier": 4992,
-    "wingman": 6,
+    "wingman": 3,
     "leetify": -2.05,
     "avgRating": -0.010648,
     "competitive": [
@@ -2418,18 +2418,18 @@
      "rank": 10
     },
     "rating": {
-     "aim": 29,
-     "positioning": 37,
-     "utility": 31,
+     "aim": 26,
+     "positioning": 36,
+     "utility": 37,
      "clutch": 0.063,
      "opening": -0.03,
      "ct_leetify": -0.0225,
      "t_leetify": -0.0188
     },
     "winrate": 0.44,
-    "totalMatches": 639,
+    "totalMatches": 902,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -3405,14 +3405,14 @@
    ],
    "perf": {
     "all": {
-     "kd": 0.4,
-     "hltv": 0.56,
-     "matches": 11
+     "kd": 0.5,
+     "hltv": 0.71,
+     "matches": 12
     },
     "week": {
-     "kd": 0.4,
-     "hltv": 0.58,
-     "matches": 10
+     "kd": 0.49,
+     "hltv": 0.66,
+     "matches": 11
     }
    },
    "errors": []
@@ -3430,13 +3430,13 @@
     "elo": 1381,
     "level": 7,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Inès",
     "privacy": "public",
     "premier": 12972,
-    "wingman": 11,
+    "wingman": 13,
     "leetify": 0.48,
     "avgRating": -0.004000000000000001,
     "competitive": [
@@ -3470,18 +3470,18 @@
      "rank": 13
     },
     "rating": {
-     "aim": 48,
-     "positioning": 42,
-     "utility": 42,
+     "aim": 52,
+     "positioning": 54,
+     "utility": 28,
      "clutch": 0.105,
      "opening": 0.004,
      "ct_leetify": 0.0028,
      "t_leetify": 0.0023
     },
     "winrate": 0.5073739668050539,
-    "totalMatches": 1066,
+    "totalMatches": 657,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -3808,14 +3808,14 @@
    ],
    "perf": {
     "all": {
-     "kd": 0.86,
-     "hltv": 0.94,
-     "matches": 11
+     "kd": 0.9,
+     "hltv": 0.9,
+     "matches": 12
     },
     "week": {
-     "kd": 0.92,
-     "hltv": 0.97,
-     "matches": 10
+     "kd": 0.91,
+     "hltv": 0.9,
+     "matches": 11
     }
    },
    "errors": []
@@ -3833,13 +3833,13 @@
     "elo": 1635,
     "level": 8,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Sami",
     "privacy": "public",
     "premier": 20284,
-    "wingman": 11,
+    "wingman": 13,
     "leetify": 1.68,
     "avgRating": 0.009115217391304345,
     "competitive": [
@@ -3865,18 +3865,18 @@
      "rank": 14
     },
     "rating": {
-     "aim": 70,
-     "positioning": 70,
-     "utility": 75,
+     "aim": 65,
+     "positioning": 68,
+     "utility": 74,
      "clutch": 0.125,
      "opening": 0.02,
      "ct_leetify": 0.0148,
      "t_leetify": 0.0124
     },
     "winrate": 0.5395233230660886,
-    "totalMatches": 923,
+    "totalMatches": 1098,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -4473,13 +4473,13 @@
    ],
    "perf": {
     "all": {
-     "kd": 1.18,
-     "hltv": 1.03,
-     "matches": 8
+     "kd": 1.4,
+     "hltv": 1.21,
+     "matches": 9
     },
     "week": {
-     "kd": 1.16,
-     "hltv": 1.02,
+     "kd": 1.56,
+     "hltv": 1.23,
      "matches": 5
     }
    },
@@ -4495,16 +4495,16 @@
     "playerId": "demo-76561198000001259",
     "nickname": "JulesCS",
     "avatar": null,
-    "elo": 538,
+    "elo": 510,
     "level": 2,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Jules",
     "privacy": "public",
     "premier": 8601,
-    "wingman": 8,
+    "wingman": 5,
     "leetify": -1.3,
     "avgRating": -0.004956000000000001,
     "competitive": [
@@ -4530,20 +4530,34 @@
      "rank": 9
     },
     "rating": {
-     "aim": 37,
-     "positioning": 47,
-     "utility": 69,
+     "aim": 39,
+     "positioning": 49,
+     "utility": 29,
      "clutch": 0.075,
      "opening": -0.02,
      "ct_leetify": -0.015,
      "t_leetify": -0.0125
     },
     "winrate": 0.4599024855717109,
-    "totalMatches": 1012,
+    "totalMatches": 1137,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
+    {
+     "id": "demo:76561198000001259:1795193160000:0",
+     "source": "faceit",
+     "at": "2026-11-20T16:46:00.000Z",
+     "map": "Dust2",
+     "result": "L",
+     "score": [
+      4,
+      13
+     ],
+     "rating": -0.0465,
+     "leetifyId": "demo-1259-1795193160000",
+     "details": true
+    },
     {
      "id": "demo:76561198000001259:1795123800000:0",
      "source": "faceit",
@@ -4596,9 +4610,7 @@
       9,
       13
      ],
-     "rating": -0.0263,
-     "leetifyId": "demo-1259-1795030320000",
-     "details": true
+     "rating": -0.0263
     },
     {
      "id": "demo:76561198000001259:1795025100000:0",
@@ -6525,14 +6537,14 @@
    ],
    "perf": {
     "all": {
-     "kd": 0.61,
+     "kd": 0.57,
      "hltv": 0.76,
-     "matches": 6
+     "matches": 12
     },
     "week": {
-     "kd": 0.64,
-     "hltv": 0.76,
-     "matches": 5
+     "kd": 0.57,
+     "hltv": 0.78,
+     "matches": 10
     }
    },
    "errors": []
@@ -6550,13 +6562,13 @@
     "elo": 1636,
     "level": 8,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Yanis",
     "privacy": "public",
     "premier": 17566,
-    "wingman": 14,
+    "wingman": 10,
     "leetify": 1.2,
     "avgRating": 0.012846000000000002,
     "competitive": [
@@ -6594,18 +6606,18 @@
      "rank": 15
     },
     "rating": {
-     "aim": 64,
-     "positioning": 47,
-     "utility": 75,
+     "aim": 62,
+     "positioning": 50,
+     "utility": 40,
      "clutch": 0.117,
      "opening": 0.013,
      "ct_leetify": 0.01,
      "t_leetify": 0.0083
     },
     "winrate": 0.5266309525320595,
-    "totalMatches": 908,
+    "totalMatches": 818,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -7611,14 +7623,14 @@
    ],
    "perf": {
     "all": {
-     "kd": 1.01,
-     "hltv": 0.98,
-     "matches": 12
+     "kd": 0.98,
+     "hltv": 0.95,
+     "matches": 7
     },
     "week": {
-     "kd": 1.04,
-     "hltv": 0.99,
-     "matches": 10
+     "kd": 0.98,
+     "hltv": 0.95,
+     "matches": 7
     }
    },
    "errors": []
@@ -7636,7 +7648,7 @@
     "elo": 1330,
     "level": 6,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Chloé",
@@ -7677,17 +7689,17 @@
     },
     "rating": {
      "aim": 47,
-     "positioning": 48,
-     "utility": 38,
+     "positioning": 58,
+     "utility": 58,
      "clutch": 0.103,
      "opening": 0.002,
      "ct_leetify": 0.0019,
      "t_leetify": 0.0016
     },
     "winrate": 0.5049960839049854,
-    "totalMatches": 852,
+    "totalMatches": 680,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -8190,14 +8202,14 @@
    ],
    "perf": {
     "all": {
-     "kd": 0.81,
-     "hltv": 0.89,
-     "matches": 7
+     "kd": 0.66,
+     "hltv": 0.8,
+     "matches": 10
     },
     "week": {
-     "kd": 0.47,
-     "hltv": 0.62,
-     "matches": 2
+     "kd": 0.57,
+     "hltv": 0.71,
+     "matches": 5
     }
    },
    "errors": []
@@ -8215,13 +8227,13 @@
     "elo": 1592,
     "level": 8,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Bastien",
     "privacy": "public",
     "premier": 18555,
-    "wingman": 14,
+    "wingman": 15,
     "leetify": 1.41,
     "avgRating": 0.00649787234042553,
     "competitive": [
@@ -8247,18 +8259,18 @@
      "rank": 13
     },
     "rating": {
-     "aim": 57,
-     "positioning": 55,
-     "utility": 67,
+     "aim": 62,
+     "positioning": 51,
+     "utility": 41,
      "clutch": 0.12,
      "opening": 0.016,
      "ct_leetify": 0.0121,
      "t_leetify": 0.0101
     },
     "winrate": 0.5321664854438664,
-    "totalMatches": 347,
+    "totalMatches": 412,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -8860,14 +8872,14 @@
    ],
    "perf": {
     "all": {
-     "kd": 1.15,
-     "hltv": 1.07,
-     "matches": 6
+     "kd": 1.14,
+     "hltv": 1.01,
+     "matches": 12
     },
     "week": {
-     "kd": 1.06,
-     "hltv": 1.03,
-     "matches": 5
+     "kd": 1.14,
+     "hltv": 1.01,
+     "matches": 10
     }
    },
    "errors": []
@@ -8921,18 +8933,18 @@
      "rank": 11
     },
     "rating": {
-     "aim": 44,
-     "positioning": 39,
-     "utility": 30,
+     "aim": 41,
+     "positioning": 50,
+     "utility": 59,
      "clutch": 0.087,
      "opening": -0.011,
      "ct_leetify": -0.0081,
      "t_leetify": -0.0067
     },
     "winrate": 0.4785061960467195,
-    "totalMatches": 388,
+    "totalMatches": 919,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -9986,14 +9998,14 @@
    ],
    "perf": {
     "all": {
-     "kd": 0.72,
-     "hltv": 0.88,
-     "matches": 11
+     "kd": 0.79,
+     "hltv": 0.87,
+     "matches": 8
     },
     "week": {
-     "kd": 0.72,
-     "hltv": 0.88,
-     "matches": 10
+     "kd": 0.83,
+     "hltv": 0.89,
+     "matches": 7
     }
    },
    "errors": []
@@ -10011,13 +10023,13 @@
     "elo": 1118,
     "level": 5,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Lucas",
     "privacy": "public",
     "premier": 11250,
-    "wingman": 8,
+    "wingman": 11,
     "leetify": -0.45,
     "avgRating": -0.004409677419354838,
     "competitive": [
@@ -10043,18 +10055,18 @@
      "rank": 9
     },
     "rating": {
-     "aim": 46,
-     "positioning": 38,
-     "utility": 50,
+     "aim": 45,
+     "positioning": 48,
+     "utility": 32,
      "clutch": 0.089,
      "opening": -0.009,
      "ct_leetify": -0.0065,
      "t_leetify": -0.0054
     },
     "winrate": 0.4826698518383036,
-    "totalMatches": 698,
+    "totalMatches": 725,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -10453,14 +10465,14 @@
    ],
    "perf": {
     "all": {
-     "kd": 0.52,
-     "hltv": 0.64,
-     "matches": 6
+     "kd": 0.84,
+     "hltv": 0.8,
+     "matches": 11
     },
     "week": {
-     "kd": 0.52,
-     "hltv": 0.64,
-     "matches": 6
+     "kd": 0.85,
+     "hltv": 0.8,
+     "matches": 9
     }
    },
    "errors": []
@@ -10478,13 +10490,13 @@
     "elo": 1937,
     "level": 9,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Malik",
     "privacy": "public",
     "premier": 21717,
-    "wingman": 17,
+    "wingman": 16,
     "leetify": 3.13,
     "avgRating": 0.01755,
     "competitive": [
@@ -10518,18 +10530,18 @@
      "rank": 18
     },
     "rating": {
-     "aim": 76,
-     "positioning": 67,
-     "utility": 55,
+     "aim": 80,
+     "positioning": 74,
+     "utility": 53,
      "clutch": 0.149,
      "opening": 0.039,
      "ct_leetify": 0.0293,
      "t_leetify": 0.0245
     },
     "winrate": 0.5782597383095508,
-    "totalMatches": 333,
+    "totalMatches": 697,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -11172,14 +11184,14 @@
    ],
    "perf": {
     "all": {
-     "kd": 1.62,
-     "hltv": 1.29,
-     "matches": 17
+     "kd": 1.38,
+     "hltv": 1.09,
+     "matches": 8
     },
     "week": {
-     "kd": 1.6,
-     "hltv": 1.3,
-     "matches": 15
+     "kd": 1.31,
+     "hltv": 1.03,
+     "matches": 6
     }
    },
    "errors": []
@@ -11197,13 +11209,13 @@
     "elo": 1352,
     "level": 7,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Théo",
     "privacy": "public",
-    "premier": 13729,
-    "wingman": 12,
+    "premier": 13520,
+    "wingman": 10,
     "leetify": 0.74,
     "avgRating": 0.005266000000000002,
     "competitive": [
@@ -11230,19 +11242,34 @@
     },
     "rating": {
      "aim": 58,
-     "positioning": 63,
-     "utility": 53,
+     "positioning": 49,
+     "utility": 45,
      "clutch": 0.109,
      "opening": 0.007,
      "ct_leetify": 0.0054,
      "t_leetify": 0.0045
     },
     "winrate": 0.5142894518508477,
-    "totalMatches": 625,
+    "totalMatches": 952,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
+    {
+     "id": "demo:76561198000001518:1795193880000:0",
+     "source": "premier",
+     "at": "2026-11-20T16:58:00.000Z",
+     "map": "Train",
+     "result": "L",
+     "score": [
+      9,
+      13
+     ],
+     "rating": -0.0099,
+     "rank": 13520,
+     "leetifyId": "demo-1518-1795193880000",
+     "details": true
+    },
     {
      "id": "demo:76561198000001518:1795124160000:1",
      "source": "faceit",
@@ -11296,9 +11323,7 @@
       13,
       10
      ],
-     "rating": 0.0482,
-     "leetifyId": "demo-1518-1794949560000",
-     "details": true
+     "rating": 0.0482
     },
     {
      "id": "demo:76561198000001518:1794948600000:3",
@@ -12029,14 +12054,14 @@
    ],
    "perf": {
     "all": {
-     "kd": 0.8,
-     "hltv": 0.87,
-     "matches": 10
+     "kd": 0.81,
+     "hltv": 0.85,
+     "matches": 8
     },
     "week": {
-     "kd": 0.81,
-     "hltv": 0.89,
-     "matches": 8
+     "kd": 0.82,
+     "hltv": 0.87,
+     "matches": 7
     }
    },
    "errors": []
@@ -12054,13 +12079,13 @@
     "elo": 499,
     "level": 1,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Romain",
     "privacy": "private",
     "premier": 2532,
-    "wingman": 6,
+    "wingman": 2,
     "leetify": -2.15,
     "avgRating": -0.019317948717948716,
     "competitive": [
@@ -12091,7 +12116,7 @@
     },
     "rating": {
      "aim": 31,
-     "positioning": 35,
+     "positioning": 30,
      "utility": 34,
      "clutch": 0.061,
      "opening": -0.031,
@@ -12099,9 +12124,9 @@
      "t_leetify": -0.0196
     },
     "winrate": 0.43738065385947067,
-    "totalMatches": 702,
+    "totalMatches": 1085,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -12583,14 +12608,14 @@
    ],
    "perf": {
     "all": {
-     "kd": 0.48,
-     "hltv": 0.63,
-     "matches": 16
+     "kd": 0.58,
+     "hltv": 0.8,
+     "matches": 9
     },
     "week": {
-     "kd": 0.45,
-     "hltv": 0.61,
-     "matches": 13
+     "kd": 0.58,
+     "hltv": 0.8,
+     "matches": 9
     }
    },
    "errors": []
@@ -12608,13 +12633,13 @@
     "elo": 1727,
     "level": 8,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Sarah",
     "privacy": "public",
     "premier": 17407,
-    "wingman": 15,
+    "wingman": 13,
     "leetify": 1.97,
     "avgRating": 0.009828205128205128,
     "competitive": [
@@ -12652,18 +12677,18 @@
      "rank": 16
     },
     "rating": {
-     "aim": 68,
-     "positioning": 53,
-     "utility": 27,
+     "aim": 63,
+     "positioning": 59,
+     "utility": 68,
      "clutch": 0.129,
      "opening": 0.024,
      "ct_leetify": 0.0177,
      "t_leetify": 0.0147
     },
     "winrate": 0.5471111622146435,
-    "totalMatches": 1072,
+    "totalMatches": 1073,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -13164,13 +13189,13 @@
    ],
    "perf": {
     "all": {
-     "kd": 1.2,
-     "hltv": 1.19,
+     "kd": 1.12,
+     "hltv": 1.11,
      "matches": 9
     },
     "week": {
-     "kd": 1.2,
-     "hltv": 1.19,
+     "kd": 1.12,
+     "hltv": 1.11,
      "matches": 9
     }
    },
@@ -13189,13 +13214,13 @@
     "elo": 2402,
     "level": 10,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Kevin",
     "privacy": "public",
     "premier": 24054,
-    "wingman": 18,
+    "wingman": 17,
     "leetify": 3.18,
     "avgRating": 0.024141999999999997,
     "competitive": [
@@ -13221,18 +13246,18 @@
      "rank": 17
     },
     "rating": {
-     "aim": 81,
+     "aim": 78,
      "positioning": 71,
-     "utility": 43,
+     "utility": 55,
      "clutch": 0.15,
      "opening": 0.04,
      "ct_leetify": 0.0298,
      "t_leetify": 0.0248
     },
     "winrate": 0.5794571373606633,
-    "totalMatches": 1062,
+    "totalMatches": 699,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -14344,14 +14369,14 @@
    ],
    "perf": {
     "all": {
-     "kd": 1.62,
-     "hltv": 1.3,
-     "matches": 6
+     "kd": 1.71,
+     "hltv": 1.42,
+     "matches": 4
     },
     "week": {
-     "kd": 1.62,
-     "hltv": 1.31,
-     "matches": 5
+     "kd": 1.71,
+     "hltv": 1.42,
+     "matches": 4
     }
    },
    "errors": []
@@ -14369,15 +14394,15 @@
     "elo": 1674,
     "level": 8,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Axel",
     "privacy": "public",
     "premier": 16984,
-    "wingman": 15,
+    "wingman": 13,
     "leetify": 1.96,
-    "avgRating": 0.012309375,
+    "avgRating": 0.012814285714285714,
     "competitive": [
      {
       "map": "Inferno",
@@ -14409,20 +14434,63 @@
      "rank": 16
     },
     "rating": {
-     "aim": 71,
-     "positioning": 56,
-     "utility": 35,
+     "aim": 68,
+     "positioning": 69,
+     "utility": 64,
      "clutch": 0.129,
      "opening": 0.023,
      "ct_leetify": 0.0176,
      "t_leetify": 0.0147
     },
     "winrate": 0.5468828478147116,
-    "totalMatches": 365,
+    "totalMatches": 352,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
+    {
+     "id": "demo:76561198000001666:1795193520000:1",
+     "source": "faceit",
+     "at": "2026-11-20T16:52:00.000Z",
+     "map": "Train",
+     "result": "L",
+     "score": [
+      4,
+      13
+     ],
+     "rating": -0.0382,
+     "leetifyId": "demo-1666-1795193520000",
+     "details": true
+    },
+    {
+     "id": "demo:76561198000001666:1795193100000:3",
+     "source": "mm",
+     "at": "2026-11-20T16:45:00.000Z",
+     "map": "Nuke",
+     "result": "W",
+     "score": [
+      13,
+      10
+     ],
+     "rating": 0.0503,
+     "rank": 14,
+     "leetifyId": "demo-1666-1795193100000",
+     "details": true
+    },
+    {
+     "id": "demo:76561198000001666:1795192200000:0",
+     "source": "faceit",
+     "at": "2026-11-20T16:30:00.000Z",
+     "map": "Nuke",
+     "result": "W",
+     "score": [
+      13,
+      10
+     ],
+     "rating": 0.0425,
+     "leetifyId": "demo-1666-1795192200000",
+     "details": true
+    },
     {
      "id": "demo:76561198000001666:1794520080000:1",
      "source": "faceit",
@@ -14447,9 +14515,7 @@
       6,
       13
      ],
-     "rating": 0.0018,
-     "leetifyId": "demo-1666-1794515580000",
-     "details": true
+     "rating": 0.0018
     },
     {
      "id": "demo:76561198000001666:1794507960000:0",
@@ -14461,9 +14527,7 @@
       13,
       6
      ],
-     "rating": 0.0218,
-     "leetifyId": "demo-1666-1794507960000",
-     "details": true
+     "rating": 0.0218
     },
     {
      "id": "demo:76561198000001666:1794253680000:0",
@@ -14476,9 +14540,7 @@
       13
      ],
      "rating": -0.0382,
-     "rank": 16984,
-     "leetifyId": "demo-1666-1794253680000",
-     "details": true
+     "rank": 16984
     },
     {
      "id": "demo:76561198000001666:1794246480000:1",
@@ -14838,14 +14900,14 @@
    ],
    "perf": {
     "all": {
-     "kd": 1.21,
-     "hltv": 1.23,
-     "matches": 8
+     "kd": 1.17,
+     "hltv": 1.16,
+     "matches": 11
     },
     "week": {
-     "kd": 1,
-     "hltv": 1.11,
-     "matches": 3
+     "kd": 1.19,
+     "hltv": 1.17,
+     "matches": 10
     }
    },
    "errors": []
@@ -14861,7 +14923,7 @@
     "name": "Noah",
     "privacy": "public",
     "premier": 13120,
-    "wingman": 12,
+    "wingman": 11,
     "leetify": -0.04,
     "avgRating": 0.0025844444444444443,
     "competitive": [
@@ -14899,18 +14961,18 @@
      "rank": 10
     },
     "rating": {
-     "aim": 46,
-     "positioning": 45,
-     "utility": 31,
+     "aim": 44,
+     "positioning": 52,
+     "utility": 35,
      "clutch": 0.096,
      "opening": -0.003,
      "ct_leetify": -0.0024,
      "t_leetify": -0.002
     },
     "winrate": 0.4936177585214542,
-    "totalMatches": 470,
+    "totalMatches": 927,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -15509,14 +15571,14 @@
    ],
    "perf": {
     "all": {
-     "kd": 0.67,
-     "hltv": 0.77,
-     "matches": 6
+     "kd": 0.94,
+     "hltv": 0.96,
+     "matches": 9
     },
     "week": {
-     "kd": 0.72,
-     "hltv": 0.81,
-     "matches": 5
+     "kd": 0.94,
+     "hltv": 0.96,
+     "matches": 9
     }
    },
    "errors": []
@@ -15534,13 +15596,13 @@
     "elo": 1332,
     "level": 6,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Mathis",
     "privacy": "public",
     "premier": 16102,
-    "wingman": 10,
+    "wingman": 14,
     "leetify": 1.1,
     "avgRating": 0.005241860465116278,
     "competitive": [
@@ -15578,18 +15640,18 @@
      "rank": 13
     },
     "rating": {
-     "aim": 58,
-     "positioning": 62,
-     "utility": 56,
+     "aim": 64,
+     "positioning": 64,
+     "utility": 60,
      "clutch": 0.115,
      "opening": 0.012,
      "ct_leetify": 0.009,
      "t_leetify": 0.0075
     },
     "winrate": 0.5239044119640295,
-    "totalMatches": 437,
+    "totalMatches": 638,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -16144,13 +16206,13 @@
    ],
    "perf": {
     "all": {
-     "kd": 0.96,
-     "hltv": 0.95,
+     "kd": 1.13,
+     "hltv": 1.06,
      "matches": 10
     },
     "week": {
-     "kd": 0.93,
-     "hltv": 0.93,
+     "kd": 1.17,
+     "hltv": 1.07,
      "matches": 8
     }
    },
@@ -16169,13 +16231,13 @@
     "elo": 1302,
     "level": 6,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Camille",
     "privacy": "public",
     "premier": 14610,
-    "wingman": 13,
+    "wingman": 9,
     "leetify": 0.41,
     "avgRating": 0.0019625000000000003,
     "competitive": [
@@ -16205,18 +16267,18 @@
      "rank": 12
     },
     "rating": {
-     "aim": 55,
-     "positioning": 52,
-     "utility": 54,
+     "aim": 54,
+     "positioning": 50,
+     "utility": 26,
      "clutch": 0.104,
      "opening": 0.003,
      "ct_leetify": 0.0021,
      "t_leetify": 0.0018
     },
     "winrate": 0.5056980307453294,
-    "totalMatches": 398,
+    "totalMatches": 996,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -16529,14 +16591,14 @@
    ],
    "perf": {
     "all": {
-     "kd": 1.05,
-     "hltv": 0.97,
-     "matches": 8
+     "kd": 0.78,
+     "hltv": 0.78,
+     "matches": 9
     },
     "week": {
-     "kd": 0.95,
-     "hltv": 0.9,
-     "matches": 5
+     "kd": 0.81,
+     "hltv": 0.78,
+     "matches": 7
     }
    },
    "errors": []
@@ -16554,7 +16616,7 @@
     "elo": 491,
     "level": 1,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": null,
    "matches": [
@@ -16770,13 +16832,13 @@
     "elo": 2044,
     "level": 10,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Rayan",
     "privacy": "public",
     "premier": 21010,
-    "wingman": 14,
+    "wingman": 13,
     "leetify": 2.5,
     "avgRating": 0.020298000000000004,
     "competitive": [
@@ -16818,18 +16880,18 @@
      "rank": 17
     },
     "rating": {
-     "aim": 71,
-     "positioning": 68,
-     "utility": 33,
+     "aim": 74,
+     "positioning": 57,
+     "utility": 55,
      "clutch": 0.138,
      "opening": 0.031,
      "ct_leetify": 0.023,
      "t_leetify": 0.0192
     },
     "winrate": 0.5614073935723001,
-    "totalMatches": 333,
+    "totalMatches": 700,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -18022,14 +18084,14 @@
    ],
    "perf": {
     "all": {
-     "kd": 1.35,
-     "hltv": 1.23,
-     "matches": 5
+     "kd": 1.41,
+     "hltv": 1.22,
+     "matches": 10
     },
     "week": {
-     "kd": 1.35,
+     "kd": 1.4,
      "hltv": 1.23,
-     "matches": 5
+     "matches": 9
     }
    },
    "errors": []
@@ -18047,7 +18109,7 @@
     "elo": 1473,
     "level": 7,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "leetify": {
     "name": "Lina",
@@ -18091,18 +18153,18 @@
      "rank": 14
     },
     "rating": {
-     "aim": 54,
+     "aim": 59,
      "positioning": 62,
-     "utility": 57,
+     "utility": 42,
      "clutch": 0.112,
      "opening": 0.01,
      "ct_leetify": 0.0073,
      "t_leetify": 0.006
     },
     "winrate": 0.5193598346592484,
-    "totalMatches": 1163,
+    "totalMatches": 618,
     "url": null,
-    "updatedAt": "2026-11-20T16:32:11.324Z"
+    "updatedAt": "2026-11-20T17:02:30.226Z"
    },
    "matches": [
     {
@@ -18418,17 +18480,312 @@
    ],
    "perf": {
     "all": {
-     "kd": 0.86,
-     "hltv": 0.88,
-     "matches": 8
+     "kd": 1.13,
+     "hltv": 1.03,
+     "matches": 6
     },
     "week": {
-     "kd": 0.86,
-     "hltv": 0.88,
-     "matches": 8
+     "kd": 1.13,
+     "hltv": 1.03,
+     "matches": 6
     }
    },
    "errors": []
   }
- ]
+ ],
+ "valorant": {
+  "generatedAt": "2026-11-20T16:48:30.226Z",
+  "sources": {
+   "ok": 12,
+   "failed": 0,
+   "error": null
+  },
+  "players": [
+   {
+    "id": "max#euw",
+    "riotId": "Max#EUW",
+    "name": "Max",
+    "region": "eu",
+    "card": null,
+    "errors": [],
+    "mmr": {
+     "tier": 20,
+     "tierName": "Diamond 3",
+     "rr": 97,
+     "elo": 2097,
+     "lastChange": 24,
+     "peakTier": 23,
+     "peakName": "Ascendant 3",
+     "peakSeason": "e9a3"
+    },
+    "stats": {
+     "matches": 20,
+     "kd": 1.28,
+     "hs": 28.8,
+     "acs": 259,
+     "winrate": 61
+    }
+   },
+   {
+    "id": "léa#euw",
+    "riotId": "Léa#EUW",
+    "name": "Léa",
+    "region": "eu",
+    "card": null,
+    "errors": [],
+    "mmr": {
+     "tier": 23,
+     "tierName": "Ascendant 3",
+     "rr": 74,
+     "elo": 2374,
+     "lastChange": -21,
+     "peakTier": 26,
+     "peakName": "Immortal 3",
+     "peakSeason": "e9a3"
+    },
+    "stats": {
+     "matches": 20,
+     "kd": 1.37,
+     "hs": 29.2,
+     "acs": 250,
+     "winrate": 53
+    }
+   },
+   {
+    "id": "inès#euw",
+    "riotId": "Inès#EUW",
+    "name": "Inès",
+    "region": "eu",
+    "card": null,
+    "errors": [],
+    "mmr": {
+     "tier": 11,
+     "tierName": "Silver 3",
+     "rr": 61,
+     "elo": 1161,
+     "lastChange": -21,
+     "peakTier": 13,
+     "peakName": "Gold 2",
+     "peakSeason": "e9a3"
+    },
+    "stats": {
+     "matches": 20,
+     "kd": 0.85,
+     "hs": 21.4,
+     "acs": 172,
+     "winrate": 50
+    }
+   },
+   {
+    "id": "yanis#euw",
+    "riotId": "Yanis#EUW",
+    "name": "Yanis",
+    "region": "eu",
+    "card": null,
+    "errors": [],
+    "mmr": {
+     "tier": 18,
+     "tierName": "Diamond 1",
+     "rr": 10,
+     "elo": 1810,
+     "lastChange": 1,
+     "peakTier": 18,
+     "peakName": "Diamond 1",
+     "peakSeason": "e9a3"
+    },
+    "stats": {
+     "matches": 20,
+     "kd": 1.2,
+     "hs": 23.3,
+     "acs": 237,
+     "winrate": 54
+    }
+   },
+   {
+    "id": "sami#euw",
+    "riotId": "Sami#EUW",
+    "name": "Sami",
+    "region": "eu",
+    "card": null,
+    "errors": [],
+    "mmr": {
+     "tier": 15,
+     "tierName": "Platinum 1",
+     "rr": 34,
+     "elo": 1534,
+     "lastChange": -20,
+     "peakTier": 17,
+     "peakName": "Platinum 3",
+     "peakSeason": "e9a3"
+    },
+    "stats": {
+     "matches": 20,
+     "kd": 1.09,
+     "hs": 25.3,
+     "acs": 241,
+     "winrate": 53
+    }
+   },
+   {
+    "id": "chloé#euw",
+    "riotId": "Chloé#EUW",
+    "name": "Chloé",
+    "region": "eu",
+    "card": null,
+    "errors": [],
+    "mmr": {
+     "tier": 13,
+     "tierName": "Gold 2",
+     "rr": 98,
+     "elo": 1398,
+     "lastChange": -14,
+     "peakTier": 15,
+     "peakName": "Platinum 1",
+     "peakSeason": "e9a3"
+    },
+    "stats": {
+     "matches": 20,
+     "kd": 0.89,
+     "hs": 20.3,
+     "acs": 194,
+     "winrate": 43
+    }
+   },
+   {
+    "id": "kevin#euw",
+    "riotId": "Kevin#EUW",
+    "name": "Kevin",
+    "region": "eu",
+    "card": null,
+    "errors": [],
+    "mmr": {
+     "tier": 8,
+     "tierName": "Bronze 3",
+     "rr": 97,
+     "elo": 897,
+     "lastChange": 5,
+     "peakTier": 10,
+     "peakName": "Silver 2",
+     "peakSeason": "e9a3"
+    },
+    "stats": {
+     "matches": 20,
+     "kd": 0.65,
+     "hs": 16.9,
+     "acs": 161,
+     "winrate": 44
+    }
+   },
+   {
+    "id": "rayan#euw",
+    "riotId": "Rayan#EUW",
+    "name": "Rayan",
+    "region": "eu",
+    "card": null,
+    "errors": [],
+    "mmr": {
+     "tier": 8,
+     "tierName": "Bronze 3",
+     "rr": 7,
+     "elo": 807,
+     "lastChange": -8,
+     "peakTier": 11,
+     "peakName": "Silver 3",
+     "peakSeason": "e9a3"
+    },
+    "stats": {
+     "matches": 20,
+     "kd": 0.75,
+     "hs": 14.8,
+     "acs": 160,
+     "winrate": 40
+    }
+   },
+   {
+    "id": "malik#euw",
+    "riotId": "Malik#EUW",
+    "name": "Malik",
+    "region": "eu",
+    "card": null,
+    "errors": [],
+    "mmr": {
+     "tier": 14,
+     "tierName": "Gold 3",
+     "rr": 62,
+     "elo": 1462,
+     "lastChange": 17,
+     "peakTier": 14,
+     "peakName": "Gold 3",
+     "peakSeason": "e9a3"
+    },
+    "stats": {
+     "matches": 20,
+     "kd": 0.96,
+     "hs": 19.9,
+     "acs": 196,
+     "winrate": 43
+    }
+   },
+   {
+    "id": "noah#euw",
+    "riotId": "Noah#EUW",
+    "name": "Noah",
+    "region": "eu",
+    "card": null,
+    "errors": [],
+    "mmr": {
+     "tier": 10,
+     "tierName": "Silver 2",
+     "rr": 65,
+     "elo": 1065,
+     "lastChange": -20,
+     "peakTier": 10,
+     "peakName": "Silver 2",
+     "peakSeason": "e9a3"
+    },
+    "stats": {
+     "matches": 20,
+     "kd": 0.74,
+     "hs": 16.4,
+     "acs": 196,
+     "winrate": 46
+    }
+   },
+   {
+    "id": "lina#euw",
+    "riotId": "Lina#EUW",
+    "name": "Lina",
+    "region": "eu",
+    "card": null,
+    "errors": [],
+    "mmr": {
+     "tier": 24,
+     "tierName": "Immortal 1",
+     "rr": 47,
+     "elo": 2447,
+     "lastChange": 8,
+     "peakTier": 27,
+     "peakName": "Radiant",
+     "peakSeason": "e9a3"
+    },
+    "stats": {
+     "matches": 20,
+     "kd": 1.27,
+     "hs": 27.8,
+     "acs": 278,
+     "winrate": 61
+    }
+   },
+   {
+    "id": "hugo#euw",
+    "riotId": "Hugo#EUW",
+    "name": "Hugo",
+    "region": "eu",
+    "card": null,
+    "errors": [],
+    "mmr": null,
+    "stats": null
+   }
+  ]
+ }
 }

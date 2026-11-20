@@ -168,12 +168,32 @@ const allDetails = Object.values(details);
 const weekDetails = allDetails.filter((x) => now - new Date(x.finishedAt) < 7 * 864e5);
 for (const p of players) p.perf = { all: perfOf(allDetails, p.steam64), week: perfOf(weekDetails, p.steam64) };
 
+// Tableau Valorant de démo : rangs de 3 (Iron 1) à 27 (Radiant), sans cartes de joueur.
+const VAL_TIERS = ['Iron 1','Iron 2','Iron 3','Bronze 1','Bronze 2','Bronze 3','Silver 1','Silver 2','Silver 3','Gold 1','Gold 2','Gold 3','Platinum 1','Platinum 2','Platinum 3','Diamond 1','Diamond 2','Diamond 3','Ascendant 1','Ascendant 2','Ascendant 3','Immortal 1','Immortal 2','Immortal 3','Radiant'];
+const VAL_NAMES = ['Max', 'Léa', 'Inès', 'Yanis', 'Sami', 'Chloé', 'Kevin', 'Rayan', 'Malik', 'Noah', 'Lina', 'Hugo'];
+const valorant = {
+  generatedAt: new Date(now.getTime() - 14 * 60e3).toISOString(),
+  sources: { ok: VAL_NAMES.length, failed: 0, error: null },
+  players: VAL_NAMES.map((name, i) => {
+    const skill = between(-1, 1);
+    const tier = i === 11 ? null : Math.max(3, Math.min(27, Math.round(15 + skill * 9 + between(-2, 2))));
+    const rr = tier ? Math.floor(between(0, 100)) : null;
+    const peakTier = tier ? Math.min(27, tier + Math.floor(between(0, 4))) : null;
+    return {
+      id: `${name.toLowerCase()}#euw`, riotId: `${name}#EUW`, name, region: 'eu', card: null, errors: [],
+      mmr: tier ? { tier, tierName: VAL_TIERS[tier - 3], rr, elo: tier * 100 + rr, lastChange: Math.round(between(-22, 24)), peakTier, peakName: VAL_TIERS[peakTier - 3], peakSeason: 'e9a3' } : null,
+      stats: tier ? { matches: 20, kd: Math.round((1 + skill * 0.35 + between(-0.1, 0.1)) * 100) / 100, hs: Math.round((22 + skill * 8 + between(-3, 3)) * 10) / 10, acs: Math.round(210 + skill * 60 + between(-20, 20)), winrate: Math.round(50 + skill * 10 + between(-5, 5)) } : null,
+    };
+  }),
+};
+
 await writeAll(OUT, {
   generatedAt: new Date(now.getTime() - 14 * 60e3).toISOString(),
   timezone: TZ,
   group: 'Traphouse',
   sources: { faceit: { ok: 22, failed: 0 }, leetify: { ok: 24, failed: 0 }, steam: { ok: 0, failed: 0, skipped: true } },
   players: players.map(toLatest),
+  valorant,
 }, { now });
 
 await writeFile(`${OUT}/matches.json`, JSON.stringify(details) + '\n');
