@@ -1,6 +1,6 @@
 {
  "date": "2026-11-20",
- "updatedAt": "2026-11-20T15:37:13.766Z",
+ "updatedAt": "2026-11-20T15:45:03.926Z",
  "players": {
   "76561198329257038": {
    "elo": 2439,
@@ -75,6 +75,118 @@
   "76561198025946650": {
    "elo": 2504,
    "level": 10,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561199090147744": {
+   "elo": 910,
+   "level": 4,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561198369128117": {
+   "elo": 1039,
+   "level": 4,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561198142689403": {
+   "elo": 729,
+   "level": 2,
+   "premier": 10547,
+   "mm": 7,
+   "mmMap": "Nuke"
+  },
+  "76561198882768460": {
+   "elo": 898,
+   "level": 3,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561198084533783": {
+   "elo": 2286,
+   "level": 10,
+   "premier": 23998,
+   "mm": 13,
+   "mmMap": "Dust2"
+  },
+  "76561198807979563": {
+   "elo": 949,
+   "level": 4,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561198113791453": {
+   "elo": 1229,
+   "level": 6,
+   "premier": null,
+   "mm": 8,
+   "mmMap": "Train"
+  },
+  "76561199140368088": {
+   "elo": 1703,
+   "level": 8,
+   "premier": null,
+   "mm": 7,
+   "mmMap": "Inferno"
+  },
+  "76561198200098141": {
+   "elo": 1000,
+   "level": 4,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561198383028566": {
+   "elo": 1203,
+   "level": 6,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561198332437870": {
+   "elo": 2517,
+   "level": 10,
+   "premier": 24321,
+   "mm": 15,
+   "mmMap": "Vertigo"
+  },
+  "76561198351001632": {
+   "elo": 953,
+   "level": 4,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561198149308963": {
+   "elo": null,
+   "level": null,
+   "premier": 21398,
+   "mm": 16,
+   "mmMap": "Cache"
+  },
+  "76561199224352089": {
+   "elo": 860,
+   "level": 3,
+   "premier": null,
+   "mm": null,
+   "mmMap": null
+  },
+  "76561198935677261": {
+   "elo": 2410,
+   "level": 10,
+   "premier": 24113,
+   "mm": 15,
+   "mmMap": "Cache"
+  },
+  "76561199586455292": {
+   "elo": 1000,
+   "level": 0,
    "premier": null,
    "mm": null,
    "mmMap": null
