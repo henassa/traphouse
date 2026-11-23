@@ -103,3 +103,157 @@ export async function notifyDiscord(url, previous, latest, siteUrl) {
     console.log(`[Discord] envoi impossible : ${e.message}`);
   }
 }
+
+// ——— Annonces match par match, façon bot Leetify ———
+
+const GREEN = 0x5ba32b, RED = 0xc23b22, GREY = 0x7a7a7a;
+const colorOf = (r) => (r === 'W' ? GREEN : r === 'L' ? RED : GREY);
+const RESULT = { W: 'Victoire', L: 'Défaite', T: 'Égalité' };
+const MODE = { faceit: 'FACEIT', premier: 'Premier', mm: 'Compétitif', wingman: 'Wingman', renown: 'Renown', other: 'Match' };
+const dec = (x, n = 2) => x.toFixed(n).replace('.', ',');
+const sign = (x) => (x > 0 ? `+${num(x)}` : x < 0 ? `−${num(-x)}` : '±0');
+const csRating = (x) => { const v = Math.abs(x) <= 1 ? x * 100 : x; return `${v > 0 ? '+' : ''}${dec(v)}`; };
+
+// Les beaux moments de la partie, mis en avant à côté des stats.
+function csHighlights(row) {
+  const out = [];
+  if (row?.k5) out.push(row.k5 > 1 ? `${row.k5} ACES` : 'ACE');
+  else if (row?.k4) out.push(row.k4 > 1 ? `${row.k4}× 4K` : '4K');
+  if (row?.k >= 30) out.push(`${row.k} kills`);
+  return out.length ? ` · **${out.join(' · ')}**` : '';
+}
+
+function csEmbed(group) {
+  const first = group[0];
+  const m = first.match;
+  const d = first.detail;
+  const score = m.score ?? (d?.teams?.length === 2 ? d.teams.map((t) => t.score) : null);
+  const lines = group.map((g) => {
+    const r = g.row;
+    const stats = r
+      ? [`${r.k}/${r.d}/${r.a}`, r.adr != null && `ADR ${Math.round(r.adr)}`, r.rating != null && `Rating ${csRating(r.rating)}`].filter(Boolean).join(' · ')
+      : g.match.rating != null ? `Rating ${csRating(g.match.rating)}` : 'pas de stats Leetify pour ce match';
+    const rank = g.eloDelta != null ? `\nFACEIT ${num(g.player.faceit.elo)} (${sign(g.eloDelta)})`
+      : g.match.source === 'premier' && g.match.rank ? `\nPremier ${num(g.match.rank)}${g.premierDelta != null ? ` (${sign(g.premierDelta)})` : ''}`
+      : '';
+    return `**${g.player.name}** — ${stats}${csHighlights(r)}${rank}`;
+  });
+  return {
+    author: { name: `CS2 · ${MODE[m.source] ?? 'Match'}${m.map ? ` · ${m.map}` : ''}` },
+    title: `${RESULT[m.result] ?? 'Match terminé'}${score ? ` ${score[0]}–${score[1]}` : ''}`,
+    url: m.leetifyId ? `https://leetify.com/app/match-details/${m.leetifyId}` : m.url ?? undefined,
+    color: colorOf(m.result),
+    description: lines.join('\n\n'),
+    thumbnail: group.length === 1 && first.player.avatar ? { url: first.player.avatar } : undefined,
+    timestamp: m.at,
+  };
+}
+
+function valEmbed(group) {
+  const m = group[0];
+  const lines = group.map((g) => {
+    const stats = [`${g.k}/${g.d}/${g.a}`, g.acs != null && `ACS ${g.acs}`, g.hs != null && `HS ${g.hs} %`].filter(Boolean).join(' · ');
+    const rr = g.rrChange != null ? `\n${g.tierName ?? 'RR'} (${sign(g.rrChange)} RR)` : '';
+    return `**${g.player.name}**${g.agent ? ` (${g.agent})` : ''} — ${stats}${rr}`;
+  });
+  return {
+    author: { name: `Valorant · Compétitif${m.map ? ` · ${m.map}` : ''}` },
+    title: `${RESULT[m.result] ?? 'Match terminé'}${m.score ? ` ${m.score[0]}–${m.score[1]}` : ''}`,
+    color: colorOf(m.result),
+    description: lines.join('\n\n'),
+    thumbnail: group.length === 1 && m.player.card ? { url: m.player.card } : undefined,
+    timestamp: m.at ?? undefined,
+  };
+}
+
+function lolEmbed(group) {
+  const m = group[0];
+  const lines = group.map((g) => {
+    const kda = g.d ? dec((g.k + g.a) / g.d) : 'parfait';
+    const rank = g.rank ? `\n${cap(g.rank.tier)}${LOL_TIERS.indexOf(g.rank.tier) < 7 ? ` ${g.rank.division}` : ''} · ${g.rank.lp} LP${g.lp != null ? ` (${sign(g.lp)})` : ''}` : '';
+    return `**${g.player.name}** (${g.champion}) — ${g.k}/${g.d}/${g.a} · KDA ${kda} · ${g.cs} CS${rank}`;
+  });
+  return {
+    author: { name: `League of Legends · ${m.queue === 'flex' ? 'Flex' : 'Solo/Duo'} · ${m.minutes} min` },
+    title: m.result ? RESULT[m.result] : 'Remake',
+    color: colorOf(m.result),
+    description: lines.join('\n\n'),
+    thumbnail: m.version && m.champion ? { url: `https://ddragon.leagueoflegends.com/cdn/${m.version}/img/champion/${m.champion}.png` } : undefined,
+    timestamp: m.at,
+  };
+}
+
+// Regroupe les joueurs du même match dans une seule carte.
+function groupBy(list, key) {
+  const map = new Map();
+  for (const x of list) map.set(key(x), [...(map.get(key(x)) ?? []), x]);
+  return [...map.values()];
+}
+
+export async function notifyGames(url, { cs = [], valorant = [], lol = [] }, siteUrl) {
+  if (!url) return;
+  const embeds = [
+    ...groupBy(cs, (g) => g.key).map((g) => [g[0].match.at, csEmbed(g)]),
+    ...groupBy(valorant, (g) => g.id).map((g) => [g[0].at ?? '', valEmbed(g)]),
+    ...groupBy(lol, (g) => g.id).map((g) => [g[0].at, lolEmbed(g)]),
+  ].sort((a, b) => String(a[0]).localeCompare(String(b[0]))).map(([, e]) => e);
+  if (!embeds.length) {
+    console.log('[Discord] aucune nouvelle partie');
+    return;
+  }
+  // 25 cartes au plus par passage, 10 par message (limite de Discord).
+  const list = embeds.slice(-25);
+  for (let i = 0; i < list.length; i += 10) {
+    const body = { username: 'TRAPHOUSE', avatar_url: siteUrl ? `${siteUrl}icon-180.png` : undefined, embeds: list.slice(i, i + 10), allowed_mentions: { parse: [] } };
+    try {
+      const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      console.log(`[Discord] ${body.embeds.length} partie(s) annoncée(s) → HTTP ${res.status}`);
+      if (res.status === 429) await new Promise((r) => setTimeout(r, 3000));
+    } catch (e) {
+      console.log(`[Discord] envoi impossible : ${e.message}`);
+    }
+  }
+}
+
+// Matchs CS à annoncer sur Discord. On attend que Leetify ait le tableau des scores (jusqu'à 3 h)
+// pour poster les stats ; au tout premier passage, on mémorise les matchs existants sans rien poster.
+const CS_WAIT = 3 * 3600e3;
+const CS_MAX_AGE = 24 * 3600e3;
+export function newCsGames(players, prevById, bundle, now) {
+  const games = [];
+  for (const p of players) {
+    const prev = prevById.get(p.id);
+    const ids = new Set(p.matches.map((m) => m.id));
+    if (!Array.isArray(prev?.notified)) {
+      p.notified = [...ids];
+      continue;
+    }
+    const done = new Set(prev.notified);
+    const fresh = p.matches.filter((m) => !done.has(m.id) && now - new Date(m.at) < CS_MAX_AGE);
+    const freshFaceit = fresh.filter((m) => m.source === 'faceit').length;
+    for (const m of fresh) {
+      const detail = m.leetifyId ? bundle[m.leetifyId] : null;
+      const row = detail?.players?.find((x) => x.steam64 === p.steam64) ?? null;
+      if (!row && now - new Date(m.at) < CS_WAIT) continue;
+      done.add(m.id);
+      // Écart de Premier : rang après ce match comparé au match Premier précédent du joueur.
+      let premierDelta = null;
+      if (m.source === 'premier' && m.rank) {
+        const before = p.matches.find((x) => x.source === 'premier' && x.rank && x.at < m.at);
+        if (before) premierDelta = m.rank - before.rank;
+      }
+      games.push({
+        key: m.leetifyId ?? m.id,
+        match: m,
+        detail,
+        row,
+        player: p,
+        eloDelta: m.source === 'faceit' && freshFaceit === 1 && prev.faceit?.elo && p.faceit?.elo ? p.faceit.elo - prev.faceit.elo : null,
+        premierDelta,
+      });
+    }
+    p.notified = [...done].filter((id) => ids.has(id));
+  }
+  return games;
+}
+

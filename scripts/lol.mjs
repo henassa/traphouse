@@ -41,6 +41,11 @@ function queue(entries, type) {
   return { tier: q.tier, division: q.rank ?? null, lp: q.leaguePoints ?? 0, wins: q.wins ?? 0, losses: q.losses ?? 0 };
 }
 
+const TIERS = ['IRON', 'BRONZE', 'SILVER', 'GOLD', 'PLATINUM', 'EMERALD', 'DIAMOND', 'MASTER', 'GRANDMASTER', 'CHALLENGER'];
+const DIVS = { IV: 0, III: 1, II: 2, I: 3 };
+const lpScore = (q) => (q ? TIERS.indexOf(q.tier) * 400 + (DIVS[q.division] ?? 0) * 100 + (q.lp ?? 0) : null);
+const lpDiff = (a, b) => (a && b && TIERS.indexOf(a.tier) < 7 && TIERS.indexOf(b.tier) < 7 ? lpScore(b) - lpScore(a) : a && b && a.tier === b.tier ? b.lp - a.lp : null);
+
 async function ddragonVersion() {
   const res = await fetch('https://ddragon.leagueoflegends.com/api/versions.json', { signal: AbortSignal.timeout(15000) }).catch(() => null);
   return res?.ok ? (await res.json())[0] : null;
@@ -52,6 +57,8 @@ export async function fetchLol(config, previous, key, now) {
   const version = await ddragonVersion();
   const sources = { ok: 0, failed: 0, error: null };
   const players = [];
+  const games = [];
+  const matchCache = new Map();
   let down = false;
 
   for (const p of entries) {
@@ -78,6 +85,34 @@ export async function fetchLol(config, previous, key, now) {
         const leagues = await riot(`https://${platform}.api.riotgames.com/lol/league/v4/entries/by-puuid/${out.puuid}`, key);
         out.solo = queue(leagues, 'RANKED_SOLO_5x5');
         out.flex = queue(leagues, 'RANKED_FLEX_SR');
+        // Parties classées récentes (match-v5), pour les annonces Discord partie par partie.
+        const ids = (await riot(`https://${regional}.api.riotgames.com/lol/match/v5/matches/by-puuid/${out.puuid}/ids?type=ranked&start=0&count=5`, key)) ?? [];
+        if (Array.isArray(prev.seen)) {
+          const fresh = ids.filter((id) => !prev.seen.includes(id));
+          for (const id of fresh) {
+            if (!matchCache.has(id)) matchCache.set(id, await riot(`https://${regional}.api.riotgames.com/lol/match/v5/matches/${id}`, key).catch(() => null));
+            const m = matchCache.get(id);
+            const me = m?.info?.participants?.find((x) => x.puuid === out.puuid);
+            if (!me) continue;
+            const q = m.info.queueId === 440 ? 'flex' : 'solo';
+            games.push({
+              id,
+              at: new Date(m.info.gameEndTimestamp ?? m.info.gameCreation).toISOString(),
+              queue: q,
+              minutes: Math.round((m.info.gameDuration ?? 0) / 60),
+              champion: me.championName,
+              k: me.kills, d: me.deaths, a: me.assists,
+              cs: (me.totalMinionsKilled ?? 0) + (me.neutralMinionsKilled ?? 0),
+              result: me.gameEndedInEarlySurrender ? null : me.win ? 'W' : 'L',
+              // Variation de LP seulement quand c'est la seule nouvelle partie du joueur.
+              lp: fresh.length === 1 ? lpDiff(prev[q], out[q]) : null,
+              rank: q === 'solo' ? out.solo : out.flex,
+              version,
+              player: out,
+            });
+          }
+        }
+        out.seen = [...new Set([...ids, ...(prev.seen ?? [])])].slice(0, 30);
         out.updatedAt = now.toISOString();
         sources.ok++;
       } catch (e) {
@@ -91,5 +126,5 @@ export async function fetchLol(config, previous, key, now) {
     console.log(`[LoL] ${out.riotId.padEnd(22)} ${out.errors.length ? out.errors.join(' | ') : `solo ${rank(out.solo)} · flex ${rank(out.flex)}`}`);
     players.push(out);
   }
-  return { generatedAt: now.toISOString(), sources, players };
+  return { generatedAt: now.toISOString(), sources, players, games };
 }

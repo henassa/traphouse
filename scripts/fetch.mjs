@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { addDays, dayKey, mergeMatches, perfOf, readJson, snapshotOf } from './lib/store.mjs';
 import { downloadTiers, fetchValorant } from './valorant.mjs';
 import { fetchLol } from './lol.mjs';
-import { notifyDiscord } from './discord.mjs';
+import { newCsGames, notifyDiscord, notifyGames } from './discord.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const DATA = join(ROOT, 'data');
@@ -485,6 +485,8 @@ async function main() {
     p.perf = { all: perfFromTotals(p.totals), week: perfOf(week, p.steam64) };
   }
 
+  const csGames = newCsGames(players, prevById, bundle, now);
+
   const timezone = config.timezone ?? 'Europe/Zurich';
   // Valorant : seulement si une clé HenrikDev est fournie et des Riot ID sont listés.
   let valorant = previous.valorant ?? null;
@@ -507,6 +509,12 @@ async function main() {
     console.log('[LoL] pas de secret RIOT_API_KEY : tableau League of Legends non mis à jour');
   }
 
+  // Les parties à annoncer ne sont pas publiées avec le site.
+  const valGames = valorant?.games ?? [];
+  const lolGames = lol?.games ?? [];
+  if (valorant) delete valorant.games;
+  if (lol) delete lol.games;
+
   const latest = { generatedAt: now.toISOString(), timezone, group: config.group ?? 'Traphouse', sources, players, valorant, lol };
   const series = updateSeries(prevSeries, dayKey(now, timezone), players);
 
@@ -518,7 +526,9 @@ async function main() {
 
   // Webhook Discord (secret DISCORD_WEBHOOK_URL, facultatif) : annonce les joueurs qui gagnent des places.
   const site = process.env.PAGES_URL ? process.env.PAGES_URL.replace(/\/?$/, '/') : null;
-  await notifyDiscord((process.env.DISCORD_WEBHOOK_URL ?? '').trim() || null, previous, latest, site);
+  const hook = (process.env.DISCORD_WEBHOOK_URL ?? '').trim() || null;
+  await notifyGames(hook, { cs: csGames, valorant: valGames, lol: lolGames }, site);
+  await notifyDiscord(hook, previous, latest, site);
 }
 
 main().catch((e) => {

@@ -71,7 +71,27 @@ async function fetchStats(p, key) {
     if (team && typeof m.teams?.[team] === 'number' && m.teams[team] > m.teams[team === 'red' ? 'blue' : 'red']) wins++;
   }
   if (!n) return null;
+  // Les 5 derniers matchs, pour les annonces Discord match par match.
+  const recent = (list ?? []).slice(0, 5).filter((m) => m.meta?.id && typeof m.stats?.kills === 'number').map((m) => {
+    const s = m.stats;
+    const team = String(s.team ?? '').toLowerCase();
+    const mine = m.teams?.[team], theirs = m.teams?.[team === 'red' ? 'blue' : 'red'];
+    const rounds = typeof mine === 'number' && typeof theirs === 'number' ? mine + theirs : 0;
+    const shots = (s.shots?.head ?? 0) + (s.shots?.body ?? 0) + (s.shots?.leg ?? 0);
+    return {
+      id: m.meta.id,
+      at: m.meta.started_at ?? null,
+      map: m.meta.map?.name ?? null,
+      agent: s.character?.name ?? null,
+      k: s.kills, d: s.deaths ?? 0, a: s.assists ?? 0,
+      acs: rounds ? Math.round((s.score ?? 0) / rounds) : null,
+      hs: shots ? Math.round(((s.shots?.head ?? 0) / shots) * 100) : null,
+      score: rounds ? [mine, theirs] : null,
+      result: !rounds ? null : mine > theirs ? 'W' : mine < theirs ? 'L' : 'T',
+    };
+  });
   return {
+    recent,
     matches: n,
     kd: Math.round((d ? k / d : k) * 100) / 100,
     hs: shots ? Math.round((head / shots) * 1000) / 10 : null,
@@ -105,6 +125,7 @@ export async function fetchValorant(config, previous, key, now) {
   const prevById = new Map((previous?.players ?? []).map((p) => [p.id, p]));
   const sources = { ok: 0, failed: 0, error: null };
   const players = [];
+  const games = [];
   let down = false;
 
   for (const p of entries) {
@@ -119,7 +140,16 @@ export async function fetchValorant(config, previous, key, now) {
         const mmr = await fetchMmr(p, key);
         if (mmr) out.mmr = mmr;
         const stats = await fetchStats(p, key).catch((e) => { out.errors.push(`stats : ${e.message}`); return null; });
-        if (stats) out.stats = stats;
+        if (stats) {
+          const { recent, ...rest } = stats;
+          out.stats = rest;
+          // Nouveaux matchs depuis le passage précédent (rien au tout premier : on mémorise seulement).
+          if (Array.isArray(prev.seen)) {
+            const fresh = recent.filter((m) => !prev.seen.includes(m.id));
+            fresh.forEach((m, i) => games.push({ ...m, player: out, rrChange: i === 0 ? out.mmr?.lastChange ?? null : null, tierName: i === 0 ? out.mmr?.tierName ?? null : null }));
+          }
+          out.seen = [...new Set([...recent.map((m) => m.id), ...(prev.seen ?? [])])].slice(0, 30);
+        }
         out.updatedAt = now.toISOString();
         sources.ok++;
       } catch (e) {
@@ -133,5 +163,5 @@ export async function fetchValorant(config, previous, key, now) {
     console.log(`[Valo] ${out.riotId.padEnd(22)} ${status}`);
     players.push(out);
   }
-  return { generatedAt: now.toISOString(), sources, players };
+  return { generatedAt: now.toISOString(), sources, players, games };
 }
