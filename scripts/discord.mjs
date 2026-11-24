@@ -127,21 +127,22 @@ function csEmbed(group) {
   const first = group[0];
   const m = first.match;
   const d = first.detail;
-  const score = m.score ?? (d?.teams?.length === 2 ? d.teams.map((t) => t.score) : null);
+  const score = m.score ?? first.faceitScore ?? (d?.teams?.length === 2 ? d.teams.map((t) => t.score) : null);
+  const map = m.map ?? first.faceitMap;
   const lines = group.map((g) => {
-    const r = g.row;
+    const r = g.row ?? g.faceitRow;
     const stats = r
-      ? [`${r.k}/${r.d}/${r.a}`, r.adr != null && `ADR ${Math.round(r.adr)}`, r.rating != null && `Rating ${csRating(r.rating)}`].filter(Boolean).join(' · ')
-      : g.match.rating != null ? `Rating ${csRating(g.match.rating)}` : 'pas de stats Leetify pour ce match';
-    const rank = g.eloDelta != null ? `\nFACEIT ${num(g.player.faceit.elo)} (${sign(g.eloDelta)})`
+      ? [`${r.k}/${r.d}/${r.a}`, r.adr != null && `ADR ${Math.round(r.adr)}`, r.hsPct != null && `HS ${r.hsPct} %`, r.rating != null && `Rating ${csRating(r.rating)}`].filter(Boolean).join(' · ')
+      : g.match.rating != null ? `Rating ${csRating(g.match.rating)}` : null;
+    const rank = g.match.source === 'faceit' && g.player.faceit?.elo ? `\nFACEIT ${num(g.player.faceit.elo)}${g.eloDelta != null ? ` (${sign(g.eloDelta)})` : ''}`
       : g.match.source === 'premier' && g.match.rank ? `\nPremier ${num(g.match.rank)}${g.premierDelta != null ? ` (${sign(g.premierDelta)})` : ''}`
       : '';
-    return `**${g.player.name}** — ${stats}${csHighlights(r)}${rank}`;
+    return `**${g.player.name}**${stats ? ` — ${stats}` : ''}${csHighlights(r)}${rank}`;
   });
   return {
-    author: { name: `CS2 · ${MODE[m.source] ?? 'Match'}${m.map ? ` · ${m.map}` : ''}` },
+    author: { name: `CS2 · ${MODE[m.source] ?? 'Match'}${map ? ` · ${map}` : ''}` },
     title: `${RESULT[m.result] ?? 'Match terminé'}${score ? ` ${score[0]}–${score[1]}` : ''}`,
-    url: m.leetifyId ? `https://leetify.com/app/match-details/${m.leetifyId}` : m.url ?? undefined,
+    url: m.leetifyId && d ? `https://leetify.com/app/match-details/${m.leetifyId}` : m.url ?? undefined,
     color: colorOf(m.result),
     description: lines.join('\n\n'),
     thumbnail: group.length === 1 && first.player.avatar ? { url: first.player.avatar } : undefined,
@@ -190,8 +191,19 @@ function groupBy(list, key) {
   return [...map.values()];
 }
 
+// Une partie finie depuis plus de 4 h n'est plus annoncée : après une panne ou un passage
+// sauté, on évite de tout poster d'un coup avec des heures de retard.
+const STALE = 4 * 3600e3;
+const fresh = (at) => !at || Date.now() - new Date(at) < STALE;
+
 export async function notifyGames(url, { cs = [], valorant = [], lol = [] }, siteUrl) {
   if (!url) return;
+  const before = cs.length + valorant.length + lol.length;
+  cs = cs.filter((g) => fresh(g.match.at));
+  valorant = valorant.filter((g) => fresh(g.at));
+  lol = lol.filter((g) => fresh(g.at));
+  const skipped = before - cs.length - valorant.length - lol.length;
+  if (skipped) console.log(`[Discord] ${skipped} partie(s) trop anciennes, pas annoncées`);
   const embeds = [
     ...groupBy(cs, (g) => g.key).map((g) => [g[0].match.at, csEmbed(g)]),
     ...groupBy(valorant, (g) => g.id).map((g) => [g[0].at ?? '', valEmbed(g)]),
@@ -215,9 +227,9 @@ export async function notifyGames(url, { cs = [], valorant = [], lol = [] }, sit
   }
 }
 
-// Matchs CS à annoncer sur Discord. On attend que Leetify ait le tableau des scores (jusqu'à 3 h)
+// Matchs CS à annoncer sur Discord. On attend que Leetify ait le tableau des scores (jusqu'à 1 h 30, seulement si le joueur est sur Leetify)
 // pour poster les stats ; au tout premier passage, on mémorise les matchs existants sans rien poster.
-const CS_WAIT = 3 * 3600e3;
+const CS_WAIT = 90 * 60e3;
 const CS_MAX_AGE = 24 * 3600e3;
 export function newCsGames(players, prevById, bundle, now) {
   const games = [];
@@ -234,7 +246,8 @@ export function newCsGames(players, prevById, bundle, now) {
     for (const m of fresh) {
       const detail = m.leetifyId ? bundle[m.leetifyId] : null;
       const row = detail?.players?.find((x) => x.steam64 === p.steam64) ?? null;
-      if (!row && now - new Date(m.at) < CS_WAIT) continue;
+      // Match FACEIT sans tableau Leetify : on prendra les stats FACEIT (voir addFaceitStats).
+      if (!row && m.source !== 'faceit' && p.leetify && now - new Date(m.at) < CS_WAIT) continue;
       done.add(m.id);
       // Écart de Premier : rang après ce match comparé au match Premier précédent du joueur.
       let premierDelta = null;

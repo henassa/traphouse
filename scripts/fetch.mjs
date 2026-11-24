@@ -342,6 +342,40 @@ function updateSeries(series, today, players) {
   return s;
 }
 
+// Stats d'un match FACEIT (kills, ADR, HS…) quand Leetify n'a pas le tableau des scores.
+// Pas encore dispo chez FACEIT : on retentera au passage suivant, pendant 1 h 30 au plus.
+async function addFaceitStats(games, now) {
+  if (!FACEIT_KEY) return games;
+  const cache = new Map();
+  const out = [];
+  for (const g of games) {
+    if (g.row || g.match.source !== 'faceit' || !g.player.faceit?.playerId) { out.push(g); continue; }
+    const id = g.match.id.replace(/^faceit:/, '');
+    if (!cache.has(id)) {
+      cache.set(id, await getJson(`https://open.faceit.com/data/v4/matches/${id}/stats`, { headers: { Authorization: `Bearer ${FACEIT_KEY}` }, gap: 250 }).catch(() => null));
+    }
+    const round = cache.get(id)?.rounds?.[0];
+    const team = round?.teams?.find((t) => t.players?.some((x) => x.player_id === g.player.faceit.playerId));
+    const st = team?.players?.find((x) => x.player_id === g.player.faceit.playerId)?.player_stats;
+    if (!st) {
+      if (now - new Date(g.match.at) < 90 * 60e3) {
+        g.player.notified = g.player.notified.filter((x) => x !== g.match.id);
+        continue;
+      }
+      out.push(g);
+      continue;
+    }
+    const n = (k) => (st[k] != null && st[k] !== '' ? Number(st[k]) : null);
+    g.faceitRow = { k: n('Kills'), d: n('Deaths'), a: n('Assists'), adr: n('ADR'), hsPct: n('Headshots %'), k4: n('Quadro Kills'), k5: n('Penta Kills') };
+    const other = round.teams.find((t) => t !== team);
+    const mine = Number(team.team_stats?.['Final Score']), theirs = Number(other?.team_stats?.['Final Score']);
+    if (Number.isFinite(mine) && Number.isFinite(theirs)) g.faceitScore = [mine, theirs];
+    if (round.round_stats?.Map) g.faceitMap = mapLabel(round.round_stats.Map);
+    out.push(g);
+  }
+  return out;
+}
+
 async function main() {
   const config = await readJson(join(ROOT, 'players.json'));
   if (!config?.players?.length) throw new Error('players.json est vide ou illisible');
@@ -485,7 +519,7 @@ async function main() {
     p.perf = { all: perfFromTotals(p.totals), week: perfOf(week, p.steam64) };
   }
 
-  const csGames = newCsGames(players, prevById, bundle, now);
+  const csGames = await addFaceitStats(newCsGames(players, prevById, bundle, now), now);
 
   const timezone = config.timezone ?? 'Europe/Zurich';
   // Valorant : seulement si une clé HenrikDev est fournie et des Riot ID sont listés.
