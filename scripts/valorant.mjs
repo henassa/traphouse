@@ -100,6 +100,33 @@ async function fetchStats(p, key) {
   };
 }
 
+// Derniers matchs compétitifs en direct de Riot (v4) : les « stored-matches » peuvent avoir des heures de retard.
+async function fetchRecent(p, key) {
+  const list = await henrik(`/v4/matches/${p.region}/pc/${enc(p.name)}/${enc(p.tag)}?mode=competitive&size=5`, key);
+  if (!Array.isArray(list)) return null;
+  const me = (m) => m.players?.find((x) => String(x.name).toLowerCase() === p.name.toLowerCase() && String(x.tag).toLowerCase() === p.tag.toLowerCase());
+  return list.filter((m) => m.metadata?.match_id && me(m)).map((m) => {
+    const pl = me(m);
+    const s = pl.stats ?? {};
+    const mine = m.teams?.find((t) => t.team_id === pl.team_id);
+    const won = mine?.rounds?.won, lost = mine?.rounds?.lost;
+    const rounds = typeof won === 'number' && typeof lost === 'number' ? won + lost : 0;
+    const shots = (s.headshots ?? 0) + (s.bodyshots ?? 0) + (s.legshots ?? 0);
+    const start = m.metadata.started_at ? new Date(m.metadata.started_at).getTime() : null;
+    return {
+      id: m.metadata.match_id,
+      at: start ? new Date(start + (m.metadata.game_length_in_ms ?? 0)).toISOString() : null,
+      map: m.metadata.map?.name ?? null,
+      agent: pl.agent?.name ?? null,
+      k: s.kills ?? 0, d: s.deaths ?? 0, a: s.assists ?? 0,
+      acs: rounds ? Math.round((s.score ?? 0) / rounds) : null,
+      hs: shots ? Math.round(((s.headshots ?? 0) / shots) * 100) : null,
+      score: rounds ? [won, lost] : null,
+      result: !rounds ? null : won > lost ? 'W' : won < lost ? 'L' : 'T',
+    };
+  });
+}
+
 // Emblèmes de rang : liste officielle (catalogue public de Riot via valorant-api.com), téléchargés à chaque
 // passage dans data/valorant-tiers/ pour être publiés avec le site plutôt que chargés depuis un autre domaine.
 export async function downloadTiers(dir) {
@@ -141,7 +168,9 @@ export async function fetchValorant(config, previous, key, now) {
         if (mmr) out.mmr = mmr;
         const stats = await fetchStats(p, key).catch((e) => { out.errors.push(`stats : ${e.message}`); return null; });
         if (stats) {
-          const { recent, ...rest } = stats;
+          const { recent: stored, ...rest } = stats;
+          const live = await fetchRecent(p, key).catch((e) => { console.log(`[Valo] ${p.name}#${p.tag} matchs récents : ${e.message}`); return null; });
+          const recent = live?.length ? live : stored;
           out.stats = rest;
           // Nouveaux matchs depuis le passage précédent (rien au tout premier : on mémorise seulement).
           if (Array.isArray(prev.seen)) {

@@ -191,14 +191,15 @@ function groupBy(list, key) {
   return [...map.values()];
 }
 
-// Une partie finie depuis plus de 4 h n'est plus annoncée : après une panne ou un passage
-// sauté, on évite de tout poster d'un coup avec des heures de retard.
-const STALE = 4 * 3600e3;
+// Une partie finie depuis plus de 12 h n'est plus annoncée. Leetify et HenrikDev peuvent mettre
+// plusieurs heures à voir un match : une limite plus courte ferait sauter des parties.
+const STALE = 12 * 3600e3;
 const fresh = (at) => !at || Date.now() - new Date(at) < STALE;
 
 export async function notifyGames(url, { cs = [], valorant = [], lol = [] }, siteUrl) {
   if (!url) return;
   const before = cs.length + valorant.length + lol.length;
+  console.log(`[Discord] nouvelles parties : CS ${cs.length}, Valorant ${valorant.length}, LoL ${lol.length}`);
   cs = cs.filter((g) => fresh(g.match.at));
   valorant = valorant.filter((g) => fresh(g.at));
   lol = lol.filter((g) => fresh(g.at));
