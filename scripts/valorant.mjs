@@ -71,60 +71,13 @@ async function fetchStats(p, key) {
     if (team && typeof m.teams?.[team] === 'number' && m.teams[team] > m.teams[team === 'red' ? 'blue' : 'red']) wins++;
   }
   if (!n) return null;
-  // Les 5 derniers matchs, pour les annonces Discord match par match.
-  const recent = (list ?? []).slice(0, 5).filter((m) => m.meta?.id && typeof m.stats?.kills === 'number').map((m) => {
-    const s = m.stats;
-    const team = String(s.team ?? '').toLowerCase();
-    const mine = m.teams?.[team], theirs = m.teams?.[team === 'red' ? 'blue' : 'red'];
-    const rounds = typeof mine === 'number' && typeof theirs === 'number' ? mine + theirs : 0;
-    const shots = (s.shots?.head ?? 0) + (s.shots?.body ?? 0) + (s.shots?.leg ?? 0);
-    return {
-      id: m.meta.id,
-      at: m.meta.started_at ?? null,
-      map: m.meta.map?.name ?? null,
-      agent: s.character?.name ?? null,
-      k: s.kills, d: s.deaths ?? 0, a: s.assists ?? 0,
-      acs: rounds ? Math.round((s.score ?? 0) / rounds) : null,
-      hs: shots ? Math.round(((s.shots?.head ?? 0) / shots) * 100) : null,
-      score: rounds ? [mine, theirs] : null,
-      result: !rounds ? null : mine > theirs ? 'W' : mine < theirs ? 'L' : 'T',
-    };
-  });
   return {
-    recent,
     matches: n,
     kd: Math.round((d ? k / d : k) * 100) / 100,
     hs: shots ? Math.round((head / shots) * 1000) / 10 : null,
     acs: rounds ? Math.round(score / rounds) : null,
     winrate: Math.round((wins / n) * 100),
   };
-}
-
-// Derniers matchs compétitifs en direct de Riot (v4) : les « stored-matches » peuvent avoir des heures de retard.
-async function fetchRecent(p, key) {
-  const list = await henrik(`/v4/matches/${p.region}/pc/${enc(p.name)}/${enc(p.tag)}?mode=competitive&size=5`, key);
-  if (!Array.isArray(list)) return null;
-  const me = (m) => m.players?.find((x) => String(x.name).toLowerCase() === p.name.toLowerCase() && String(x.tag).toLowerCase() === p.tag.toLowerCase());
-  return list.filter((m) => m.metadata?.match_id && me(m)).map((m) => {
-    const pl = me(m);
-    const s = pl.stats ?? {};
-    const mine = m.teams?.find((t) => t.team_id === pl.team_id);
-    const won = mine?.rounds?.won, lost = mine?.rounds?.lost;
-    const rounds = typeof won === 'number' && typeof lost === 'number' ? won + lost : 0;
-    const shots = (s.headshots ?? 0) + (s.bodyshots ?? 0) + (s.legshots ?? 0);
-    const start = m.metadata.started_at ? new Date(m.metadata.started_at).getTime() : null;
-    return {
-      id: m.metadata.match_id,
-      at: start ? new Date(start + (m.metadata.game_length_in_ms ?? 0)).toISOString() : null,
-      map: m.metadata.map?.name ?? null,
-      agent: pl.agent?.name ?? null,
-      k: s.kills ?? 0, d: s.deaths ?? 0, a: s.assists ?? 0,
-      acs: rounds ? Math.round((s.score ?? 0) / rounds) : null,
-      hs: shots ? Math.round(((s.headshots ?? 0) / shots) * 100) : null,
-      score: rounds ? [won, lost] : null,
-      result: !rounds ? null : won > lost ? 'W' : won < lost ? 'L' : 'T',
-    };
-  });
 }
 
 // Emblèmes de rang : liste officielle (catalogue public de Riot via valorant-api.com), téléchargés à chaque
@@ -152,12 +105,12 @@ export async function fetchValorant(config, previous, key, now) {
   const prevById = new Map((previous?.players ?? []).map((p) => [p.id, p]));
   const sources = { ok: 0, failed: 0, error: null };
   const players = [];
-  const games = [];
   let down = false;
 
   for (const p of entries) {
     const prev = prevById.get(p.id) ?? {};
-    const out = { ...prev, id: p.id, riotId: `${p.name}#${p.tag}`, name: p.label || p.name, region: p.region, errors: [] };
+    const { seen, ...keep } = prev;
+    const out = { ...keep, id: p.id, riotId: `${p.name}#${p.tag}`, name: p.label || p.name, region: p.region, errors: [] };
     if (!down) {
       try {
         // La carte (photo) une fois par jour, le rang et les stats à chaque passage.
@@ -167,18 +120,7 @@ export async function fetchValorant(config, previous, key, now) {
         const mmr = await fetchMmr(p, key);
         if (mmr) out.mmr = mmr;
         const stats = await fetchStats(p, key).catch((e) => { out.errors.push(`stats : ${e.message}`); return null; });
-        if (stats) {
-          const { recent: stored, ...rest } = stats;
-          const live = await fetchRecent(p, key).catch((e) => { console.log(`[Valo] ${p.name}#${p.tag} matchs récents : ${e.message}`); return null; });
-          const recent = live?.length ? live : stored;
-          out.stats = rest;
-          // Nouveaux matchs depuis le passage précédent (rien au tout premier : on mémorise seulement).
-          if (Array.isArray(prev.seen)) {
-            const fresh = recent.filter((m) => !prev.seen.includes(m.id));
-            fresh.forEach((m, i) => games.push({ ...m, player: out, rrChange: i === 0 ? out.mmr?.lastChange ?? null : null, tierName: i === 0 ? out.mmr?.tierName ?? null : null }));
-          }
-          out.seen = [...new Set([...recent.map((m) => m.id), ...(prev.seen ?? [])])].slice(0, 30);
-        }
+        if (stats) out.stats = stats;
         out.updatedAt = now.toISOString();
         sources.ok++;
       } catch (e) {
@@ -192,5 +134,5 @@ export async function fetchValorant(config, previous, key, now) {
     console.log(`[Valo] ${out.riotId.padEnd(22)} ${status}`);
     players.push(out);
   }
-  return { generatedAt: now.toISOString(), sources, players, games };
+  return { generatedAt: now.toISOString(), sources, players };
 }

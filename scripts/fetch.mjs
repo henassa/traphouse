@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { addDays, dayKey, mergeMatches, perfOf, readJson, snapshotOf } from './lib/store.mjs';
 import { downloadTiers, fetchValorant } from './valorant.mjs';
 import { fetchLol } from './lol.mjs';
-import { newCsGames, notifyDiscord, notifyGames } from './discord.mjs';
+import { postLadder } from './discord.mjs';
 
 const ROOT = new URL('..', import.meta.url).pathname;
 const DATA = join(ROOT, 'data');
@@ -342,40 +342,6 @@ function updateSeries(series, today, players) {
   return s;
 }
 
-// Stats d'un match FACEIT (kills, ADR, HS…) quand Leetify n'a pas le tableau des scores.
-// Pas encore dispo chez FACEIT : on retentera au passage suivant, pendant 1 h 30 au plus.
-async function addFaceitStats(games, now) {
-  if (!FACEIT_KEY) return games;
-  const cache = new Map();
-  const out = [];
-  for (const g of games) {
-    if (g.row || g.match.source !== 'faceit' || !g.player.faceit?.playerId) { out.push(g); continue; }
-    const id = g.match.id.replace(/^faceit:/, '');
-    if (!cache.has(id)) {
-      cache.set(id, await getJson(`https://open.faceit.com/data/v4/matches/${id}/stats`, { headers: { Authorization: `Bearer ${FACEIT_KEY}` }, gap: 250 }).catch(() => null));
-    }
-    const round = cache.get(id)?.rounds?.[0];
-    const team = round?.teams?.find((t) => t.players?.some((x) => x.player_id === g.player.faceit.playerId));
-    const st = team?.players?.find((x) => x.player_id === g.player.faceit.playerId)?.player_stats;
-    if (!st) {
-      if (now - new Date(g.match.at) < 90 * 60e3) {
-        g.player.notified = g.player.notified.filter((x) => x !== g.match.id);
-        continue;
-      }
-      out.push(g);
-      continue;
-    }
-    const n = (k) => (st[k] != null && st[k] !== '' ? Number(st[k]) : null);
-    g.faceitRow = { k: n('Kills'), d: n('Deaths'), a: n('Assists'), adr: n('ADR'), hsPct: n('Headshots %'), k4: n('Quadro Kills'), k5: n('Penta Kills') };
-    const other = round.teams.find((t) => t !== team);
-    const mine = Number(team.team_stats?.['Final Score']), theirs = Number(other?.team_stats?.['Final Score']);
-    if (Number.isFinite(mine) && Number.isFinite(theirs)) g.faceitScore = [mine, theirs];
-    if (round.round_stats?.Map) g.faceitMap = mapLabel(round.round_stats.Map);
-    out.push(g);
-  }
-  return out;
-}
-
 async function main() {
   const config = await readJson(join(ROOT, 'players.json'));
   if (!config?.players?.length) throw new Error('players.json est vide ou illisible');
@@ -519,8 +485,6 @@ async function main() {
     p.perf = { all: perfFromTotals(p.totals), week: perfOf(week, p.steam64) };
   }
 
-  const csGames = await addFaceitStats(newCsGames(players, prevById, bundle, now), now);
-
   const timezone = config.timezone ?? 'Europe/Zurich';
   // Valorant : seulement si une clé HenrikDev est fournie et des Riot ID sont listés.
   let valorant = previous.valorant ?? null;
@@ -543,13 +507,7 @@ async function main() {
     console.log('[LoL] pas de secret RIOT_API_KEY : tableau League of Legends non mis à jour');
   }
 
-  // Les parties à annoncer ne sont pas publiées avec le site.
-  const valGames = valorant?.games ?? [];
-  const lolGames = lol?.games ?? [];
-  if (valorant) delete valorant.games;
-  if (lol) delete lol.games;
-
-  const latest = { generatedAt: now.toISOString(), timezone, group: config.group ?? 'Traphouse', sources, players, valorant, lol };
+  const latest = { generatedAt: now.toISOString(), timezone, group: config.group ?? 'Traphouse', sources, players, valorant, lol, discord: previous.discord ?? null };
   const series = updateSeries(prevSeries, dayKey(now, timezone), players);
 
   // Écrit dans data/, qui n'est pas suivi par git : le workflow publie ces fichiers avec le site.
@@ -558,11 +516,14 @@ async function main() {
   await writeFile(join(DATA, 'series.json'), JSON.stringify(series));
   await writeFile(join(DATA, 'matches.json'), JSON.stringify(bundle));
 
-  // Webhook Discord (secret DISCORD_WEBHOOK_URL, facultatif) : annonce les joueurs qui gagnent des places.
+  // Webhook Discord (secret DISCORD_WEBHOOK_URL, facultatif) : le top 10 de chaque jeu, posté chaque nuit à minuit.
+  // L'état (jour du dernier message, places de la veille) est publié avec le site pour le passage suivant.
   const site = process.env.PAGES_URL ? process.env.PAGES_URL.replace(/\/?$/, '/') : null;
-  const hook = (process.env.DISCORD_WEBHOOK_URL ?? '').trim() || null;
-  await notifyGames(hook, { cs: csGames, valorant: valGames, lol: lolGames }, site);
-  await notifyDiscord(hook, previous, latest, site);
+  const discord = await postLadder((process.env.DISCORD_WEBHOOK_URL ?? '').trim() || null, previous.discord, latest, site, timezone, now);
+  if (discord !== latest.discord) {
+    latest.discord = discord;
+    await writeFile(join(DATA, 'latest.json'), JSON.stringify(latest));
+  }
 }
 
 main().catch((e) => {
